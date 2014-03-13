@@ -77,16 +77,11 @@ public class ModelEnviroment implements IActionTick{
 		ScaleConverter.latEnd  = latitude1;
 		ScaleConverter.longEnd = longitude1;
 	}
-	public void draw(){
-		
-		
-		
-	}
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -107,7 +102,15 @@ public class ModelEnviroment implements IActionTick{
 
 	@Override
 	public void moveImage() {
-		// TODO Auto-generated method stub
+		WifiAgent              agent;
+		Iterator<WifiAgent> iterator;
+		
+		iterator = agents.iterator();
+		while(iterator.hasNext()){
+			agent = iterator.next();
+			agent.moveImage();
+		}
+				
 		
 	}
 
