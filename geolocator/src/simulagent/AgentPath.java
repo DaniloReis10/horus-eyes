@@ -18,14 +18,14 @@ public class AgentPath {
 
 	ArrayList<PositionPath> dataPath;// Array com as posicoes do agente no dia
 	/**
-	 * 
+	 * Construtor da classe geral
 	 */
 	public AgentPath() {
 		super();
 		dataPath = new ArrayList<PositionPath>();
 	}
 	/**
-	 * 
+	 * Construtor da classe com os parametros
 	 * @param array
 	 */
 	public AgentPath(ArrayList<PositionPath> array){
@@ -34,7 +34,7 @@ public class AgentPath {
 	}
 	/**
 	 * Adiciona uma nova posicao na lista de posicoes
-	 * @param p
+	 * @param posicao dentro da rota
 	 */
 	public void addPoint(PositionPath p){
 		if( p != null)
@@ -48,13 +48,13 @@ public class AgentPath {
 	}
 	/**
 	 * Retorna o iterator da lista de posicoes
-	 * @return
+	 * @return iterator da lista de  paradas da rota
 	 */
 	public Iterator<PositionPath> iterator(){
 		return dataPath.iterator();
 	}
 	/**
-	 * Pega a posicao do agente no tempo time
+	 * Pega a posicao do agente no tempo time no caso em que o agente esta parado em uma posicao
 	 * @param time tempo decorrido em minutos dentro de um dia desde da 0:00
 	 * Por exemplo 1:15 = 1x60 + 15 = 75
 	 * @return a interface da posicao no momento
@@ -75,9 +75,10 @@ public class AgentPath {
 		return null;
 	}
 	/**
-	 * 
-	 * @param time
-	 * @return
+	 *Retorna a posicao do agente no tempo especificado. No caso em que o mesmo esteja se deslocando é estimada uma posicao
+	 * baseada no tempo de transicao entre duas paradas.
+	 * @param time tempo em minutos desde 0:00
+	 * @return interface da posicao estimada
 	 */
 	private IGeoPosition getEstimatedPosition(int time){
 		PositionPath         posiPrev;
@@ -120,9 +121,9 @@ public class AgentPath {
 		
 	}
 	/**
-	 * 
-	 * @param time
-	 * @return
+	 * Retorna a posicao do agente dentro de um tempo especificado.
+	 * @param time tempo em minutos desde 0:00
+	 * @return interface da posicao
 	 */
 	public IGeoPosition getPositionAtTime(int time){
 		PositionPath         position;
@@ -132,14 +133,14 @@ public class AgentPath {
 		return (position == null)?getEstimatedPosition(time):position;
 	}
 	/**
-	 * 
-	 * @return
+	 * Retorna o array com as posicoes do agente durante o dia
+	 * @return ArrayList com as posicoes da rota
 	 */
 	public ArrayList<PositionPath> getDataPath() {
 		return dataPath;
 	}
 	/**
-	 * 
+	 * Seta o array de rota do dia
 	 * @param dataPath
 	 */
 	public void setDataPath(ArrayList<PositionPath> dataPath) {
