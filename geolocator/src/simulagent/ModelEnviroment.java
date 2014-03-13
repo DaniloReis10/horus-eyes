@@ -12,12 +12,19 @@ import javax.swing.JPanel;
 import location.geoengine.GeoPosition;
 
 import trilaceration.ScaleConverter;
-
+/**
+ * Classe responsável por criar o modelo do ambiente dos agentes sensores ,fixos e moveis.
+ * Nesta classe sao criados os agentes e implementados os metodos de animacao dos mesmos.
+ * Nesta classe tambem é criada uma escala do ambiente para conversao entre latitude e longitude
+ * e linhas e colunas na imagem. esta classe segue o padrão de projeto singleton, sendo tambem um Model
+ * @author DaniloReis
+ *
+ */
 public class ModelEnviroment implements IActionTick{
 
-	private static ModelEnviroment       instance; 
-	PathFactory                      factory;
-	ArrayList<WifiAgent>              agents;
+	private static ModelEnviroment  instance;// Instancia do modelo 
+	PathFactory                      factory;// Fabrica de agentes
+	ArrayList<WifiAgent>              agents;// lista de agentes criados
 	public static final int STATIC_AGENT = 0;
 	public static final int MOBILE_AGENT = 1;
 	

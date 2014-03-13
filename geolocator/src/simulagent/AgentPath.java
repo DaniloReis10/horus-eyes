@@ -9,9 +9,14 @@ import location.geoengine.GeoPosition;
 import trilaceration.Point;
 import trilaceration.ScaleConverter;
 
+/**
+ * Classe responsável pelo armazenamento das posicoes que o agente percorreu em um dia . Considera-se o intervalo de analise de 1 minuto.
+ * @author DaniloReis
+ *
+ */
 public class AgentPath {
 
-	ArrayList<PositionPath> dataPath;
+	ArrayList<PositionPath> dataPath;// Array com as posicoes do agente no dia
 	/**
 	 * 
 	 */
@@ -28,7 +33,7 @@ public class AgentPath {
 		dataPath = array;
 	}
 	/**
-	 * 
+	 * Adiciona uma nova posicao na lista de posicoes
 	 * @param p
 	 */
 	public void addPoint(PositionPath p){
@@ -36,22 +41,23 @@ public class AgentPath {
 		   dataPath.add(p);
 	}
 	/**
-	 * 
+	 * Limpa a lista de posicoes
 	 */
 	public void clear(){
 		dataPath.clear();
 	}
 	/**
-	 * 
+	 * Retorna o iterator da lista de posicoes
 	 * @return
 	 */
 	public Iterator<PositionPath> iterator(){
 		return dataPath.iterator();
 	}
 	/**
-	 * 
-	 * @param time
-	 * @return
+	 * Pega a posicao do agente no tempo time
+	 * @param time tempo decorrido em minutos dentro de um dia desde da 0:00
+	 * Por exemplo 1:15 = 1x60 + 15 = 75
+	 * @return a interface da posicao no momento
 	 */
 	private PositionPath getStaticPosition(int time){
 		Iterator<PositionPath> iterator;
