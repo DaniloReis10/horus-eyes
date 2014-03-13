@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//src/location/facade/IGeoPositionControl.java=UTF-8
+encoding//src/location/facade/IMobileDevice.java=UTF-8
+encoding//src/location/facade/IProximityListener.java=UTF-8
+encoding//src/location/geoengine/DevicePath.java=UTF-8
+encoding//src/location/geoengine/DevicesPositionControl.java=UTF-8
+encoding//src/location/listeners/ProximityBarricadaListener.java=UTF-8
+encoding//src/location/listeners/VisibilityMinaListener.java=UTF-8
+encoding//src/location/listeners/app/ProximityTagListener.java=UTF-8
+encoding//src/myserver/kernel/ProcessRequest.java=UTF-8
+encoding//src/sensordataset/AlarmQueue.java=UTF-8
+encoding//src/simulagent/AgentPath.java=UTF-8
+encoding//src/simulagent/JAnimationPanel.java=UTF-8
+encoding//src/trilaceration/ElectronicFence.java=UTF-8
