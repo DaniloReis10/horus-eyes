@@ -3,6 +3,11 @@ package simulagent;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+/**
+ * Interface de animaçao de objetos dentro do objeto JAnimationPanel
+ * @author DaniloReis
+ *
+ */
 public interface IActionTick {
 	/**
 	 * Apaga na imagem o objeto que se deseja animar

@@ -29,6 +29,10 @@ public class ModelEnviroment implements IActionTick{
 	public static final int MOBILE_AGENT = 1;
 	
 
+	/**
+	 * Retorna a instancia do modelo (Padrão de projeto singleton)
+	 * @return
+	 */
 	public static ModelEnviroment getInstance(){
 		
 		if( instance == null){
@@ -37,13 +41,19 @@ public class ModelEnviroment implements IActionTick{
 		return instance;
 	}
 
-	
+	/**
+	 * Construtor generico
+	 */
 	public ModelEnviroment() {
 		super();
 	    factory = new PathFactory();
 	    agents  = new ArrayList<WifiAgent> ();
 	}
-	
+	/**
+	 * Cria agentes moveis no ambiente
+	 * @param n Numero de agentes a serem criados
+	 * @param nPositions - numero de posicoes estaticas que o agente terá na sua rota diária. 
+	 */
 	public void createMobileAgents(int n,int nPositions){
 		int              i;
 		AgentPath     path;
@@ -57,6 +67,10 @@ public class ModelEnviroment implements IActionTick{
 			agents.add(agent);
 		}
 	}
+	/**
+	 * Cria agentes fixos no ambiente
+	 * @param n numero de agentes a serem criados
+	 */
 	public void createStaticAgents(int n){
 		int                     i;
 		WifiAgent           agent;
@@ -75,7 +89,15 @@ public class ModelEnviroment implements IActionTick{
 			agents.add(agent);
 		}
 	}
-	
+	/**
+	 * Seta os parametros de escala do ambiente
+	 * @param latitude0 latitude do canto superior esquerdo (0,0)
+	 * @param longitude0 longitude do canto superior direito (0,0)
+	 * @param latitude1 latitude do canto inferior direito (width,height)
+	 * @param longitude1 longitude do canto inferior direito (width,height)
+	 * @param width largura da imagem
+	 * @param height altura da imagem
+	 */
 	public void setScaleEnviroment(float latitude0,float longitude0,float latitude1,float longitude1,int width,int height){
 		ScaleConverter.width   = width;
 		ScaleConverter.height  = height;
@@ -93,11 +115,15 @@ public class ModelEnviroment implements IActionTick{
 	}
 
 
+	/**
+	 * Metodos da interface de animaçao do ambiente
+	 */
 	@Override
 	public void drawImage(BufferedImage image, Color color) {
 		WifiAgent              agent;
 		Iterator<WifiAgent> iterator;
 		
+		// Percorre todos os agentes do ambiente desenhando cada um.
 		iterator = agents.iterator();
 		while(iterator.hasNext()){
 			agent = iterator.next();
@@ -112,6 +138,7 @@ public class ModelEnviroment implements IActionTick{
 		WifiAgent              agent;
 		Iterator<WifiAgent> iterator;
 		
+		// Percorre todos os agentes do ambiente movendo no modelo cada um.
 		iterator = agents.iterator();
 		while(iterator.hasNext()){
 			agent = iterator.next();
@@ -126,7 +153,7 @@ public class ModelEnviroment implements IActionTick{
 	public void clearImage(BufferedImage image) {
 		WifiAgent              agent;
 		Iterator<WifiAgent> iterator;
-		
+		// Percorre todos os agentes do ambiente apagando cada um.
 		iterator = agents.iterator();
 		while(iterator.hasNext()){
 			agent = iterator.next();

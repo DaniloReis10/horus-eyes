@@ -21,7 +21,13 @@ import trilaceration.ElectronicFence;
 import trilaceration.LocationArea;
 import trilaceration.ScaleConverter;
 import trilaceration.SensorPosition;
-
+/**
+ * Classe filha do JPanel do swing que permite chamar a cada 50 ms a interface IActionTicket
+ * que desenha e faz a animação de um objeto geerico dentro de uma imagem gerada neste objeto
+ * 
+ * @author DaniloReis
+ *
+ */
 public class JAnimationPanel extends JPanel 
 {
 	private final static String IMAGE_NAME = "deitel"; // nome básico de imagem
@@ -32,12 +38,19 @@ public class JAnimationPanel extends JPanel
 	private final int            ANIMATION_DELAY = 50; // retardo em milissegundos 
 	private int                                 width; // largura da imagem
 	private int                                height; // altura da imagem
-	private BufferedImage                      image0;
-	private BufferedImage                      image1;
+	private BufferedImage                      image0; // Imagem utilizada para animacao
+	private BufferedImage                      image1; // imagem utilizada para animacao
 	private Timer                      animationTimer; // O timer guia a animação
-	private IActionTick                    actionTick;
+	private IActionTick                    actionTick; // interface de animaçao do objeto
 
-	// construtor inicializa LogoAnimatorJPanel carregando imagens
+	
+	/**
+	 * construtor inicializa LogoAnimatorJPanel definindo o tamanho da imagem e interface da
+	 * animaçao do objeto ou coleçao deste
+	 * @param width largura da imagem em pixels
+	 * @param height altura da imagem em pixels
+	 * @param actionTick interface de animaçao do objeto
+	 */
 	public JAnimationPanel(int width,int height,IActionTick actionTick)
 	{
 		Graphics  g;
@@ -66,7 +79,9 @@ public class JAnimationPanel extends JPanel
 	
 	} // fim do construtor LogoAnimatorJPanel
 	
-	// exibe a imagem atual
+	/**
+	 * Desenha o componente acrescentando as chamadas da animaçao
+	 */
 	public void paintComponent( Graphics g )
 	{
 	   actionTick.clearImage(this.getPaintImage());
@@ -86,7 +101,9 @@ public class JAnimationPanel extends JPanel
 	   }
 	} // fim do método paintComponent
 	
-	// inicia a animação ou reinicia se a janela for reexibida
+	/**
+	 * inicia a animação ou reinicia se a janela for reexibida
+	 */
 	public void startAnimation()
 	{
 	   if ( animationTimer == null ) 
@@ -105,26 +122,33 @@ public class JAnimationPanel extends JPanel
 	   } // fim de else
 	} // fim do método startAnimation 
 	
-	// pára o timer de animação 
+	/**
+	 * para o timer de animação
+	 */
 	public void stopAnimation()
 	{
 	   animationTimer.stop();
 	} // fim do método stopAnimation 
 	
-	// retorna o tamanho mínimo de animação
+	/**
+	 *  retorna o tamanho mínimo de animação
+	 */
 	public Dimension getMinimumSize()  
 	{                                  
 	   return getPreferredSize();      
 	} // fim do método getMinimumSize     
 	
-	// retorna tamanho preferido da animação    
+	/**
+	 * retorna tamanho preferido da animação    
+	 */
 	public Dimension getPreferredSize()      
 	{                                        
 	   return new Dimension( width, height );
 	} // fim do método getPreferredSize         
 	/**
-	 * 
-	 * @return
+	 * Pega a imagem corrente que deverá ser mostrada no panel, isto é, feito para minimizar efeito de cintilamento
+	 * a imagem que é desenhada não é mostrada so mostrando uma imagem completamente desenhada
+	 * @return imagem corrente
 	 */
 	private BufferedImage getDrawImage(){
 		switch(currentImage){
@@ -136,6 +160,10 @@ public class JAnimationPanel extends JPanel
 			return null;
 		}
 	}
+	/**
+	 * Retorna a imagem que sera desenhada
+	 * @return imagem a ser desenhada
+	 */
 	private BufferedImage getPaintImage(){
 		switch(paintImage){
 		case 0:
@@ -146,12 +174,19 @@ public class JAnimationPanel extends JPanel
 			return null;
 		}
 	}	
+	/**
+	 * Atualiza no array de imagens as novas imagem na forma de icon
+	 */
 	private void updateImage(){
 	    images[ 0 ] = new ImageIcon( image0);         
 	    images[ 1 ] = new ImageIcon( image1);         
 	}
 	
-	// classe interna para tratar eventos de ação do Timer
+	/**
+	 *  classe interna para tratar eventos de ação do Timer chamada a cada 50 ms
+	 * @author DaniloReis
+	 *
+	 */
 	private class TimerHandler implements ActionListener 
 	{
 	   // responde ao evento do Timer
