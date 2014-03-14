@@ -10,20 +10,28 @@ import location.geoengine.GeoPosition;
 import trilaceration.Point;
 import trilaceration.ScaleConverter;
 
-public class WifiAgent implements IActionTick{
-	private int                        type; 
-	private GeoPosition     currentPosition;
-	private int                 currentTime;
-	private AgentPath                  path;
+/**
+ * Classe do agente que possui um interface de rede sem fio
+ * @author DaniloReis
+ *
+ */
+public class WirelessAgent implements IActionTick{
+	private int                        type;// Tipo do agente Moével ou fixo 
+	private GeoPosition     currentPosition;// Posicao corrente
+	private int                 currentTime;// Tempo corrente em relacao 0:00 em minutos no dia
+	private AgentPath                  path;// Rota do agente no dia
 
-	public static final int  FIXED = 0;
-	public static final int MOBILE = 1;
+	public static final int  FIXED = 0;// Tipo de agente Fixo
+	public static final int MOBILE = 1;// Tipo de agente Móvel
 
-	public WifiAgent() {
+	/**
+	 * Construtor generico
+	 */
+	public WirelessAgent() {
 		super();
 		path = new AgentPath();
 	}
-	
+	// Metodos set e gets
 	public AgentPath getPath() {
 		return path;
 	}
@@ -47,10 +55,12 @@ public class WifiAgent implements IActionTick{
 	public void setCurrentPosition(GeoPosition currentPosition) {
 		if(currentPosition != null){
 		   this.currentPosition = currentPosition;
-		   //path.addPoint(currentPosition);
 		}
 	}
 
+	/**
+	 * Interface de animaçao do agente
+	 */
 	@Override
 	public void clearImage(BufferedImage image) {
 		Graphics  g;

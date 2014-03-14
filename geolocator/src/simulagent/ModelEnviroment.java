@@ -24,7 +24,7 @@ public class ModelEnviroment implements IActionTick{
 
 	private static ModelEnviroment  instance;// Instancia do modelo 
 	PathFactory                      factory;// Fabrica de agentes
-	ArrayList<WifiAgent>              agents;// lista de agentes criados
+	ArrayList<WirelessAgent>              agents;// lista de agentes criados
 	public static final int STATIC_AGENT = 0;
 	public static final int MOBILE_AGENT = 1;
 	
@@ -47,7 +47,7 @@ public class ModelEnviroment implements IActionTick{
 	public ModelEnviroment() {
 		super();
 	    factory = new PathFactory();
-	    agents  = new ArrayList<WifiAgent> ();
+	    agents  = new ArrayList<WirelessAgent> ();
 	}
 	/**
 	 * Cria agentes moveis no ambiente
@@ -57,11 +57,11 @@ public class ModelEnviroment implements IActionTick{
 	public void createMobileAgents(int n,int nPositions){
 		int              i;
 		AgentPath     path;
-		WifiAgent    agent;
+		WirelessAgent    agent;
 		
 		for( i = 0; i < n; i++){
 			path = factory.create(ScaleConverter.width, ScaleConverter.height, nPositions);
-			agent = new WifiAgent();
+			agent = new WirelessAgent();
 			agent.setPath(path);
 			agent.setType(ModelEnviroment.MOBILE_AGENT);
 			agents.add(agent);
@@ -73,7 +73,7 @@ public class ModelEnviroment implements IActionTick{
 	 */
 	public void createStaticAgents(int n){
 		int                     i;
-		WifiAgent           agent;
+		WirelessAgent           agent;
 		GeoPosition      position;
 		
 		double latitude,longitude;
@@ -83,7 +83,7 @@ public class ModelEnviroment implements IActionTick{
 		position  = new GeoPosition(latitude,longitude);
 		
 		for( i = 0; i < n; i++){
-			agent = new WifiAgent();
+			agent = new WirelessAgent();
 			agent.setType(ModelEnviroment.STATIC_AGENT);
 			agent.setCurrentPosition(position);
 			agents.add(agent);
@@ -120,8 +120,8 @@ public class ModelEnviroment implements IActionTick{
 	 */
 	@Override
 	public void drawImage(BufferedImage image, Color color) {
-		WifiAgent              agent;
-		Iterator<WifiAgent> iterator;
+		WirelessAgent              agent;
+		Iterator<WirelessAgent> iterator;
 		
 		// Percorre todos os agentes do ambiente desenhando cada um.
 		iterator = agents.iterator();
@@ -135,8 +135,8 @@ public class ModelEnviroment implements IActionTick{
 
 	@Override
 	public void moveImage() {
-		WifiAgent              agent;
-		Iterator<WifiAgent> iterator;
+		WirelessAgent              agent;
+		Iterator<WirelessAgent> iterator;
 		
 		// Percorre todos os agentes do ambiente movendo no modelo cada um.
 		iterator = agents.iterator();
@@ -151,8 +151,8 @@ public class ModelEnviroment implements IActionTick{
 
 	@Override
 	public void clearImage(BufferedImage image) {
-		WifiAgent              agent;
-		Iterator<WifiAgent> iterator;
+		WirelessAgent              agent;
+		Iterator<WirelessAgent> iterator;
 		// Percorre todos os agentes do ambiente apagando cada um.
 		iterator = agents.iterator();
 		while(iterator.hasNext()){

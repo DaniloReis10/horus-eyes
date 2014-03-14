@@ -1,6 +1,11 @@
 package simulagent;
 
-public class SensorAgent extends WifiAgent {
+/**
+ * Classe do agente sensor que detecta outros agentes em uma distancia determinada.
+ * @author DaniloReis
+ *
+ */
+public class SensorAgent extends WirelessAgent {
 
 
 }
