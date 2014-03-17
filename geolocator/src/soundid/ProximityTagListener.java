@@ -1,4 +1,4 @@
-package location.listeners.app;
+package soundid;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,15 +17,33 @@ import location.listeners.ProximityListener;
  */
 public class ProximityTagListener extends ProximityListener{
 	List<ElectronicFence>     fencesList;
+    ArrayList<BaseDetection>  detections;
+	
+	public ProximityTagListener() {
+		super();
+		detections = new ArrayList<BaseDetection>();
+	}
+	
 
 	@Override
 	public void action(IMobileDevice device1, IMobileDevice device2,double distance) {
+		 double timeToDetect;
+		 double  temperature;
 		 this.device1 = device1;
 		 this.device2 = device2;
 		 
 		 // verifica se o device violou alguma cerca eletronica
 		 if(isOutOfFences(device1)==false){
-			 // TODO gera alarme de violação de cerca eletronica
+			 //Gera alarme de violação de cerca eletronica
+		 }
+		 // caso o dispositivo 2 seja uma base
+		 // Verifica se o dispositivo estar dentro do alcance de detecção sonica se
+		 // estiver adiciona na lista de tempos a deteccao da estacao
+		 if((device1.getType()==SoundIdModel.TAG_TYPE)  && // tag
+		    (device2.getType()==SoundIdModel.BASE_TYPE) && // Estacao base
+			(distance <= SoundIdModel.DISTANCE_DETECTION)){// Dentro da distancia de detecção
+			 temperature = 0;
+			 timeToDetect = distance/SoundIdModel.getSoundSpeed(temperature);
 		 }
 	}
 	/**

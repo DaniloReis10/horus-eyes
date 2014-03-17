@@ -63,7 +63,7 @@ public class ModelEnviroment implements IActionTick{
 			path = factory.create(ScaleConverter.width, ScaleConverter.height, nPositions);
 			agent = new WirelessAgent();
 			agent.setPath(path);
-			agent.setType(ModelEnviroment.MOBILE_AGENT);
+			agent.setMobility(ModelEnviroment.MOBILE_AGENT);
 			agents.add(agent);
 		}
 	}
@@ -84,7 +84,7 @@ public class ModelEnviroment implements IActionTick{
 		
 		for( i = 0; i < n; i++){
 			agent = new WirelessAgent();
-			agent.setType(ModelEnviroment.STATIC_AGENT);
+			agent.setMobility(ModelEnviroment.STATIC_AGENT);
 			agent.setCurrentPosition(position);
 			agents.add(agent);
 		}

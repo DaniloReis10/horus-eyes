@@ -5,6 +5,14 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import location.facade.IGeoPosition;
+import location.facade.IMobileDevice;
+import location.facade.IProximityListener;
+import location.facade.IVisibilityListener;
+import location.geoengine.DevicePath;
 import location.geoengine.GeoPosition;
 
 import trilaceration.Point;
@@ -15,8 +23,8 @@ import trilaceration.ScaleConverter;
  * @author DaniloReis
  *
  */
-public class WirelessAgent implements IActionTick{
-	private int                        type;// Tipo do agente Moével ou fixo 
+public class WirelessAgent extends MobileAgent implements IActionTick{
+	private int                    mobility;// Tipo do agente Moével ou fixo 
 	private GeoPosition     currentPosition;// Posicao corrente
 	private int                 currentTime;// Tempo corrente em relacao 0:00 em minutos no dia
 	private AgentPath                  path;// Rota do agente no dia
@@ -40,12 +48,12 @@ public class WirelessAgent implements IActionTick{
 		this.path = path;
 	}
 	
-	public int getType() {
-		return type;
+	public int getMobility() {
+		return mobility;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setMobility(int mobility) {
+		this.mobility = mobility;
 	}
 
 	public GeoPosition getCurrentPosition() {
@@ -84,5 +92,4 @@ public class WirelessAgent implements IActionTick{
 		currentTime = (currentTime++) % PathFactory.TICKS_DAY;
 		currentPosition = (GeoPosition) path.getPositionAtTime(currentTime);
 	}
-
 }

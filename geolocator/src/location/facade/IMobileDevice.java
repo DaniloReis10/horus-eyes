@@ -16,102 +16,102 @@ public interface IMobileDevice {
 	 * Retorna o identificador do dispositivo
 	 * @return
 	 */
-	Integer                                          getId();
+	public Integer                                          getId();
 	/**
 	 * Seta a interface da posi��o corrente
 	 * @param position
 	 */
-	void               setGeoPosition(IGeoPosition position);
+	public void               setGeoPosition(IGeoPosition position);
 	/**
 	 * Retorna a interface da posi��o corrente
 	 * @return
 	 */
-	IGeoPosition                            getGeoPosition();
+	public IGeoPosition                            getGeoPosition();
 	/**
 	 * Calcula a distancia entre o dispositivo e o dispositivo passado como parametro
 	 * @param device dispositivo a ser  calculada a distancia
 	 * @return distancia em metros do dispositivo
 	 */
-	double                   getDistanceFrom(IMobileDevice device);
+	public double                   getDistanceFrom(IMobileDevice device);
 	/**
 	 * Retorna o valor da ultima distancia calculada
 	 * @return ultima distancia calculada em metros
 	 */
-	double                                 getLastDistance();
+	public double                                 getLastDistance();
 	/**
 	 * Retorna o tipo do dispositivo
 	 * @return tipo do dispositivo
 	 */
-	Integer                                        getType();
+	public Integer                                        getType();
 	/**
 	 * Seta o tipo do dispositivo
 	 * @param type tipo do dispositivo
 	 */
-	void                               setType(Integer type);
+	public void                               setType(Integer type);
 	/**
 	 * Seta distancia na qual limite para um dispositivo ser considerado sobre
 	 * @param distancia em metros
 	 */
-	void                           setDistanceOn(double dist);
+	public void                           setDistanceOn(double dist);
 	/**
 	 * Seta o grupo que o dispositivo pertence
 	 * @param group c�digo do grupo
 	 */
-	void                             setGroup(Integer group);
+	public void                             setGroup(Integer group);
 	/**
 	 * Retorna o grupo que o us�rio pertence
 	 * @return c�digo do grupo
 	 */
-	Integer                                       getGroup();
+	public Integer                                       getGroup();
 	/**
 	 * Retorna a distancia limite para um dispositivo ser considerado sobre
 	 * @return distancia em metros
 	 */
-	double                                   getDistanceOn();
+	public double                                   getDistanceOn();
 	/**
 	 * Seta o objeto de controle da rota realizada  do dispositivo
 	 * @param path
 	 */
-	void                     setDevicePath(DevicePath path);
+	public void                     setDevicePath(DevicePath path);
 	/**
 	 * Retorna o objeto de controle da rota realizada do dispositivo
 	 * @return
 	 */
-	DevicePath                              getDevicePath();
+	public DevicePath                              getDevicePath();
 	/** 
 	 * Seta o listener que � atuado quando o servidor de georeferenciamento
 	 * detectar situa��o de proximidade
 	 * @param listener
 	 */
-	void  setProximityListener(IProximityListener listener);
+	public void  setProximityListener(IProximityListener listener);
 	/**
 	 * Retorna o listener que � atuado quando o servidor de georeferenciamento
 	 * detectar situa��o de proximidade
 	 * @return
 	 */
-	IProximityListener               getProximityListener();
+	public IProximityListener               getProximityListener();
 	/**
 	 * Retorna o listener que � atuado quando o servidor de georeferenciamento
 	 * detectar situa��o de proximidade
 	 * @return
 	 */
-	IVisibilityListener               getVisibilityListener();
+	public IVisibilityListener               getVisibilityListener();
 	/**
 	 * Converte as informa�oes do dispositivo em parametros XML
 	 * @return
 	 * @throws Exception 
 	 */
-	String toXML() throws Exception;
+	public String toXML() throws Exception;
 	
 	/**
 	 * Converte as informa�oes do dispositivo em parametros XML
 	 * @return
 	 * @throws Exception 
 	 */	
-	void toXML(Element devices, Document doc);
+	public void toXML(Element devices, Document doc);
 	
-	void fromXML(Element item);
-	IMobileDevice clone();
+	public void fromXML(Element item);
+	// public IMobileDevice clone();
 	
-	void setId(Integer id);
+	public void setId(Integer id);
 }
