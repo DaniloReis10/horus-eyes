@@ -17,11 +17,11 @@ import location.listeners.ProximityListener;
  */
 public class ProximityTagListener extends ProximityListener{
 	List<ElectronicFence>     fencesList;
-    ArrayList<BaseDetection>  detections;
+    ArrayList<TimeMeasure>  detections;
 	
 	public ProximityTagListener() {
 		super();
-		detections = new ArrayList<BaseDetection>();
+		detections = new ArrayList<TimeMeasure>();
 	}
 	
 
