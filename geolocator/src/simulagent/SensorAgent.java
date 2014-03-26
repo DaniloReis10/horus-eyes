@@ -5,7 +5,7 @@ package simulagent;
  * @author DaniloReis
  *
  */
-public class SensorAgent extends WirelessAgent {
+public class SensorAgent extends MobileAgent {
 
 
 }

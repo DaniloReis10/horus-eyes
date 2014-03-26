@@ -58,6 +58,10 @@ public class GeoPosition implements IGeoPosition{
 	public Date getDate() {
 		return date;
 	}
+
+	public synchronized boolean isInSamePlace(GeoPosition oldPosition) {
+		return ( latitude == oldPosition.getLatitude()) && (longitude == oldPosition.getLongitude());
+	}
 	
 
 }

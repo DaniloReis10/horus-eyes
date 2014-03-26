@@ -202,6 +202,7 @@ public class JAnimationPanel extends JPanel
 	public static void main(String[] args) {
 	    BufferedImage        image;
 	    DrawAnimation    animation;
+	    ModelEnviroment      model;
 
 	    ScaleConverter.latIni = 0.0;
 	    ScaleConverter.longIni = 0.0;
@@ -213,7 +214,14 @@ public class JAnimationPanel extends JPanel
 	    
 	    JFrame frm = new JFrame("Teste Imagem");
 	    animation  = new DrawAnimation(400,400);
-	    JAnimationPanel pan = new JAnimationPanel(400,400,animation);
+	    model      =  ModelEnviroment.getInstance();
+	    model.createMobileAgents(10, 5);
+	    model.createStaticAgents(5);
+	    model.setScaleEnviroment(ScaleConverter.latIni , ScaleConverter.longIni, 
+	    		                 ScaleConverter.latEnd,ScaleConverter.longEnd,
+	    		                 ScaleConverter.width, ScaleConverter.height);
+	    
+	    JAnimationPanel pan = new JAnimationPanel(400,400,model);
 	    
 	    //JLabel lbl = new JLabel( area.getImagem() );
 	    JLabel lbl = new JLabel();

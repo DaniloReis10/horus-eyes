@@ -1,8 +1,8 @@
 package soundid;
 
-import simulagent.WirelessAgent;
+import simulagent.MobileAgent;
 
-public class TagAgent extends WirelessAgent {
+public class TagAgent extends MobileAgent {
 	private float temperature;
 	
 	public float getTemperature() {
