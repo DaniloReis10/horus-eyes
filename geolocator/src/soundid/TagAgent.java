@@ -8,7 +8,9 @@ import simulagent.MobileAgent;
 public class TagAgent extends MobileAgent {
 	private float                         temperature;
 	private ArrayList<TimeMeasurePoint>  timeMeasures;
-
+    private TimeMeasurePoint         timeMeasurePoint;
+    private int                             measureId;
+	
 	public TagAgent() {
 		super();
 		timeMeasures = new ArrayList<TimeMeasurePoint> ();
@@ -40,6 +42,28 @@ public class TagAgent extends MobileAgent {
 	public Iterator<TimeMeasurePoint> getIteratorMeasures(){
 		return timeMeasures.iterator();
 	}
+	/**
+	 * Seta o tempo de deteccao de uma base
+	 * @param timeToDetect
+	 */
+	public void setBaseDetectionTime(double timeToDetect,int tick){
+		TimeMeasure  measure;
+		
+		measure = new TimeMeasure(measureId,timeToDetect,tick);
+		timeMeasurePoint.addMeasure(measure);
+		measureId++;
+		
+	}
+	@Override
+	public void startListener() {
+	    timeMeasurePoint = new TimeMeasurePoint();
+	    measureId = 1;
+	}
+	@Override
+	public void stopListener() {
+		timeMeasures.add(timeMeasurePoint);
+	}
+
 
 	
 	

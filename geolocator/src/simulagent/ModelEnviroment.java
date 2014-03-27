@@ -27,6 +27,7 @@ public class ModelEnviroment implements IActionTick{
 	ArrayList<RFAgent>                agents;// lista de agentes criados
 	public static final int STATIC_AGENT = 0;
 	public static final int MOBILE_AGENT = 1;
+	public static int         lastAgentId = 0;
 	
 
 	/**
@@ -62,6 +63,7 @@ public class ModelEnviroment implements IActionTick{
 		for( i = 0; i < n; i++){
 			path = factory.create(ScaleConverter.width, ScaleConverter.height, nPositions);
 			agent = new MobileAgent();
+			agent.setId(new Integer(++lastAgentId));
 			agent.setPath(path);
 			agent.setMobility(ModelEnviroment.MOBILE_AGENT);
 			agent.setCurrentPosition(agent.getPath().getPositionAtTime(0));
@@ -81,6 +83,7 @@ public class ModelEnviroment implements IActionTick{
 		
 		for( i = 0; i < n; i++){
 			agent = new RFAgent();
+			agent.setId(new Integer(++lastAgentId));
 			latitude  = ScaleConverter.latIni + Math.random()*(ScaleConverter.latEnd - ScaleConverter.latIni);
 			longitude = ScaleConverter.longIni + Math.random()*(ScaleConverter.longEnd - ScaleConverter.longIni);
 			position  = new GeoPosition(latitude,longitude);

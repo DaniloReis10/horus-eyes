@@ -194,4 +194,13 @@ public class RFAgent implements IMobileDevice,IActionTick {
 		currentTime++;
 	}
 
+	@Override
+	public void startListener() {
+
+	}
+
+	@Override
+	public void stopListener() {
+	}
+
 }

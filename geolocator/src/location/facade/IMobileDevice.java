@@ -114,4 +114,6 @@ public interface IMobileDevice {
 	// public IMobileDevice clone();
 	
 	public void setId(Integer id);
+	void startListener();
+	void stopListener();
 }

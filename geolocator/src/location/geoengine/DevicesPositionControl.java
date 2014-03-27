@@ -140,6 +140,7 @@ public class DevicesPositionControl {
 		// cria uma lista com todos os dispositivos
 		list      = new ArrayList<IMobileDevice>(map.values());
 		iterator = list.iterator();
+		device.startListener();
 		// percorre a lista de dispositivos registrados
 		while(iterator.hasNext()){
 			dev      = iterator.next();
@@ -156,6 +157,7 @@ public class DevicesPositionControl {
 				}
 			}
 		}
+		device.stopListener();
 	}
 	/**
 	 * 

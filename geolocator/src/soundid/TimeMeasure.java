@@ -9,20 +9,21 @@ import java.util.Date;
  */
 public class TimeMeasure {
 	private int        id;// Identificador da base
-	private int      time;// tempo do relogio em microsegundos
+	private double   time;// tempo do relogio em microsegundos
 	private int      tick;// ciclo do relogio sincronizado
     private Date dateTime;// Data e hora da medida	
 
-	public TimeMeasure(int id, int time, int tick) {
+	public TimeMeasure(int id, double timeToDetect, int tick) {
 		super();
 		this.id = id;
-		this.time = time;
+		this.time = timeToDetect;
 		this.tick = tick;
 	}
 	
 	public TimeMeasure() {
 		super();
-		id = time = tick = 0;
+		id = tick = 0;
+		time = 0.0;
 	}
 	public int getId() {
 		return id;
@@ -32,11 +33,11 @@ public class TimeMeasure {
 		this.id = id;
 	}
 
-	public int getTime() {
+	public double getTime() {
 		return time;
 	}
 
-	public void setTime(int time) {
+	public void setTime(double time) {
 		this.time = time;
 	}
 

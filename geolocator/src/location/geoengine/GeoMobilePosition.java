@@ -86,5 +86,12 @@ public class GeoMobilePosition implements IGeoMobilePosition {
 	public Date getDate() {
 		return date;
 	}
+	@Override
+	public void startListener() {
+	
+	}
+	@Override
+	public void stopListener() {
+	}
 
 }

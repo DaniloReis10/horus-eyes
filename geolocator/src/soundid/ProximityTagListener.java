@@ -27,8 +27,11 @@ public class ProximityTagListener extends ProximityListener{
 
 	@Override
 	public void action(IMobileDevice device1, IMobileDevice device2,double distance) {
-		 double timeToDetect;
-		 double  temperature;
+		 double    timeToDetect;
+		 double     temperature;
+		 BaseAgent         base;
+		 TagAgent           tag;
+		 
 		 this.device1 = device1;
 		 this.device2 = device2;
 		 
@@ -44,6 +47,9 @@ public class ProximityTagListener extends ProximityListener{
 			(distance <= SoundIdModel.DISTANCE_DETECTION)){// Dentro da distancia de detecção
 			 temperature = 0;
 			 timeToDetect = distance/SoundIdModel.getSoundSpeed(temperature);
+		     base = (BaseAgent)device2;
+		     tag  = (TagAgent)device1;
+			 tag.setBaseDetectionTime(timeToDetect,base.getPulseTick());
 		 }
 	}
 	/**
