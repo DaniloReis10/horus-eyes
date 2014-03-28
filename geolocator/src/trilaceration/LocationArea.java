@@ -163,6 +163,19 @@ public class LocationArea {
 		drawCentroide(Color.RED);
 		
 	}
+	
+	public Centroide getCentroide(){
+		Centroide  centroide;
+		// calcula o centroide da interseccao
+		calculateCentroid();
+		// calcula o raio que centrado no centroide engloba todos os pontos
+		calculateRatioCentroid();
+		centroide = new Centroide(ScaleConverter.convertToLatitude(xc),
+				                  ScaleConverter.convertToLongitude(yc),
+				                  ratio);
+		return centroide;
+		
+	}
 	/**
 	 * 		
 	 * @return

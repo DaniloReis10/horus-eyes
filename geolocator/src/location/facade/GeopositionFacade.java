@@ -7,6 +7,14 @@ import location.geoengine.DevicePath;
 
 public class GeopositionFacade implements IGeoPositionControl{
 
+	private static GeopositionFacade instance;
+	
+	public static  GeopositionFacade getInstance(){
+		if(instance == null){
+			instance = new GeopositionFacade();
+		}
+		return instance;
+	}
 	
 	public GeopositionFacade(){
 		super();
