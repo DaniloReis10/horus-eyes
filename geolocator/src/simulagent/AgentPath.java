@@ -5,8 +5,6 @@ import java.util.Iterator;
 
 import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
-
-import trilaceration.Point;
 import trilaceration.ScaleConverter;
 
 /**
@@ -132,6 +130,19 @@ public class AgentPath {
 		// caso o no tempo especificado o agente nao esteja parado calcula a posicao estimada senao volta a posicao estatica 
 		return (position == null)?getEstimatedPosition(time):position;
 	}
+	
+	/**
+     * <p>Returns agent's first path</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public IGeoPosition getFirstPosition() {
+        return this.getPositionAtTime(0);
+    }   
+	
 	/**
 	 * Retorna o array com as posicoes do agente durante o dia
 	 * @return ArrayList com as posicoes da rota
@@ -145,6 +156,5 @@ public class AgentPath {
 	 */
 	public void setDataPath(ArrayList<PositionPath> dataPath) {
 		this.dataPath = dataPath;
-	}	
-	
+	}
 }
