@@ -1,6 +1,7 @@
 package simulagent;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
@@ -19,7 +20,7 @@ public interface IActionTick {
 	 * @param image imagem a ser desenhada
 	 * @param color cor do objeto a ser desenhado
 	 */
-	void drawImage(BufferedImage image,Color color);
+	void drawImage(Graphics graphics,Color color);
 	/**
 	 * Movimenta os parametros do modelo para efetuar uma movimentação
 	 */
