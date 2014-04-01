@@ -49,6 +49,11 @@ public class SimulationPanel extends JPanel {
         this.startAnimation();
     }
     
+    public void stopSimulation() {
+        ModelEnviroment.getInstance().deleteAllAgents();
+        this.stopAnimation();
+    }
+    
     public void startAnimation() {
         if (animationTimer == null) {
             animationTimer = new Timer(ANIMATION_DELAY, new TimerHandler());

@@ -180,7 +180,7 @@ public class ModelEnviroment implements IActionTick {
     }
     
     /**
-     * <p>This methods increments the agent ID number and returns the incremented ID.</p>
+     * <p>This method increments the agent ID number and returns the incremented ID.</p>
      * 
      * 
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -190,5 +190,17 @@ public class ModelEnviroment implements IActionTick {
     private Integer generateAgentId() {
         ModelEnviroment.instance.lastAgentId++;
         return new Integer(lastAgentId);
+    }
+
+    /**
+     * <p>This method deletes all static and mobile agents.</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void deleteAllAgents() {
+        this.agents.clear();
     }
 }

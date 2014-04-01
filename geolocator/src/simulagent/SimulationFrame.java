@@ -134,19 +134,34 @@ public class SimulationFrame extends JFrame {
         this.startSimulationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SimulationFrame.this.drawingPanel.startSimulation();
+                SimulationFrame.this.startSimulation();
             }
         });
 
         this.stopSimulationButton = new JButton("Stop Simulation");
+        this.stopSimulationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SimulationFrame.this.stopSimulation();;
+            }
+        });
+
+    }
+    
+    public void startSimulation() {
+        this.drawingPanel.startSimulation();
+    }
+    
+    public void stopSimulation() {
+        this.drawingPanel.stopSimulation();
     }
 
     public short getNumberOfDevices() {
-        return Short.parseShort(this.numberOfDevicesTextField.getText());
+        return this.numberOfDevicesTextField.getText().isEmpty()? 0: Short.parseShort(this.numberOfDevicesTextField.getText());  
     }
 
     public short getNumberOfMobileDevices() {
-        return Short.parseShort(this.numberOfMobileDevicesTextField.getText());
+        return this.numberOfMobileDevicesTextField.getText().isEmpty()? 0: Short.parseShort(this.numberOfMobileDevicesTextField.getText());
     }
 
     public short getNumberOfFixedDevices() {
@@ -154,6 +169,6 @@ public class SimulationFrame extends JFrame {
     }
 
     public short getNumberOfSensors() {
-        return Short.parseShort(this.numberOfSensorsTextField.getText());
+        return this.numberOfSensorsTextField.getText().isEmpty()? 0: Short.parseShort(this.numberOfSensorsTextField.getText());
     }
 }
