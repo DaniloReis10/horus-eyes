@@ -67,6 +67,20 @@ public class DevicesPositionControl {
 		return d;
 	}
 	
+	static public synchronized double convertToGrade(double distance,double latitude,double longitude){
+		double  lat1,long1;
+		GeoPosition  p1,p2;
+		double        dref;
+		
+		lat1  = latitude + 1;
+		long1 = longitude;
+		p1    = new GeoPosition (latitude,longitude);
+		p2    = new GeoPosition (lat1, long1);
+		dref  = calculateDistance(p1,p2);
+		
+		return (distance/dref);
+	}
+	
 	public DevicesPositionControl() {
 		super();
 		map = new HashMap<Integer, IMobileDevice>();

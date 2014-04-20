@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 
+import location.geoengine.DevicesPositionControl;
 import location.geoengine.GeoPosition;
 
 public class LocationArea {
@@ -166,14 +167,15 @@ public class LocationArea {
 		return false;
 	}	
 	/**
-	 * 
-	 * @param sensor
-	 * @param ratio
+	 * Adiciona a detecçao de sensor ao objeto
+	 * @param sensor objeto associdado ao sensor
+	 * @param ratio raio em metros
 	 */
 	public void addSensorDetection(SensorPosition sensor,double ratio){
 		int               xs,ys;
 		int                  rs;
 		Double               db;
+		double           dratio;
 		BufferedImage      img1;
 		// Verifica se o sensor estar dentro da area
 		if( (sensor.getLatitude() >= lati)&&(sensor.getLatitude() <= latf)&&
@@ -184,8 +186,10 @@ public class LocationArea {
 			ys = height - db.intValue();
 			db = new Double( (sensor.getLongitude() - longi)/deltaX);
 			xs = db.intValue();
-			// TODO O Raio devera ser convertido para metros
-			db = new Double( (ratio /(latf - lati))*height);
+			// Raio convertido para graus
+			dratio = DevicesPositionControl.convertToGrade(ratio, sensor.getLatitude(), sensor.getLongitude());
+			// converte o raio em pixeis
+			db = new Double( (dratio /(latf - lati))*height);
 			rs = db.intValue();
 			// Verifica se parametros sao validos
 			if( (rs >0)&&(xs >=0)&&(ys>=0)){
