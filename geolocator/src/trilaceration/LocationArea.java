@@ -34,23 +34,26 @@ public class LocationArea {
 	 */
 	public LocationArea(double lati,double longi,double latf,double longf,int width,int height) {
 		super();
-		// Seta parametros
-		this.lati   = lati;
-		this.longi  = longi;
-		this.latf   = latf;
-		this.longf  = longf;
-		this.width  = width;
-		this.height = height;
-		img = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
-		Graphics g = img.createGraphics();
-		g.setColor( Color.WHITE );
-		g.fillRect( 0, 0, width, height );
-		//g.setColor( Color.BLACK );
-		//g.drawLine( 0, 0, width, height );
-		deltaX = (latf - lati)/width;
-		deltaY = (longf - longi)/height;
+		// Verifica se paramentros sao validos
+		if( (lati < latf)&&(longi < longf) &&(width > 0) &&(height > 0)){
+			// Seta parametros
+			this.lati   = lati;
+			this.longi  = longi;
+			this.latf   = latf;
+			this.longf  = longf;
+			this.width  = width;
+			this.height = height;
+			img = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
+			Graphics g = img.createGraphics();
+			g.setColor( Color.WHITE );
+			g.fillRect( 0, 0, width, height );
+			//g.setColor( Color.BLACK );
+			//g.drawLine( 0, 0, width, height );
+			deltaY = (latf - lati)/height;
+			deltaX = (longf - longi)/width;
+			status = NO_POSITION;
+		}
 		
-		status = NO_POSITION;
 	}
 	/**
 	 * 
@@ -77,7 +80,7 @@ public class LocationArea {
 		
 	}
 	/**
-	 * 
+	 * Gera uma imagem da interseccao das duas areas sendo uma definida pela posicao do sensor e da intersecao anterior
 	 * @param x
 	 * @param y
 	 * @param ratio
@@ -92,29 +95,76 @@ public class LocationArea {
 		BufferedImage result;
 		int      c1,c2,c3,c4;
 		Point          point;
+		int        xmin,ymin;
+		int        xmax,ymax;
 	
-		result = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
-		shape  = new ArrayList<Point>();
+		if( hasIntersection(x, y, ratio, color1, color2, img1, img2)){
+			result = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
+			shape  = new ArrayList<Point>();
+			
+			clearImage(result);
+			c3 = color1.getRGB();
+			c4 = color2.getRGB();
+			xmin =((x-ratio) > 0)?(x - ratio) : 0;
+			ymin =((y-ratio) > 0)?(y - ratio) : 0;
+			xmax =((x+ratio+1)>(width -1))?(width - 1):(x + ratio + 1);
+			ymax =((y+ratio+1)>(height -1))?(height - 1):(y + ratio + 1);
+			// Percorre a area em torno do circulo da imagem 1
+			for (i =xmin;i < xmax;i++){
+				for( j=ymin; j <ymax; j++){
+					c1 = img1.getRGB(i, j);
+					c2 = img2.getRGB(i, j);
+					//System.out.printf("%d %d\n",c1,c2);
+					// verifica se o pixel da imagem 1 e na imagem 2 tem o pixel na cor pintada
+					if( (c1 == c3) && (c2 == c4) ){
+						result.setRGB(i, j, Color.BLUE.getRGB());
+						point = new Point( i,j );
+						shape.add(point);
+					}
+				}
+			}
+			return result;
+		}
+		else
+			return this.img;
+	}
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param ratio
+	 * @param color1
+	 * @param color2
+	 * @param img1
+	 * @param img2
+	 * @return
+	 */
+	private boolean hasIntersection(int x,int y, int ratio,Color color1,Color color2,BufferedImage img1,BufferedImage img2){
+		int              i,j;
+		int      c1,c2,c3,c4;
+		int        xmin,ymin;
+		int        xmax,ymax;
+	
 		
-		clearImage(result);
 		c3 = color1.getRGB();
 		c4 = color2.getRGB();
+		xmin =((x-ratio) > 0)?(x - ratio) : 0;
+		ymin =((y-ratio) > 0)?(y - ratio) : 0;
+		xmax =((x+ratio+1)>(width -1))?(width - 1):(x + ratio + 1);
+		ymax =((y+ratio+1)>(height -1))?(height - 1):(y + ratio + 1);
 		// Percorre a area em torno do circulo da imagem 1
-		for (i =(x -ratio);i < (x + ratio + 1);i++){
-			for( j=(y-ratio); j <(y + ratio +1); j++){
+		for (i =xmin;i < xmax;i++){
+			for( j=ymin; j <ymax; j++){
 				c1 = img1.getRGB(i, j);
 				c2 = img2.getRGB(i, j);
-				//System.out.printf("%d %d\n",c1,c2);
 				// verifica se o pixel da imagem 1 e na imagem 2 tem o pixel na cor pintada
 				if( (c1 == c3) && (c2 == c4) ){
-					result.setRGB(i, j, Color.BLUE.getRGB());
-					point = new Point( i,j );
-					shape.add(point);
+					return true;
 				}
 			}
 		}
-		return result;
-	}
+		return false;
+	}	
 	/**
 	 * 
 	 * @param sensor
@@ -125,32 +175,37 @@ public class LocationArea {
 		int                  rs;
 		Double               db;
 		BufferedImage      img1;
-		// TODO Verifica se o sensor estar dentro da area
+		// Verifica se o sensor estar dentro da area
+		if( (sensor.getLatitude() >= lati)&&(sensor.getLatitude() <= latf)&&
+			(sensor.getLongitude() >= longi)&&(sensor.getLongitude()<=longf)){
 		
-		// Calcula coordenadas dentro da imagem
-		db = new Double( (sensor.getLatitude() - lati)/deltaX);
-		xs = db.intValue();
-		db = new Double( (sensor.getLongitude() - longi)/deltaY);
-		ys = db.intValue();
-		// TODO O Raio devera ser convertido para metros
-		db = new Double( (ratio /(latf - lati))*width);
-		rs = db.intValue();
-		// TODO verifica se parametros sao validos
-		if( status == LocationArea.NO_POSITION){
-			clearImage(this.img);
-			// Primeira vez que esta sendo detectado a area possivel e  a mesma da estacao
-			drawCicle(xs,ys,rs,Color.BLUE,this.img);
-			xc    = xs;
-			yc    = ys;
-			ratio = rs;
-			status = LocationArea.DETECTED;
-			
-		}
-		else{
-			img1 = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
-			drawCicle(xs,ys,rs,Color.BLUE,img1);
-			// Calcula a imagem interseccao entre as duas imagens
-			img = getIntersectionImage(xs,ys, rs,Color.BLUE,Color.BLUE,img1,this.img);
+			// Calcula coordenadas dentro da imagem
+			db = new Double( (sensor.getLatitude() - lati)/deltaY);
+			ys = height - db.intValue();
+			db = new Double( (sensor.getLongitude() - longi)/deltaX);
+			xs = db.intValue();
+			// TODO O Raio devera ser convertido para metros
+			db = new Double( (ratio /(latf - lati))*height);
+			rs = db.intValue();
+			// Verifica se parametros sao validos
+			if( (rs >0)&&(xs >=0)&&(ys>=0)){
+				if( status == LocationArea.NO_POSITION){
+					clearImage(this.img);
+					// Primeira vez que esta sendo detectado a area possivel e  a mesma da estacao
+					drawCicle(xs,ys,rs,Color.BLUE,this.img);
+					xc    = xs;
+					yc    = ys;
+					ratio = rs;
+					status = LocationArea.DETECTED;
+					
+				}
+				else{
+					img1 = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
+					drawCicle(xs,ys,rs,Color.BLUE,img1);
+					// Calcula a imagem interseccao entre as duas imagens
+					img = getIntersectionImage(xs,ys, rs,Color.BLUE,Color.BLUE,img1,this.img);
+				}
+			}
 		}
 		
 	}
@@ -243,10 +298,10 @@ public class LocationArea {
 	public static void main(String[] args) {
 	    BufferedImage   image;
 
-		LocationArea   area   = new LocationArea (0,0,4,4,400,400);
-	    SensorPosition sensor1 = new SensorPosition(1,1,0.5);
-	    SensorPosition sensor2 = new SensorPosition(1.5,1,0.5);
-	    SensorPosition sensor3 = new SensorPosition(1.25,1.5,0.5);
+		LocationArea   area   = new LocationArea (-3,-5,-1,-1,400,200);
+	    SensorPosition sensor1 = new SensorPosition(-2,-3,0.5);
+	    SensorPosition sensor2 = new SensorPosition(-2.5,-3,0.5);
+	    SensorPosition sensor3 = new SensorPosition(-2.0,-2.5,0.5);
 	    area.addSensorDetection(sensor1, 1);
 	    area.addSensorDetection(sensor2, 1);
 	    area.addSensorDetection(sensor3, 1);

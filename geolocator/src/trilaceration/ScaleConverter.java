@@ -17,10 +17,14 @@ public class ScaleConverter {
 	public static int convertToX(IGeoPosition position) {
          double deltaLat;
          int           x;
-         
-         deltaLat = (position.getLatitude() - latIni)/(latEnd - latIni);
-         x = (int)(deltaLat*width);
-         return x;
+ 
+ 		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	
+	         deltaLat = (position.getLatitude() - latIni)/(latEnd - latIni);
+	         x = (int)(deltaLat*width);
+	         return x;
+ 		}
+ 		return 0;
 	}
     /**
      * 
@@ -30,10 +34,13 @@ public class ScaleConverter {
 	public static int convertToY(IGeoPosition position) {
         double deltaLong;
         int            y;
-        
-        deltaLong = (position.getLongitude() - longIni)/(longEnd - longIni);
-        y = (int)(deltaLong*height);
-        return y;
+
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLong = (position.getLongitude() - longIni)/(longEnd - longIni);
+	        y = (int)(deltaLong*height);
+	        return y;
+		}
+		return 0;
 	}
 	/**
 	 * 
@@ -43,10 +50,13 @@ public class ScaleConverter {
 	public static double convertToLatitude(int x){
         double  deltaLat;
         double  latitude;
-        
-        deltaLat = (latEnd - latIni)/width;
-        latitude = x * deltaLat + latIni;		
-		return latitude;
+
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLat = (latEnd - latIni)/width;
+	        latitude = x * deltaLat + latIni;		
+			return latitude;
+		}
+		return 0;
 	}
 	/**
 	 * 
@@ -56,10 +66,12 @@ public class ScaleConverter {
 	public static double convertToLongitude(int y){
         double deltaLong;
         double longitude;
-        
-        deltaLong = (longEnd - longIni)/width;
-        longitude = y * deltaLong + longIni;		
-		return longitude;
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLong = (longEnd - longIni)/width;
+	        longitude = y * deltaLong + longIni;		
+			return longitude;
+		}
+		return 0;
 	}
 	
 }
