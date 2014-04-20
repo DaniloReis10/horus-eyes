@@ -17,7 +17,7 @@ public class LocationArea {
 	private int               xc,yc;// Centro da area em torno da posicao estimada do dispositivo
 	private int               ratio;// Raio em torno da possicao estimada
 	private BufferedImage       img;// Imagem  da area provavel
-	private ArrayList<Point>  shape; 
+	private ArrayList<Point>  shape;// Forma da intersecçao
 
 	public static final int NO_POSITION = 0; 
 	public static final int DETECTED    = 1; 
@@ -25,13 +25,13 @@ public class LocationArea {
 	public static final int SY[]={-1,-1, 0, 1, 1, 1, 0,-1};
 	
 	/**
-	 * 
-	 * @param lati
-	 * @param longi
-	 * @param latf
-	 * @param longf
-	 * @param width
-	 * @param height
+	 * Classe responsável por calculo da trileceraçao em uma área de estudo
+	 * @param lati  latitude do canto inferior esquerdo da área em estudo.
+	 * @param longi longitude do canto inferior esquerdo da área em estudo.
+	 * @param latf latitude do canto superior direito da área em estudo.
+	 * @param longf longitude do canto superior direito da área em estudo.
+	 * @param width largura em pixeis da imagem da área em estudo.
+	 * @param height altura em pixeis da imagem da área em estudo.
 	 */
 	public LocationArea(double lati,double longi,double latf,double longf,int width,int height) {
 		super();
@@ -57,12 +57,12 @@ public class LocationArea {
 		
 	}
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param ratio
-	 * @param color
-	 * @param image
+	 * Desenha um circulo preenchido com centro x,y e raio (ratio) na miagem image.
+	 * @param x coordenadas do centro do circulo.
+	 * @param y coordenadas do centro do circulo.
+	 * @param ratio raio do circulo
+	 * @param color cor do circulo
+	 * @param image imagem onde o circulo sera desenhado
 	 */
 	private void drawCicle(int x,int y, int ratio,Color color,BufferedImage image){
 		Graphics g = image.createGraphics();
@@ -71,8 +71,8 @@ public class LocationArea {
 		g.fillOval(x - ratio, y - ratio,2*ratio, 2*ratio);
 	}
 	/**
-	 * 
-	 * @param image
+	 * Limpa imagem
+	 * @param image imagem a ser limpa
 	 */
 	private void clearImage(BufferedImage image){
 		Graphics g = image.createGraphics();
@@ -82,14 +82,14 @@ public class LocationArea {
 	}
 	/**
 	 * Gera uma imagem da interseccao das duas areas sendo uma definida pela posicao do sensor e da intersecao anterior
-	 * @param x
-	 * @param y
-	 * @param ratio
-	 * @param color1
-	 * @param color2
-	 * @param img1
-	 * @param img2
-	 * @return
+	 * @param x coordenadas do centro do circulo
+	 * @param y coordenadas do centro do circulo
+	 * @param ratio raio do circulo
+	 * @param color1 cor do circulo 1
+	 * @param color2 cor do circulo 2
+	 * @param img1 imagem onde se encontra o circulo 1
+	 * @param img2 imagem onde se encontra o circulo 2
+	 * @return imagem com a interseccao
 	 */
 	private BufferedImage getIntersectionImage(int x,int y, int ratio,Color color1,Color color2,BufferedImage img1,BufferedImage img2){
 		int              i,j;
@@ -130,15 +130,16 @@ public class LocationArea {
 			return this.img;
 	}
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param ratio
-	 * @param color1
-	 * @param color2
-	 * @param img1
-	 * @param img2
-	 * @return
+	 * Verifica se existe intersecçao entre as áreas
+	 * @param x coordenadas do centro do circulo
+	 * @param y coordenadas do centro do circulo
+	 * @param ratio raio do circulo
+	 * @param color1 cor do circulo 1
+	 * @param color2 cor do circulo 2
+	 * @param img1 imagem do circulo 1
+	 * @param img2 imagem do circulo 2
+	 * @return true existe area de intersecçao
+	 * @return false não existe área de intersecção
 	 */
 	private boolean hasIntersection(int x,int y, int ratio,Color color1,Color color2,BufferedImage img1,BufferedImage img2){
 		int              i,j;
@@ -213,7 +214,9 @@ public class LocationArea {
 		}
 		
 	}
-	
+	/**
+	 * Desenha o centroide da área de intersecção
+	 */
 	public void showCentroide(){
 		// calcula o centroide da interseccao
 		calculateCentroid();
@@ -222,7 +225,10 @@ public class LocationArea {
 		drawCentroide(Color.RED);
 		
 	}
-	
+	/**
+	 * Retorna o objeto centroide da imagem com a intersecçãoi
+	 * @return
+	 */
 	public Centroide getCentroide(){
 		Centroide  centroide;
 		// calcula o centroide da interseccao
@@ -236,7 +242,7 @@ public class LocationArea {
 		
 	}
 	/**
-	 * 		
+	 * Retorna a imagem com a intersecção		
 	 * @return
 	 */
 	public ImageIcon getImagem() {
@@ -245,7 +251,7 @@ public class LocationArea {
 		return new ImageIcon( buffer );
     }
 	/**
-	 * 
+	 * Calcula o centroide da área de intersecção
 	 * @return
 	 */
 	private Point calculateCentroid(){
@@ -268,8 +274,8 @@ public class LocationArea {
 		
 	}
 	/**
-	 * 
-	 * @return
+	 * Calcula o raio do circulo da área que contem toda área de intersecção.
+	 * @return raio em pixeis
 	 */
 	private long calculateRatioCentroid(){
 		Iterator<Point> iterator;
@@ -287,6 +293,10 @@ public class LocationArea {
 		}
 		return ratio;
 	}
+	/**
+	 * Desenha o centroide na imagem
+	 * @param color
+	 */
 	public void drawCentroide(Color color){
 		Graphics g=img.getGraphics();
 		
