@@ -3,17 +3,15 @@ package soundid;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import simulagent.MobileAgent;
-
 public class TagAgent extends MobileAgent {
 	private float                         temperature;
 	private ArrayList<TimeMeasurePoint>  timeMeasures;
     private TimeMeasurePoint         timeMeasurePoint;
     private int                             measureId;
 	
-	public TagAgent() {
-		super();
-		timeMeasures = new ArrayList<TimeMeasurePoint> ();
+	public TagAgent(Integer agentID) {
+	    super(agentID);
+		this.timeMeasures = new ArrayList<TimeMeasurePoint> ();
 	}	
 	
 	/**

@@ -1,6 +1,5 @@
 package soundid;
 
-import simulagent.RFAgent;
 
 public class BaseAgent extends RFAgent {
 
