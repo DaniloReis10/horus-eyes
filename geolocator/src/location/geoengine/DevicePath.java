@@ -104,7 +104,7 @@ public class DevicePath {
 		for(i = index0; i <= index1 - 1; i++ ){
 			pos1 = (IGeoPosition)positions.get(i);
 			pos2 = (IGeoPosition)positions.get(i+1);
-			d += DevicesPositionControl.calculateDistance(pos1, pos2);
+			d += DevicesController.calculateDistance(pos1, pos2);
 		}
 		return d;
 	}

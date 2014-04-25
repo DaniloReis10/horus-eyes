@@ -1,6 +1,6 @@
 package simulagent;
 
-public enum AgentMobility {
+public enum Mobility {
     
     FIXED(0, "Fixed"),
     MOBILE(1, "Mobile");
@@ -8,7 +8,7 @@ public enum AgentMobility {
     private int index;
     private String description;
     
-    private AgentMobility(final int index, final String description) {
+    private Mobility(final int index, final String description) {
         this.index = index;
         this.description = description;
     }
