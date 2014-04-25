@@ -10,15 +10,23 @@ import trilaceration.ScaleConverter;
 public class SimulationController {
 
     public static void main(String[] args) {
-        ScaleConverter.latIni = 0.0;
-        ScaleConverter.longIni = 0.0;
-        ScaleConverter.latEnd = 4.0;
-        ScaleConverter.longEnd = 4.0;
-        ScaleConverter.width  = 700;
-        ScaleConverter.height = 400;
-        
-        SimulationFrame frame = new SimulationFrame();
-        frame.pack();
-        frame.setVisible(true);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              buildGUI();
+            }
+
+            private void buildGUI() {
+                ScaleConverter.latIni = 0.0;
+                ScaleConverter.longIni = 0.0;
+                ScaleConverter.latEnd = 4.0;
+                ScaleConverter.longEnd = 4.0;
+                ScaleConverter.width  = 980;
+                ScaleConverter.height = 480;
+                
+                SimulationFrame frame = new SimulationFrame();
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
     }
 }

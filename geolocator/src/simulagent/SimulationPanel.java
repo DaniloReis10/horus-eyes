@@ -1,6 +1,5 @@
 package simulagent;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -33,25 +32,37 @@ public class SimulationPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        ModelEnviroment.getInstance().drawImage(graphics, Color.BLUE);
-        ModelEnviroment.getInstance().moveImage();
+        ModelEnviroment.getInstance().move();
+        ModelEnviroment.getInstance().draw(graphics);
     }
 
     public void startSimulation() {
-        final short numberOfDevices = this.simulationFrame.getNumberOfDevices();
-        final short numberOfSensors = this.simulationFrame.getNumberOfSensors();
-        final short numberOfFixedDevices = this.simulationFrame.getNumberOfFixedDevices();
-        final short numberOfMobileDevices = this.simulationFrame.getNumberOfMobileDevices();
-        
-        ModelEnviroment.getInstance().createMobileAgentsWithRandomPosition(numberOfMobileDevices);
-        ModelEnviroment.getInstance().createStaticAgents(numberOfFixedDevices);
-        
+        this.createDevices();
         this.startAnimation();
     }
     
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private void createDevices() {
+        final short numberOfFixedAgents = this.simulationFrame.getNumberOfFixedAgents();
+        final short numberOfMobileAgents = this.simulationFrame.getNumberOfMobileAgents();
+        
+        final short numberOfFixedSensors = this.simulationFrame.getNumberOfFixedSensors();
+        final short numberOfMobileSensors = this.simulationFrame.getNumberOfMobileSensors();
+        
+        ModelEnviroment.getInstance().createDevices(numberOfFixedAgents, numberOfFixedSensors, numberOfMobileAgents, numberOfMobileSensors); 
+    }
+
     public void stopSimulation() {
-        ModelEnviroment.getInstance().deleteAllAgents();
+        ModelEnviroment.getInstance().deleteAllDevices();
         this.stopAnimation();
+        this.repaint();
     }
     
     public void startAnimation() {
