@@ -12,7 +12,7 @@ public class GeoPositionControlTest {
 	public static void main(String[] args) {
 		String []               params;
 		//String                    resp;
-		DevicesPositionControl control;
+		DevicesController control;
 		GeoMobilePosition           position;
 		double                latitude;
 		double               longitude;
@@ -46,8 +46,8 @@ public class GeoPositionControlTest {
         longitude = Double.parseDouble("-38.497810");
         Date now  = new Date();
         position  = new GeoMobilePosition(now, latitude, longitude);
-        control   = DevicesPositionControl.getInstance();
-        control.updateDevicePosition(new Integer(1), position);
+        control   = DevicesController.getInstance();
+//        control.updateDevicePosition(new Integer(1), position);
         
         //List<IMobileDevice> list = control.getDevicesByGroup(1);
         
