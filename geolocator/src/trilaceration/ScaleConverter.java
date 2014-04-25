@@ -15,12 +15,16 @@ public class ScaleConverter {
 	 * @return
 	 */
 	public static int convertToX(IGeoPosition position) {
-         double deltaLat;
-         int           x;
-         
-         deltaLat = (position.getLatitude() - latIni)/(latEnd - latIni);
-         x = (int)(deltaLat*width);
-         return x;
+         double deltaLong;
+         int            x;
+ 
+ 		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	
+	         deltaLong = (position.getLatitude() - longIni)/(longEnd - longIni);
+	         x = (int)(deltaLong*width);
+	         return x;
+ 		}
+ 		return 0;
 	}
     /**
      * 
@@ -28,38 +32,46 @@ public class ScaleConverter {
      * @return
      */
 	public static int convertToY(IGeoPosition position) {
-        double deltaLong;
+        double  deltaLat;
         int            y;
-        
-        deltaLong = (position.getLongitude() - longIni)/(longEnd - longIni);
-        y = (int)(deltaLong*height);
-        return y;
+
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLat = (position.getLatitude() - latIni)/(latEnd - latIni);
+	        y = (int)(height - deltaLat*height);
+	        return y;
+		}
+		return 0;
 	}
 	/**
 	 * 
 	 * @param x
 	 * @return
 	 */
-	public static double convertToLatitude(int x){
-        double  deltaLat;
-        double  latitude;
-        
-        deltaLat = (latEnd - latIni)/width;
-        latitude = x * deltaLat + latIni;		
-		return latitude;
+	public static double convertToLongitude(int x){
+        double  deltaLong;
+        double  longitude;
+
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLong = (longEnd - longIni)/width;
+	        longitude = x * deltaLong + longIni;		
+			return longitude;
+		}
+		return 0;
 	}
 	/**
 	 * 
 	 * @param y
 	 * @return
 	 */
-	public static double convertToLongitude(int y){
-        double deltaLong;
-        double longitude;
-        
-        deltaLong = (longEnd - longIni)/width;
-        longitude = y * deltaLong + longIni;		
-		return longitude;
+	public static double convertToLatitude(int y){
+        double deltaLat;
+        double  latitude;
+		if( (latIni < latEnd)&&(longIni < longEnd) &&(width > 0) &&(height > 0)){
+	        deltaLat = (latEnd - latIni)/height;
+	        latitude = (height - y) * deltaLat + latIni;		
+			return latitude;
+		}
+		return 0;
 	}
 	
 }
