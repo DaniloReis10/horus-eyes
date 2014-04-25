@@ -1,13 +1,11 @@
 package simulagent;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
 
-import location.geoengine.GeoPosition;
+import location.facade.GeopositionFacade;
 import trilaceration.ScaleConverter;
 
 /**
@@ -23,9 +21,8 @@ import trilaceration.ScaleConverter;
 public class ModelEnviroment implements IActionTick {
 
     private static ModelEnviroment instance;        // Instancia do modelo
-    PathFactory factory;                            // Fabrica de agentes
-    ArrayList<RFAgent> agents;                      // lista de agentes criados
-    private int lastAgentId = 0;
+    private List<Device> devices;                      // lista de agentes criados
+    private int deviceIdController = 0;
 
     /**
      * Retorna a instancia do modelo (Padrão de projeto singleton)
@@ -44,48 +41,98 @@ public class ModelEnviroment implements IActionTick {
      */
     public ModelEnviroment() {
         super();
-        this.factory = new PathFactory();
-        this.agents = new ArrayList<RFAgent>();
+        this.devices = new ArrayList<Device>();
     }
 
     /**
-     * Cria agentes moveis no ambiente
+     * <p>
+     *  Creates all the devices used in simulation
+     * </p>
      * 
-     * @param n
-     *            Numero de agentes a serem criados
-     * @param nPositions
-     *            - numero de posicoes estaticas que o agente terá na sua rota
-     *            diária.
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
      */
-    public void createMobileAgents(int n, int nPositions) {
-        for (int i = 0; i < n; i++) {
-            final AgentPath path = factory.create(ScaleConverter.width, ScaleConverter.height, nPositions);
-            final MobileAgent agent = new MobileAgent(generateAgentId());
-            agent.setPath(path);
-            agent.setCurrentPosition(agent.getPath().getPositionAtTime(0));
-            this.agents.add(agent);
+    public void createDevices(short numberOfFixedAgents, short numberOfFixedSensors, short numberOfMobileAgents, short numberOfMobileSensors) {
+        List<Device> fixedAgents = DeviceFactory.createStaticDevices(Agent.class, numberOfFixedAgents);
+        List<Device> fixedSensors = DeviceFactory.createStaticDevices(Sensor.class, numberOfFixedSensors);
+        List<Device> mobileAgents = DeviceFactory.createMobileDevices(Agent.class, numberOfMobileAgents);
+        List<Device> mobileSensors = DeviceFactory.createMobileDevices(Sensor.class, numberOfMobileSensors);
+        
+        this.devices.addAll(fixedAgents);
+        this.devices.addAll(fixedSensors);
+        this.devices.addAll(mobileAgents);
+        this.devices.addAll(mobileSensors);
+        
+        GeopositionFacade.getInstance().addDevicesToTrack(devices);
+    }
+    
+    @Override
+    public void move() {
+        final Iterator<Device> iterator = this.devices.iterator();
+        
+        while (iterator.hasNext()) {
+            final Device device = iterator.next();
+            device.move();
         }
     }
 
     /**
-     * Cria agentes fixos no ambiente
+     * <p></p>
      * 
-     * @param n
-     *            numero de agentes a serem criados
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
      */
-    public void createStaticAgents(int n) {
-        for (int i = 0; i < n; i++) {
-            final RFAgent agent = new RFAgent(this.generateAgentId());
-
-            final double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni);
-            final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
-            final GeoPosition position = new GeoPosition(latitude, longitude);
-            
-            agent.setCurrentPosition(position);
-            this.agents.add(agent);
+    public void draw(Graphics graphics) {
+        final Iterator<Device> iterator = this.devices.iterator();
+        
+        while (iterator.hasNext()) {
+            final Device device = iterator.next();
+            device.draw(graphics);
         }
     }
 
+    /**
+     * <p>This method increments the device ID number and returns the incremented ID.</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public Integer generateDeviceId() {
+        this.deviceIdController++;
+        return new Integer(deviceIdController);
+    }
+    
+    /**
+     * <p>This method resets the device ID number.</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void resetDeviceIdController() {
+        this.deviceIdController = 0;
+    }
+
+    /**
+     * <p>This method deletes all static and mobile devices.</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void deleteAllDevices() {
+        this.devices.clear();
+        this.resetDeviceIdController();
+    }
+    
     /**
      * Seta os parametros de escala do ambiente
      * 
@@ -109,98 +156,5 @@ public class ModelEnviroment implements IActionTick {
         ScaleConverter.longIni = longitude0;
         ScaleConverter.latEnd = latitude1;
         ScaleConverter.longEnd = longitude1;
-    }
-
-    @Override
-    public void moveImage() {
-        RFAgent agent;
-        Iterator<RFAgent> iterator;
-
-        // Percorre todos os agentes do ambiente movendo no modelo cada um.
-        iterator = this.agents.iterator();
-        while (iterator.hasNext()) {
-            agent = iterator.next();
-            agent.moveImage();
-        }
-
-    }
-
-    @Override
-    public void clearImage(BufferedImage image) {
-        RFAgent agent;
-        Iterator<RFAgent> iterator;
-        // Percorre todos os agentes do ambiente apagando cada um.
-        iterator = this.agents.iterator();
-        while (iterator.hasNext()) {
-            agent = iterator.next();
-            agent.clearImage(image);
-        }
-
-    }
-
-    /**
-     * <p></p>
-     * 
-     * 
-     * @author tiagoportela <tiagoporteladesouza@gmail.com>
-     * @param
-     * @return
-     */
-    public void drawImage(Graphics graphics, Color color) {
-        RFAgent agent;
-        Iterator<RFAgent> iterator;
-
-        // Percorre todos os agentes do ambiente desenhando cada um.
-        iterator = this.agents.iterator();
-        while (iterator.hasNext()) {
-            agent = iterator.next();
-            agent.drawImage(graphics, color);
-        }
-    }
-
-    /**
-     * <p>This method creates mobile agents with random generated positions</p>
-     * 
-     * 
-     * @author tiagoportela <tiagoporteladesouza@gmail.com>
-     * @param
-     * @return
-     */
-    public void createMobileAgentsWithRandomPosition(int numberOfAgents) {
-        final Random randomNumberGenerator = new Random();
-        
-        for (int i = 0; i < numberOfAgents; i++) {
-            final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 1);
-            final AgentPath path = this.factory.create(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
-            final MobileAgent agent = new MobileAgent(generateAgentId()); 
-            agent.setPath(path);
-            agent.setCurrentPosition(agent.getPath().getFirstPosition());
-            this.agents.add(agent);
-        }
-    }
-    
-    /**
-     * <p>This method increments the agent ID number and returns the incremented ID.</p>
-     * 
-     * 
-     * @author tiagoportela <tiagoporteladesouza@gmail.com>
-     * @param
-     * @return
-     */
-    private Integer generateAgentId() {
-        ModelEnviroment.instance.lastAgentId++;
-        return new Integer(lastAgentId);
-    }
-
-    /**
-     * <p>This method deletes all static and mobile agents.</p>
-     * 
-     * 
-     * @author tiagoportela <tiagoporteladesouza@gmail.com>
-     * @param
-     * @return
-     */
-    public void deleteAllAgents() {
-        this.agents.clear();
     }
 }
