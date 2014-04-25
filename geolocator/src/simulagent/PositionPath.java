@@ -1,7 +1,5 @@
 package simulagent;
 
-import java.util.Date;
-
 import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
 
