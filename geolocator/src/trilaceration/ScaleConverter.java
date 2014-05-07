@@ -1,6 +1,8 @@
 package trilaceration;
 
 import location.facade.*;
+import location.geoengine.DevicesController;
+import location.geoengine.GeoPosition;
 public class ScaleConverter {
 
     public static double  latIni;
@@ -72,6 +74,26 @@ public class ScaleConverter {
             return latitude;
         }
         return 0;
+    }
+    public static double convertToGrades(double distance,double latitude,double longitude){
+    	double      l1,l2;
+    	GeoPosition p1,p2;
+    	double  rdistance;
+    	
+    	// Gera os pontos de referencia da area
+    	p1 = new GeoPosition (latIni,longIni);
+    	p2 = new GeoPosition (latIni,longEnd);
+
+    	// Calcula a distancia no lado superior da area
+    	l1 = DevicesController.calculateDistance(p1, p2);
+       	
+    	p1 = new GeoPosition (latEnd,longIni);
+    	p2 = new GeoPosition (latEnd,longEnd);
+    	// calcula a distancia do lado inferior da área
+   	    l2 = DevicesController.calculateDistance(p1, p2);
+        // calculo da distancia fazendo correcao pela latitude
+    	rdistance = l1 + ((latitude -latIni)/(latEnd - latIni))*(l2 - l1);
+    	return rdistance;
     }
     
 }
