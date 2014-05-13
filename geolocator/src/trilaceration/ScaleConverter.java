@@ -75,24 +75,21 @@ public class ScaleConverter {
         }
         return 0;
     }
-    public static double convertToGrades(double distance,double latitude,double longitude){
-    	double      l1,l2;
-    	GeoPosition p1,p2;
+    public static double convertToGrades(double distance, double latitude, double longitude){
     	double  rdistance;
     	
     	// Gera os pontos de referencia da area
-    	p1 = new GeoPosition (latIni,longIni);
-    	p2 = new GeoPosition (latIni,longEnd);
+    	final GeoPosition topLeftCorner = new GeoPosition (latIni,longIni);
+    	final GeoPosition topRightCorner = new GeoPosition (latIni,longEnd);
+    	final GeoPosition bottomLeftCorner = new GeoPosition (latEnd,longIni);
+        final GeoPosition bottomRightCorner = new GeoPosition (latEnd,longEnd);
+    	
+    	final double topDistance = DevicesController.calculateDistance(topLeftCorner, topRightCorner);
+   	    final double bottomDistance = DevicesController.calculateDistance(bottomLeftCorner, bottomRightCorner);
 
-    	// Calcula a distancia no lado superior da area
-    	l1 = DevicesController.calculateDistance(p1, p2);
-       	
-    	p1 = new GeoPosition (latEnd,longIni);
-    	p2 = new GeoPosition (latEnd,longEnd);
-    	// calcula a distancia do lado inferior da área
-   	    l2 = DevicesController.calculateDistance(p1, p2);
-        // calculo da distancia fazendo correcao pela latitude
-    	rdistance = l1 + ((latitude -latIni)/(latEnd - latIni))*(l2 - l1);
+   	    // calculo da distancia fazendo correcao pela latitude
+    	rdistance = topDistance + ((latitude - latIni) / (latEnd - latIni)) * (bottomDistance - topDistance);
+
     	return rdistance;
     }
     
