@@ -272,7 +272,7 @@ public class LocationArea {
 		
 	}
 	/**
-	 * Calcula o raio do circulo da ��rea que contem toda ��rea de intersec����o.
+	 * Calcula o raio do circulo da area que contem toda area de intersecao.
 	 * @return raio em pixeis
 	 */
 	private long calculateRatioCentroid(){
