@@ -1,3 +1,4 @@
+
 package location.geoengine;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import simulagent.Device;
 import trilaceration.ScaleConverter;
 
 /**
- * Classe controladora do gerenciamento de posi??????es
+ * Classe controladora do gerenciamento de posi��es
  * 
  * @author Danilo Reis
  * 
@@ -285,11 +286,11 @@ public class DevicesController {
     }*/
 
     /**
-     * Fun???ao solicita do googlemaps uma imagem com o centro da imagem
+     * Fun�ao solicita do googlemaps uma imagem com o centro da imagem
      * localizado nas latitude e longitude especificados. A imagem gerada coloca
-     * uma icone no local das coordenadas o programador pode determinar o n???vel
-     * de zoom , a icone que ser??? mostrada e um path. Estes dois ultimos
-     * parametros podem serem deixados em branco quando n???o se desejar mostrar a
+     * uma icone no local das coordenadas o programador pode determinar o n�vel
+     * de zoom , a icone que ser� mostrada e um path. Estes dois ultimos
+     * parametros podem serem deixados em branco quando n�o se desejar mostrar a
      * path e que a icone do marcador seja a default do google maps.
      * 
      * @param latitude
@@ -297,11 +298,11 @@ public class DevicesController {
      * @param longitude
      *            - longitude do ponto a ser mostrado na imagem
      * @param imageName
-     *            - Nome do arquivo de imagem que ser??? mostrado
+     *            - Nome do arquivo de imagem que ser� mostrado
      * @param zoom
-     *            - N???vel de zoom entre 0 (o mais baixo, no qual todo o mundo
-     *            pode ser visto em um s??? mapa) e 21+ (chega at??? constru??????es
-     *            individuais) s???o poss???veis na visualiza??????o padr???o dos mapas.
+     *            - N�vel de zoom entre 0 (o mais baixo, no qual todo o mundo
+     *            pode ser visto em um s� mapa) e 21+ (chega at� constru��es
+     *            individuais) s�o poss�veis na visualiza��o padr�o dos mapas.
      * @param custonIconUrl
      *            -
      * @param path
