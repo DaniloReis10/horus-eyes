@@ -1,12 +1,14 @@
 package trilaceration;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
-
-import location.geoengine.DevicesController;
-import location.geoengine.GeoPosition;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class LocationArea {
     private double       lati,longi;// coordenadas do canto superior esquerdo da area
@@ -17,7 +19,7 @@ public class LocationArea {
     private int               xc,yc;// Centro da area em torno da posicao estimada do dispositivo
     private int               ratio;// Raio em torno da possicao estimada
     private BufferedImage       img;// Imagem  da area provavel
-    private ArrayList<Point>  shape;// Forma da intersecçao
+    private ArrayList<Point>  shape;// Forma da intersec��ao
 
     public static final int NO_POSITION = 0; 
     public static final int DETECTED    = 1; 
@@ -25,13 +27,13 @@ public class LocationArea {
     public static final int SY[]={-1,-1, 0, 1, 1, 1, 0,-1};
     
     /**
-     * Classe responsável por calculo da trileceraçao em uma área de estudo
-     * @param lati  latitude do canto inferior esquerdo da área em estudo.
-     * @param longi longitude do canto inferior esquerdo da área em estudo.
-     * @param latf latitude do canto superior direito da área em estudo.
-     * @param longf longitude do canto superior direito da área em estudo.
-     * @param width largura em pixeis da imagem da área em estudo.
-     * @param height altura em pixeis da imagem da área em estudo.
+     * Classe respons��vel por calculo da trilecera��ao em uma ��rea de estudo
+     * @param lati  latitude do canto inferior esquerdo da ��rea em estudo.
+     * @param longi longitude do canto inferior esquerdo da ��rea em estudo.
+     * @param latf latitude do canto superior direito da ��rea em estudo.
+     * @param longf longitude do canto superior direito da ��rea em estudo.
+     * @param width largura em pixeis da imagem da ��rea em estudo.
+     * @param height altura em pixeis da imagem da ��rea em estudo.
      */
     public LocationArea(double lati,double longi,double latf,double longf,int width,int height) {
         super();
@@ -130,7 +132,7 @@ public class LocationArea {
             return this.img;
     }
     /**
-     * Verifica se existe intersecçao entre as áreas
+     * Verifica se existe intersec��ao entre as ��reas
      * @param x coordenadas do centro do circulo
      * @param y coordenadas do centro do circulo
      * @param ratio raio do circulo
@@ -138,8 +140,8 @@ public class LocationArea {
      * @param color2 cor do circulo 2
      * @param img1 imagem do circulo 1
      * @param img2 imagem do circulo 2
-     * @return true existe area de intersecçao
-     * @return false não existe área de intersecção
+     * @return true existe area de intersec��ao
+     * @return false n��o existe ��rea de intersec����o
      */
     private boolean hasIntersection(int x,int y, int ratio,Color color1,Color color2,BufferedImage img1,BufferedImage img2){
         int              i,j;
@@ -168,7 +170,7 @@ public class LocationArea {
         return false;
     }   
     /**
-     * Adiciona a detecçao de sensor ao objeto
+     * Adiciona a detec��ao de sensor ao objeto
      * @param sensor objeto associdado ao sensor
      * @param ratio raio em metros
      */
@@ -215,7 +217,7 @@ public class LocationArea {
         
     }
     /**
-     * Desenha o centroide da área de intersecção
+     * Desenha o centroide da ��rea de intersec����o
      */
     public void showCentroide(){
         // calcula o centroide da interseccao
@@ -226,7 +228,7 @@ public class LocationArea {
         
     }
     /**
-     * Retorna o objeto centroide da imagem com a intersecçãoi
+     * Retorna o objeto centroide da imagem com a intersec����oi
      * @return
      */
     public Centroide getCentroide(){
@@ -242,7 +244,7 @@ public class LocationArea {
         
     }
     /**
-     * Retorna a imagem com a intersecção       
+     * Retorna a imagem com a intersec����o     
      * @return
      */
     public ImageIcon getImagem() {
@@ -251,7 +253,7 @@ public class LocationArea {
         return new ImageIcon( buffer );
     }
     /**
-     * Calcula o centroide da área de intersecção
+     * Calcula o centroide da ��rea de intersec����o
      * @return
      */
     private Point calculateCentroid(){
@@ -274,7 +276,7 @@ public class LocationArea {
         
     }
     /**
-     * Calcula o raio do circulo da área que contem toda área de intersecção.
+     * Calcula o raio do circulo da area que contem toda area de intersecao.
      * @return raio em pixeis
      */
     private long calculateRatioCentroid(){
@@ -310,13 +312,7 @@ public class LocationArea {
      */
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
-        ScaleConverter.latIni = 0.0;
-        ScaleConverter.longIni = 0.0;
-        ScaleConverter.latEnd = 0.05;
-        ScaleConverter.longEnd = 0.05;
-        ScaleConverter.width  = 400;
-        ScaleConverter.height = 200;
-
+        BufferedImage   image;
 
         LocationArea   area   = new LocationArea (-3,-5,-1,-1,400,200);
         SensorPosition sensor1 = new SensorPosition(-2,-3,0.5);
@@ -326,8 +322,39 @@ public class LocationArea {
         area.addSensorDetection(sensor2, 1);
         area.addSensorDetection(sensor3, 1);
         area.showCentroide();
-
+        /**
+        image = new BufferedImage(400,400,java.awt.image.BufferedImage.TYPE_INT_RGB);
         
+        ScaleConverter.latIni = 0.0;
+        ScaleConverter.longIni = 0.0;
+        ScaleConverter.latEnd = 4.0;
+        ScaleConverter.longEnd = 4.0;
+        ScaleConverter.height = 400;
+        ScaleConverter.width  = 400;
+        
+        ElectronicFence fence = new ElectronicFence();
+        
+        GeoPosition   p1,p2,p3,p4,p5;
+        
+        p1 = new GeoPosition(new Date(),0.3,0.2);
+        p2 = new GeoPosition(new Date(),0.3,1.3);
+        p3 = new GeoPosition(new Date(),2.3,1.3);
+        p4 = new GeoPosition(new Date(),2.3,0.2);
+       // p5 = new GeoPosition(new Date(),0.8,1.2);     
+        
+        fence.addPoint(p1);
+        fence.addPoint(p2);
+        fence.addPoint(p3);
+        fence.addPoint(p4);
+        //fence.addPoint(p5);
+        
+        p1 = new GeoPosition(new Date(),0.1,0.1);
+        
+        boolean result = fence.isInsideFence(p1);
+        System.out.print(result);
+        fence.drawFenceArea(image);
+        */
+        // TODO Auto-generated method stub
         JFrame frm = new JFrame("Teste Imagem");
         JPanel pan = new JPanel();
         JLabel lbl = new JLabel( area.getImagem() );
