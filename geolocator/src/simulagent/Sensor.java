@@ -17,7 +17,7 @@ import sensordataset.DetectedDevice;
  */
 public class Sensor extends Device implements Detector {
     
-    public static final int RADIUS = 10;
+    public static final int RADIUS = 15;
     private Map<Integer, List<DetectedDevice>> detectedDevices;
     private IGeoPosition previousPosition;
     
@@ -43,12 +43,13 @@ public class Sensor extends Device implements Detector {
         final List<DetectableDevice> detectedDevices = GeopositionFacade.getInstance().getDevicesAround(this, RADIUS);
         for (DetectableDevice device : detectedDevices) {
             final boolean hasMoved = device.hasMoved();
+            final boolean hasBeenDetected = this.detectedDevices.get(device.getId()) != null;
             
-            if (hasMoved) {
+            if (hasMoved || !hasBeenDetected) {
                 final Integer id = device.getId();
                 final int time = this.getCurrentTime();
-                final IGeoPosition position = device.getCurrentPosition();
-                final DetectedDevice detectedDevice = new DetectedDevice(id, time, RADIUS, position);
+                final IGeoPosition sensorPositionAtDetection = this.currentPosition;
+                final DetectedDevice detectedDevice = new DetectedDevice(id, time, RADIUS, sensorPositionAtDetection);
                 this.addDetectedDevice(detectedDevice);
             }
         }
@@ -63,6 +64,7 @@ public class Sensor extends Device implements Detector {
         }
         
         detectedDevicesList.add(device);
+        this.detectedDevices.put(device.getId(), detectedDevicesList);
     }
 
     @Override

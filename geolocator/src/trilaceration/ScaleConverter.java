@@ -5,14 +5,16 @@ import location.geoengine.DevicesController;
 import location.geoengine.GeoPosition;
 public class ScaleConverter {
 
+    public static final double EARTHRATIO = 6378160; // Raio da terra em metros
     public static double  latIni;
     public static double  latEnd;
     public static double longIni;
     public static double longEnd;
     public static int      width;
     public static int     height;
+    
     /**
-     * 
+     * <p>This method receives an GeoPosition, extracts its Longitude and computes its equivalent in pixels</p> 
      * @param position
      * @return
      */
@@ -75,6 +77,7 @@ public class ScaleConverter {
         }
         return 0;
     }
+    
     public static double convertToGrades(double distance, double latitude, double longitude){
     	double  rdistance;
     	

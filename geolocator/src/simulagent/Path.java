@@ -2,13 +2,14 @@ package simulagent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
 import trilaceration.ScaleConverter;
 
 /**
- * Classe responsável pelo armazenamento das posicoes que o agente percorreu em
+ * Classe respons??vel pelo armazenamento das posicoes que o agente percorreu em
  * um dia . Considera-se o intervalo de analise de 1 minuto.
  * 
  * @author DaniloReis
@@ -16,7 +17,7 @@ import trilaceration.ScaleConverter;
  */
 public class Path {
 
-    ArrayList<PositionPath> dataPath;// Array com as posicoes do agente no dia
+    List<PositionPath> dataPath;// Array com as posicoes do agente no dia
 
     /**
      * Construtor da classe geral
@@ -31,7 +32,7 @@ public class Path {
      * 
      * @param array
      */
-    public Path(ArrayList<PositionPath> array) {
+    public Path(List<PositionPath> array) {
         super();
         dataPath = array;
     }
@@ -90,7 +91,7 @@ public class Path {
 
     /**
      * Retorna a posicao do agente no tempo especificado. No caso em que o mesmo
-     * esteja se deslocando é estimada uma posicao baseada no tempo de transicao
+     * esteja se deslocando ?? estimada uma posicao baseada no tempo de transicao
      * entre duas paradas.
      * 
      * @param time
@@ -107,7 +108,7 @@ public class Path {
         GeoPosition pos;
 
         // neste caso devemos encontra entre quais pontos da rota o agente
-        // deverá estar
+        // dever?? estar
         n = dataPath.size();
         if (n < 2) {
             return null;
@@ -177,7 +178,7 @@ public class Path {
      * 
      * @return ArrayList com as posicoes da rota
      */
-    public ArrayList<PositionPath> getDataPath() {
+    public List<PositionPath> getDataPath() {
         return dataPath;
     }
 
@@ -186,7 +187,7 @@ public class Path {
      * 
      * @param dataPath
      */
-    public void setDataPath(ArrayList<PositionPath> dataPath) {
+    public void setDataPath(List<PositionPath> dataPath) {
         this.dataPath = dataPath;
     }
 }

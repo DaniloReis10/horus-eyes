@@ -31,7 +31,7 @@ public abstract class Device implements IActionTick{
     }
 
     /**
-     * Interface de animaçao do agente
+     * Interface de anima??ao do agente
      */
     @Override
     public void move() {
@@ -70,9 +70,9 @@ public abstract class Device implements IActionTick{
                 color = Color.RED;
             }
             
-            final int diameter = Sensor.RADIUS * 2;
-            graphics.setColor(Color.LIGHT_GRAY);
-            graphics.fillOval(ScaleConverter.convertToX(currentPosition) - 5, ScaleConverter.convertToY(currentPosition) - 5, diameter, diameter);
+//            final int diameter = Sensor.RADIUS * 2;
+//            graphics.setColor(Color.LIGHT_GRAY);
+//            graphics.fillOval(ScaleConverter.convertToX(currentPosition) - Sensor.RADIUS, ScaleConverter.convertToY(currentPosition) - Sensor.RADIUS, diameter, diameter);
         }
         
         graphics.setColor(color);

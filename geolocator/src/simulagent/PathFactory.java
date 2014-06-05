@@ -28,29 +28,44 @@ public class PathFactory {
         ArrayList<PositionPath> points;
         int i, dayTime, timePoint, timeWindow;
         double latitude, longitude;
-        int posX, posY;
+        int posX, posY,oldPosX,oldPosY,dmax;
+        int posStartX,posStartY;
         int startTime;
         int timeTrip;
         PositionPath point;
         GeoPosition geoPoint;
+    public static Path createAgentPath(int width, int height, int numberOfPositions) {
+        return createPath(width, height, numberOfPositions, Agent.class);
+    }
 
-        // Cria o array para armazenar as posicoes
-        points = new ArrayList<PositionPath>();
-        // define o numero de minutos do dia.
-        dayTime = TICKS_DAY;
+    
+    public static Path createSensorPath(int width, int height, int numberOfPositions) {
+        return createPath(width, height, numberOfPositions, Sensor.class);
+    }
+
+    
+    public static Path createPath(int width, int height, int numberOfPositions, Class<? extends Device> deviceClass) {
+        final List<PositionPath> positions = new ArrayList<PositionPath>();
+        int numberOfMinutesPerDay = TICKS_DAY;
+        int startTime = 0;
+        
         // define a largura media do tempo de parada
         timeWindow = dayTime / n;
         // seta a hora de cehgada inicial como 0:00 ou 0 minuto
         startTime = 0;
+        dmax = (int)(0.25*width);
+        oldPosX = oldPosY = 0;
         // Faz loop para gerar n pontos de parada preenchendo de forma aleatoria
         // o tempo
         // de chagada, saida e tempo para se locomover para a proxima parada
-        for (i = 0; i < n; i++) {
+        for (int i = 0; i < numberOfPositions; i++) {
             // Gera o tempo de parada
             timePoint = (int) (timeWindow * Math.random());
             // gera de forma aleatoria a posicao dentro da imagem
-            posX = (int) (width * Math.random());
-            posY = (int) (height * Math.random());
+            posX =(i==0) ?(int) (width * Math.random()):oldPosX+(int) (dmax * Math.random());
+            posY =(i==0) ? (int) (height * Math.random()):oldPosY+(int) (dmax * Math.random());
+            oldPosX = posX;
+            oldPosY = posY;
             // converte pela escala para latitude e longitude
             latitude = ScaleConverter.convertToLatitude(posX);
             longitude = ScaleConverter.convertToLongitude(posY);
@@ -75,41 +90,15 @@ public class PathFactory {
         return new Path(points);
 
     }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        PathFactory factory;
-        ArrayList<PositionPath> data;
-        Iterator<PositionPath> iterator;
-        PositionPath position;
-        Path path;
-        int i;
-        IGeoPosition pos;
-
-        factory = new PathFactory();
-        // seta escalas
-        ScaleConverter.height = 200;
-        ScaleConverter.width = 200;
-        ScaleConverter.latIni = 0;
-        ScaleConverter.latEnd = 2.0;
-        ScaleConverter.longIni = 0;
-        ScaleConverter.longEnd = 2.0;
-
-        path = factory.createPath(200, 200, 3);
-        data = path.getDataPath();
-        iterator = data.iterator();
-        while (iterator.hasNext()) {
-            position = iterator.next();
-            position.print();
-        }
-
-        path = new Path();
-        path.setDataPath(data);
-        for (i = 0; i < 1440; i++) {
-            pos = path.getPositionAtTime(i);
-            System.out.printf("lat = %f long = %f time = %d \n", pos.getLatitude(), pos.getLongitude(), i);
+       
+    private static IGeoPosition createPosition(Class<? extends Device> deviceClass, int width, int height) {
+        final double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni);
+        final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
+ 
+        if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
+            return new SensorPosition(latitude, longitude, Sensor.RADIUS);
+        } else {
+            return new GeoPosition(latitude, longitude);
         }
 
     }

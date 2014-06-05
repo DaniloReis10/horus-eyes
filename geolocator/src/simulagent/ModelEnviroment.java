@@ -23,6 +23,8 @@ public class ModelEnviroment implements IActionTick {
     private static ModelEnviroment instance;        // Instancia do modelo
     private List<Device> devices;                      // lista de agentes criados
     private int deviceIdController = 0;
+    private List<Agent> agents;
+    private List<Sensor> sensors;
 
     /**
      * Retorna a instancia do modelo (Padrão de projeto singleton)

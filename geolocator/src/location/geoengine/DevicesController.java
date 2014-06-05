@@ -8,9 +8,10 @@ import location.facade.DetectableDevice;
 import location.facade.IGeoPosition;
 import simulagent.Detector;
 import simulagent.Device;
+import trilaceration.ScaleConverter;
 
 /**
- * Classe controladora do gerenciamento de posi��es
+ * Classe controladora do gerenciamento de posi??????es
  * 
  * @author Danilo Reis
  * 
@@ -21,8 +22,6 @@ public class DevicesController {
     private static int freeDeviceId;
     private static DevicesController manager;
 
-    // Constantes
-    public static final double EARTHRATIO = 6378160; // Raio da terra em metros
 
     static {
         freeDeviceId = 1;
@@ -71,7 +70,7 @@ public class DevicesController {
         a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2)
                 * Math.cos(lat1) * Math.cos(lat2);
         c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        d = DevicesController.EARTHRATIO * c;
+        d = ScaleConverter.EARTHRATIO * c;
         
         return d;
     }
@@ -225,7 +224,7 @@ public class DevicesController {
         
         for (DetectableDevice detectableDevice : this.detectableDevices) {
             final double distance = DevicesController.calculateDistance(device.getCurrentPosition(), detectableDevice.getCurrentPosition());
-            final boolean isDistanceWithinRadius = distance <= 10000;
+            final boolean isDistanceWithinRadius = distance <= radius;
             
             if(isDistanceWithinRadius) {
                 devicesAround.add(detectableDevice);
@@ -286,11 +285,11 @@ public class DevicesController {
     }*/
 
     /**
-     * Fun�ao solicita do googlemaps uma imagem com o centro da imagem
+     * Fun???ao solicita do googlemaps uma imagem com o centro da imagem
      * localizado nas latitude e longitude especificados. A imagem gerada coloca
-     * uma icone no local das coordenadas o programador pode determinar o n�vel
-     * de zoom , a icone que ser� mostrada e um path. Estes dois ultimos
-     * parametros podem serem deixados em branco quando n�o se desejar mostrar a
+     * uma icone no local das coordenadas o programador pode determinar o n???vel
+     * de zoom , a icone que ser??? mostrada e um path. Estes dois ultimos
+     * parametros podem serem deixados em branco quando n???o se desejar mostrar a
      * path e que a icone do marcador seja a default do google maps.
      * 
      * @param latitude
@@ -298,11 +297,11 @@ public class DevicesController {
      * @param longitude
      *            - longitude do ponto a ser mostrado na imagem
      * @param imageName
-     *            - Nome do arquivo de imagem que ser� mostrado
+     *            - Nome do arquivo de imagem que ser??? mostrado
      * @param zoom
-     *            - N�vel de zoom entre 0 (o mais baixo, no qual todo o mundo
-     *            pode ser visto em um s� mapa) e 21+ (chega at� constru��es
-     *            individuais) s�o poss�veis na visualiza��o padr�o dos mapas.
+     *            - N???vel de zoom entre 0 (o mais baixo, no qual todo o mundo
+     *            pode ser visto em um s??? mapa) e 21+ (chega at??? constru??????es
+     *            individuais) s???o poss???veis na visualiza??????o padr???o dos mapas.
      * @param custonIconUrl
      *            -
      * @param path
