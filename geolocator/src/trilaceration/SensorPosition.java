@@ -6,7 +6,7 @@ import location.geoengine.GeoPosition;
 
 public class SensorPosition  extends GeoPosition{
 
-	private double        ratio;// Raio em metros da deteccao
+	private double        radius;// Raio em metros da deteccao
 	private double       height;// altura do sensor
 	private int           floor;// Andar onde esta o sensor
 	private String         name;// Nome do sensor
@@ -24,7 +24,7 @@ public class SensorPosition  extends GeoPosition{
 	 */
 	public SensorPosition(double latitude, double longitude, double ratio,double height, int floor, String name, String description) {
 		super(new Date(),latitude,longitude);
-		this.ratio       = ratio;
+		this.radius       = ratio;
 		this.height      = height;
 		this.floor       = floor;
 		this.name        = name;
@@ -38,7 +38,7 @@ public class SensorPosition  extends GeoPosition{
 	 */
 	public SensorPosition(double latitude, double longitude, double ratio) {
 		super(new Date(),latitude,longitude);
-		this.ratio = ratio;
+		this.radius = ratio;
 	}
 	// Metodos Set e gets dos atributos
 	public double getHeight() {
@@ -73,12 +73,12 @@ public class SensorPosition  extends GeoPosition{
 		this.description = description;
 	}
 
-	public double getRatio() {
-		return ratio;
+	public double getRadius() {
+		return radius;
 	}
 
-	public void setRatio(double ratio) {
-		this.ratio = ratio;
+	public void setRadius(double ratio) {
+		this.radius = ratio;
 	}
 		/**
 	 * @param args

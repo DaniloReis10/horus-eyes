@@ -1,10 +1,17 @@
 package sensordataset;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import simulagent.Agent;
 import simulagent.Device;
+import simulagent.Mobility;
 import simulagent.Sensor;
+import trilaceration.LocationArea2;
+import trilaceration.ScaleConverter;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -18,40 +25,102 @@ public class DataAnalyzer {
      * 
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
      * @param
+     * @return 
      * @return
      */
-    public static void predictDevicesClasses(final List<Device> devices, final List<Sensor> sensors) {
-        for (Device device: devices) {
-            final List<Sensor> sensorsThatDetectedTheDevice = getSensorsThatDetectedTheDevice(device, sensors);
-            final Integer deviceID = device.getId();
-            final int numberOfSensors = sensorsThatDetectedTheDevice.size();
+    public static List<AnalyzedData> predictDevicesClasses(final List<Device> devices) {
+        final List<Agent> agents = getAgentsFromDeviceList(devices);
+        final List<Sensor> sensors = getSensorsFromDeviceList(devices);
+        
+        final List<AnalyzedData> analyzedData = new ArrayList<AnalyzedData>();
+        
+        for (Agent agent: agents) {
+            final List<Sensor> sensorsThatDetectedTheDevice = getSensorsThatDetectedTheDevice(agent, sensors);
+            final Integer agentID = agent.getId();
+            BufferedImage intersectionArea = new BufferedImage(ScaleConverter.width, ScaleConverter.height, BufferedImage.TYPE_INT_RGB);
+            final Graphics intersectionGraphics = intersectionArea.getGraphics();
+            intersectionGraphics.setColor(LocationArea2.BASE_AREA_COLOR);
+            intersectionGraphics.fillRect(0, 0, ScaleConverter.width, ScaleConverter.height);
             
-            for(int sensor1 = 0; sensor1 < numberOfSensors; sensor1++) {
-                final List<DetectedDevice> baseSensorDetectedDevicesInformation = sensorsThatDetectedTheDevice.get(sensor1).getDetectedDevices().get(deviceID);
+            for (Sensor sensor : sensorsThatDetectedTheDevice) {
+                final List<DetectedDevice> detectedDevices = sensor.getDetectedDevices().get(agentID);
+                final boolean hasDetectedDeviceMoreThanOnce = detectedDevices.size() > 1;
+                final LocationArea2 locationArea = new LocationArea2();
+                int startIndex = 0;
                 
-                for(int sensor2 = sensor1 + 1; sensor2 < numberOfSensors; sensor2++) {
-                    final List<DetectedDevice> comparedSensorDetectedDevicesInformation = sensorsThatDetectedTheDevice.get(sensor2).getDetectedDevices().get(deviceID);
-                    
-                    predictDeviceClass(baseSensorDetectedDevicesInformation, comparedSensorDetectedDevicesInformation);
+                if (hasDetectedDeviceMoreThanOnce) {
+                    final DetectedDevice firstDetectedDevice = detectedDevices.get(0);
+                    final DetectedDevice secondDetectedDevice = detectedDevices.get(1);
+                    intersectionArea = locationArea.calculateIntersectionArea(firstDetectedDevice.getSensorPositionAtDetection(), secondDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS);
+                    startIndex = 2;
+                }
+                
+                for (int currentIndex = startIndex; currentIndex < detectedDevices.size(); currentIndex++) {
+                    final DetectedDevice currentDetectedDevice = detectedDevices.get(currentIndex);
+                    intersectionArea = locationArea.calculateIntersectionArea(intersectionArea, currentDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS);
                 }
             }
+            
+            final boolean hasIntersection = intersectionArea != null;
+            final Mobility predictedMobility;
+            
+            if (!hasIntersection) {
+                predictedMobility = Mobility.MOBILE;
+            } else {
+                final boolean agentWasntDetected = sensorsThatDetectedTheDevice.size() == 0; 
+                
+                if(agentWasntDetected) {
+                    predictedMobility = Mobility.UNDEFINED;
+                } else {
+                    predictedMobility = Mobility.FIXED;
+                }
+            }
+            
+            final AnalyzedData analyzedDevice = new AnalyzedData(Agent.class, agent.getMobility(), predictedMobility);
+            analyzedData.add(analyzedDevice);
         }
+        
+        return analyzedData;
     }
 
     /**
-     * <p>Uses trilaceration to determine if the detected device is fixed or mobile.</p>
+     * <p></p>
      * 
      * 
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
      * @param
      * @return
      */
-    private static void predictDeviceClass(List<DetectedDevice> detectedDeviceInformation1, List<DetectedDevice> detectedDeviceInformation2) {
-        for (DetectedDevice detectedDevice1 : detectedDeviceInformation1) {
-            for (DetectedDevice detectedDevice2 : detectedDeviceInformation2) {
-                //TODO TRILACERATION
+    private static List<Sensor> getSensorsFromDeviceList(List<Device> devices) {
+        final List<Sensor> sensors = new ArrayList<Sensor>();
+        
+        for (Device device: devices) {
+            if(device instanceof Sensor) {
+                sensors.add((Sensor)device);
             }
         }
+        
+        return sensors;
+    }
+
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private static List<Agent> getAgentsFromDeviceList(List<Device> devices) {
+        final List<Agent> agents = new ArrayList<Agent>();
+        
+        for (Device device: devices) {
+            if(device instanceof Agent) {
+                agents.add((Agent)device);
+            }
+        }
+        
+        return agents;
     }
 
     /**

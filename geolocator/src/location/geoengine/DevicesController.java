@@ -8,6 +8,7 @@ import location.facade.DetectableDevice;
 import location.facade.IGeoPosition;
 import simulagent.Detector;
 import simulagent.Device;
+import trilaceration.ScaleConverter;
 
 /**
  * Classe controladora do gerenciamento de posi��es
@@ -21,8 +22,6 @@ public class DevicesController {
     private static int freeDeviceId;
     private static DevicesController manager;
 
-    // Constantes
-    public static final double EARTHRATIO = 6378160; // Raio da terra em metros
 
     static {
         freeDeviceId = 1;
@@ -71,7 +70,7 @@ public class DevicesController {
         a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2)
                 * Math.cos(lat1) * Math.cos(lat2);
         c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        d = DevicesController.EARTHRATIO * c;
+        d = ScaleConverter.EARTHRATIO * c;
         
         return d;
     }
@@ -225,7 +224,7 @@ public class DevicesController {
         
         for (DetectableDevice detectableDevice : this.detectableDevices) {
             final double distance = DevicesController.calculateDistance(device.getCurrentPosition(), detectableDevice.getCurrentPosition());
-            final boolean isDistanceWithinRadius = distance <= 10000;
+            final boolean isDistanceWithinRadius = distance <= radius;
             
             if(isDistanceWithinRadius) {
                 devicesAround.add(detectableDevice);

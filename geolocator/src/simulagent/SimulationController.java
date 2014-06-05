@@ -18,8 +18,8 @@ public class SimulationController {
             private void buildGUI() {
                 ScaleConverter.latIni = 0.0;
                 ScaleConverter.longIni = 0.0;
-                ScaleConverter.latEnd = 4.0;
-                ScaleConverter.longEnd = 4.0;
+                ScaleConverter.latEnd = 0.01;
+                ScaleConverter.longEnd = 0.01;
                 ScaleConverter.width  = 980;
                 ScaleConverter.height = 480;
                 
