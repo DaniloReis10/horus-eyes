@@ -2,6 +2,7 @@ package simulagent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
@@ -16,7 +17,7 @@ import trilaceration.ScaleConverter;
  */
 public class Path {
 
-    ArrayList<PositionPath> dataPath;// Array com as posicoes do agente no dia
+    List<PositionPath> dataPath;// Array com as posicoes do agente no dia
 
     /**
      * Construtor da classe geral
@@ -31,7 +32,7 @@ public class Path {
      * 
      * @param array
      */
-    public Path(ArrayList<PositionPath> array) {
+    public Path(List<PositionPath> array) {
         super();
         dataPath = array;
     }
@@ -177,7 +178,7 @@ public class Path {
      * 
      * @return ArrayList com as posicoes da rota
      */
-    public ArrayList<PositionPath> getDataPath() {
+    public List<PositionPath> getDataPath() {
         return dataPath;
     }
 
@@ -186,7 +187,7 @@ public class Path {
      * 
      * @param dataPath
      */
-    public void setDataPath(ArrayList<PositionPath> dataPath) {
+    public void setDataPath(List<PositionPath> dataPath) {
         this.dataPath = dataPath;
     }
 }

@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
 import trilaceration.ScaleConverter;
+import trilaceration.SensorPosition;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -22,9 +24,7 @@ public class DeviceFactory {
             final Integer deviceID = ModelEnviroment.getInstance().generateDeviceId();
             final Device device = DeviceFactory.createDevice(deviceClass, deviceID, Mobility.FIXED);
 
-            final double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni);
-            final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
-            final GeoPosition position = new GeoPosition(latitude, longitude);
+            final IGeoPosition position = createPosition(device);
             
             device.setCurrentPosition(position);
             devices.add(device);
@@ -33,13 +33,22 @@ public class DeviceFactory {
         return devices;
     }
     
+    private static IGeoPosition createPosition(Device device) {
+        final double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni);
+        final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
+ 
+        if (device instanceof Sensor) {
+            return new SensorPosition(latitude, longitude, Sensor.RADIUS);
+        } else {
+            return new GeoPosition(latitude, longitude);
+        }
+    }
+    
     public static <T extends Device> List<Device> createMobileDevices(Class<T> deviceClass, int numberOfDevices) {
-        final Random randomNumberGenerator = new Random();
         final List<Device> devices = new ArrayList<Device>();
 
         for (int i = 0; i < numberOfDevices; i++) {
-            final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 1);
-            final Path path = PathFactory.createPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+            final Path path = createPath(deviceClass);
             final Integer deviceID = ModelEnviroment.getInstance().generateDeviceId();
             
             final Device device = DeviceFactory.createDevice(deviceClass, deviceID, Mobility.MOBILE); 
@@ -52,6 +61,16 @@ public class DeviceFactory {
         return devices;
     }
 
+    
+    private static <T> Path createPath(Class<T> deviceClass) {
+        final Random randomNumberGenerator = new Random();
+        final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 1);
+        if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
+            return PathFactory.createSensorPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+        } else {
+            return PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+        }
+    }
     
     private static <T extends Device> Device createDevice(Class<T> deviceClass, Integer deviceID, Mobility mobility) {
         Device device = null;

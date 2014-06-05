@@ -3,7 +3,8 @@ package simulagent;
 public enum Mobility {
     
     FIXED(0, "Fixed"),
-    MOBILE(1, "Mobile");
+    MOBILE(1, "Mobile"),
+    UNDEFINED(2, "Undefined");
     
     private int index;
     private String description;

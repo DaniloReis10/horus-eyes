@@ -19,6 +19,10 @@ public class Agent extends Device implements DetectableDevice{
 
     @Override
     public void move() {
+        if (this.previousPosition == null) {
+            GeopositionFacade.getInstance().notifyDetectors();
+        }
+        
         this.previousPosition = this.currentPosition;
         super.move();
         this.notifySensors();
@@ -39,8 +43,8 @@ public class Agent extends Device implements DetectableDevice{
 
     @Override
     public boolean hasMoved() {
-        final boolean isLatitudeDifferent = this.currentPosition.getLatitude() != this.previousPosition.getLatitude();
-        final boolean isLongitudeDifferent = this.currentPosition.getLongitude() != this.previousPosition.getLongitude();
+        final boolean isLatitudeDifferent = this.previousPosition != null && this.currentPosition.getLatitude() != this.previousPosition.getLatitude();
+        final boolean isLongitudeDifferent = this.previousPosition != null && this.currentPosition.getLongitude() != this.previousPosition.getLongitude();
         final boolean hasMoved = isLatitudeDifferent || isLongitudeDifferent;
         
         return hasMoved;
