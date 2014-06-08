@@ -53,11 +53,11 @@ public class PositionPath extends GeoPosition {
 	 * Metodo de impressao dos atributos da classe
 	 */
 	public void print(){
-		System.out.printf("Latitude     = %5.2f\n", this.getLatitude());
-		System.out.printf("Longitude    = %5.2f\n", this.getLongitude());
-		System.out.printf("Tempo Chegada = %d\n", this.arriveTime);
-		System.out.printf("Tempo parado  = %d\n", this.stopTime);
-		System.out.printf("Tempo Saida   = %d\n", this.leaveTime);
+		System.out.printf("Latitude     = %f\n", this.getLatitude());
+		System.out.printf("Longitude    = %f\n", this.getLongitude());
+		System.out.printf("Tempo Chegada(s) = %d  (%d min %02d sec)\n", this.arriveTime,(this.arriveTime/60),(this.arriveTime%60));
+		System.out.printf("Tempo parado(s)  = %d  (%d min %02d sec)\n", this.stopTime,(this.stopTime/60),(this.stopTime%60));
+		System.out.printf("Tempo Saida(s0   = %d  (%d min %02d sec)\n", this.leaveTime,(this.leaveTime/60),(this.leaveTime%60));
 		System.out.printf("\n");
 	}
 

@@ -190,4 +190,39 @@ public class Path {
     public void setDataPath(List<PositionPath> dataPath) {
         this.dataPath = dataPath;
     }
+    
+    public void printPos(){
+    	IGeoPosition pos;
+    	PositionPath pp;
+    	double xx,yy;
+    	for(int i=0; i < dataPath.size();i++){
+    		pp = dataPath.get(i);
+    		pp.print();
+    	}
+	    yy = this.getPositionAtTime(0).getLatitude();
+		xx = this.getPositionAtTime(0).getLongitude();
+    	for( int i=0 ; i < 24*60*60;i++){
+    		pos = this.getPositionAtTime(i);
+    		if((pos.getLatitude()!= yy)||(pos.getLongitude()!= xx)){
+    	  		System.out.printf("%d  lat = %f  long = %f\n",i,pos.getLatitude(),pos.getLongitude());
+    		}
+    	    yy = pos.getLatitude();
+    		xx = pos.getLongitude();
+    	}
+    }
+    public static void main(String[] args){
+    	PathFactory factory;
+    	Path    path;
+    	
+    	ScaleConverter.latIni = 0.0;
+        ScaleConverter.longIni = 0.0;
+        ScaleConverter.latEnd = 0.01;
+        ScaleConverter.longEnd = 0.01;
+        ScaleConverter.width  = 980;
+        ScaleConverter.height = 480;
+    	factory = new PathFactory();
+    	path = factory.createPath(ScaleConverter.width, ScaleConverter.height, 10, Agent.class);
+    	path.printPos();
+    	
+    }
 }

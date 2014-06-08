@@ -15,10 +15,10 @@ public class SimulationPanel extends JPanel {
 
     private SimulationFrame simulationFrame;
     
-    private final int ANIMATION_DELAY = 50; // retardo em milissegundos
+    private final int ANIMATION_DELAY = 10; // retardo em milissegundos
     private int width; // largura da imagem
     private int height; // altura da imagem
-    private Timer animationTimer; // O timer guia a animação
+    private Timer animationTimer; // O timer guia a anima����o
 
     public SimulationPanel(int width, int height, SimulationFrame simulationFrame) {
         this.width = width;
@@ -27,7 +27,7 @@ public class SimulationPanel extends JPanel {
     }
     
     /**
-     * Desenha o componente acrescentando as chamadas da animaçao
+     * Desenha o componente acrescentando as chamadas da anima��ao
      */
     @Override
     public void paintComponent(Graphics graphics) {
@@ -70,35 +70,35 @@ public class SimulationPanel extends JPanel {
             animationTimer = new Timer(ANIMATION_DELAY, new TimerHandler());
 
             animationTimer.start(); // inicia o timer
-        } else {// animationTimer já existe, reinicia animação
+        } else {// animationTimer j�� existe, reinicia anima����o
             if (!animationTimer.isRunning())
                 animationTimer.restart();
         }
     }
 
     /**
-     * para o timer de animação
+     * para o timer de anima����o
      */
     public void stopAnimation() {
         animationTimer.stop();
     }
 
     /**
-     * retorna o tamanho mínimo de animação
+     * retorna o tamanho m��nimo de anima����o
      */
     public Dimension getMinimumSize() {
         return getPreferredSize();
     }
 
     /**
-     * retorna tamanho preferido da animação
+     * retorna tamanho preferido da anima����o
      */
     public Dimension getPreferredSize() {
         return new Dimension(width, height);
     }
 
     /**
-     * classe interna para tratar eventos de ação do Timer chamada a cada 50 ms
+     * classe interna para tratar eventos de a����o do Timer chamada a cada 50 ms
      * 
      * @author DaniloReis
      * 
