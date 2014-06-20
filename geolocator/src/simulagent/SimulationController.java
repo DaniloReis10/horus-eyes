@@ -20,8 +20,8 @@ public class SimulationController {
                 ScaleConverter.longIni = 0.0;
                 ScaleConverter.latEnd = 0.01;
                 ScaleConverter.longEnd = 0.01;
-                ScaleConverter.width  = 980;
-                ScaleConverter.height = 480;
+                ScaleConverter.width  = 978;
+                ScaleConverter.height = 670;
                 
                 SimulationFrame frame = new SimulationFrame();
                 frame.pack();

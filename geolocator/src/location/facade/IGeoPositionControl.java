@@ -20,7 +20,7 @@ public interface IGeoPositionControl {
      * @return true registro feito com sucesso
      * @return false - falha na atualiza��o
      */
-    public boolean addDevicesToTrack(List<Device> devices);
+    public void addDevicesToTrack(List<Device> devices);
     
     /**
      * Registra um dispositivo no controlador de georeferenciamento
@@ -29,8 +29,17 @@ public interface IGeoPositionControl {
      * @return true registro feito com sucesso
      * @return false - falha na atualiza��o
      */
-    public boolean addDeviceToTrack(Device device);
-
+    public void addDeviceToTrack(Device device);
+    
+    /**
+     * Remove vários dispositivos do controlador de georeferenciamento
+     * 
+     * @param device
+     * @return true registro feito com sucesso
+     * @return false - falha na atualiza��o
+     */
+    public void removeDevicesFromTracking();
+    
     /**
      * Busca o dispositivo pelo identificador
      * 

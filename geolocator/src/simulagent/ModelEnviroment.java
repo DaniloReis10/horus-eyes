@@ -70,6 +70,21 @@ public class ModelEnviroment implements IActionTick {
         GeopositionFacade.getInstance().addDevicesToTrack(devices);
     }
     
+    /**
+     * <p>
+     *  Creates one traceable agent
+     * </p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void createTraceableAgent() {
+        this.devices = DeviceFactory.createMobileDevices(TraceableAgent.class, 1);
+        GeopositionFacade.getInstance().addDevicesToTrack(devices);
+    }
+    
     @Override
     public void move() {
         final Iterator<Device> iterator = this.devices.iterator();
@@ -133,6 +148,7 @@ public class ModelEnviroment implements IActionTick {
     public void deleteAllDevices() {
         this.devices.clear();
         this.resetDeviceIdController();
+        GeopositionFacade.getInstance().removeDevicesFromTracking();
     }
     
     /**

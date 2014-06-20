@@ -86,6 +86,7 @@ public class PathFactory {
                 position.setLeaveTime(startTime + timePoint);
                 startTime = startTime + timePoint;
             } else {
+            	// Ultimo ponto da rota
             	distance = DevicesController.calculateDistance(firstPosition, lastPosition);
                 // calcula o tempo em segundos para percorre a distancia
             	speed = (0.05 + 0.3*Math.random());
@@ -107,7 +108,6 @@ public class PathFactory {
        
     private static IGeoPosition createPosition(Class<? extends Device> deviceClass,double factor) {
         double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni)*factor;
-   
         double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni)*factor;
  
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
