@@ -100,11 +100,26 @@ public class DevicesController {
      * @return
      */
     public synchronized boolean removeDevice(Device device) {
-        // verifica se o dispositivo ja esta na tabela
-        this.detectableDevices.remove(device);
+        if(device instanceof DetectableDevice) {
+            this.detectableDevices.remove(device);
+        } else if (device instanceof Detector) {
+            this.detectorDevices.remove(device);
+        }
+        
         return true;
     }
 
+    /**
+     * Remove todos os dispositivos gerenciados
+     * 
+     * @param device
+     * @return
+     */
+    public synchronized void deleteAllDevices() {
+        this.detectableDevices.clear();
+        this.detectorDevices.clear();
+    }
+    
 
     /**
      * Atualiza a posicao de um um dispositivo movel

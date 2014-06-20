@@ -107,7 +107,6 @@ public class PathFactory {
        
     private static IGeoPosition createPosition(Class<? extends Device> deviceClass,double factor) {
         double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni)*factor;
-   
         double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni)*factor;
  
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {

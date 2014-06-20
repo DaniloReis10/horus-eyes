@@ -22,17 +22,20 @@ public class GeopositionFacade implements IGeoPositionControl {
     }
 
     @Override
-    public boolean addDevicesToTrack(List<Device> devices) {
+    public void addDevicesToTrack(List<Device> devices) {
         for (Device device : devices) {
            this.addDeviceToTrack(device);
         }
-        return true;
     }
-
+    
     @Override
-    public boolean addDeviceToTrack(Device device) {
+    public void addDeviceToTrack(Device device) {
         DevicesController.getInstance().addDevice(device);
-        return true;
+    }
+    
+    @Override
+    public void removeDevicesFromTracking() {
+        DevicesController.getInstance().deleteAllDevices();
     }
 
     @Override

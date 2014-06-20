@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -24,6 +25,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import location.geoengine.DevicesController;
 import sensordataset.AnalyzedData;
 import sensordataset.DataAnalyzer;
+import trilaceration.ScaleConverter;
+
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -48,28 +53,36 @@ public class SimulationFrame extends JFrame {
     private JLabel numberOfMobileSensors;
     private JTextField numberOfMobileSensorsTextField;
 
-    private JButton startSimulationButton;
-    private JButton stopSimulationButton;
-    private JButton analyzeSimulationButton;
-
     private int width;
     private int height;
 
     private SimulationPanel drawingPanel;
-    private JLabel horusEyeLabel;
     
-    private JInternalFrame configurationFrame;
-    private JInternalFrame simulationFrame;
-    private JInternalFrame resultsFrame;
-    private JInternalFrame labelsFrame;
+    private JFrame configurationFrame;
+    
+    private JFrame labelsFrame;
     private JCheckBox chckbxFixedAgent;
     private JCheckBox chckbxMobileAgent;
     private JCheckBox chckbxFixedSensor;
     private JCheckBox chckbxMobileSensor;
+    
+    private JFrame resultsFrame;
     private JTable resultsTable;
     private JScrollPane scrollPane;
     
-    private SimulationResults simulationResults;
+    private JMenuBar menuBar;
+    private JMenu optionsMenu;
+    private JMenu simulationMenu;
+    private JMenuItem startSimulationMenuItem;
+    private JMenuItem stopSimulationMenuItem;
+    private JMenuItem analyzeSimulationMenuItem;
+    private JMenuItem testAgentRoute;
+
+    private JMenuItem configureSimulationMenuItem;
+
+    private JMenu helpMenu;
+
+    private JMenuItem labelsMenuItem;
     
     /**
      * 
@@ -89,9 +102,9 @@ public class SimulationFrame extends JFrame {
 
         this.setSize(width, height);
 
-        initializeInternalFrames();
+        initializeFrames();
         initializeFormComponents();
-        initializeButtons();
+        initializeMenu();
         initializeLabels();
         initializeResultTable();
         initializeLayout();
@@ -103,11 +116,6 @@ public class SimulationFrame extends JFrame {
      * @return
      */
     private void initializeFormComponents() {
-        this.horusEyeLabel = new JLabel("Horus Eye");
-        this.horusEyeLabel.setFont(new Font("Dialog", Font.BOLD, 14));
-        
-        this.drawingPanel = new SimulationPanel(980, 480, this);
-        this.drawingPanel.setBackground(Color.WHITE);
 
         this.numberOfFixedAgentsLabel = new JLabel("Number of Fixed Agents");
         this.numberOfFixedAgentsTextField = new JTextField();
@@ -124,6 +132,9 @@ public class SimulationFrame extends JFrame {
         this.numberOfMobileSensors = new JLabel("Number of Mobile Sensors");
         this.numberOfMobileSensorsTextField = new JTextField();
         this.numberOfMobileSensorsTextField.setColumns(10);
+        
+        this.drawingPanel = new SimulationPanel(ScaleConverter.width, ScaleConverter.height, this);
+        this.drawingPanel.setBackground(Color.WHITE);
     }
 
     /**
@@ -131,27 +142,10 @@ public class SimulationFrame extends JFrame {
      * @param
      * @return
      */
-    private void initializeInternalFrames() {
-        this.labelsFrame = new JInternalFrame("Labels");
-        this.labelsFrame.setVisible(true);
-        
-        this.resultsFrame = new JInternalFrame("Prediction Results");
-        this.resultsFrame.setVisible(true);
-        
-        this.configurationFrame = new JInternalFrame("Configuration");
-        this.configurationFrame.setVisible(true);
-        
-        this.simulationFrame = new JInternalFrame("Simulation");
-        this.simulationFrame.setVisible(true);
-        
-        try {
-            this.configurationFrame.setIcon(true);
-            this.simulationFrame.setIcon(true);
-            this.resultsFrame.setIcon(true);
-            this.labelsFrame.setIcon(true);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
+    private void initializeFrames() {
+        this.labelsFrame = new JFrame("Labels");
+        this.configurationFrame = new JFrame("Configuration");
+        this.resultsFrame = new JFrame("Prediction Results");
     }
     
     /**
@@ -159,40 +153,106 @@ public class SimulationFrame extends JFrame {
      * @param
      * @return
      */
-    private void initializeButtons() {
-        this.startSimulationButton = new JButton("Start Simulation");
-        this.startSimulationButton.addActionListener(new ActionListener() {
+    private void initializeMenu() {
+        this.menuBar = new JMenuBar();
+        this.simulationMenu = new JMenu("Simulation");
+        this.optionsMenu = new JMenu("Options");
+        this.helpMenu = new JMenu("Help");
+        
+        this.startSimulationMenuItem = new JMenuItem("Start Simulation");
+        this.stopSimulationMenuItem = new JMenuItem("Stop Simulation");
+        this.analyzeSimulationMenuItem = new JMenuItem("Analyze Simulation");
+        this.configureSimulationMenuItem = new JMenuItem("Configure Simulation");
+        this.testAgentRoute = new JMenuItem("Test Agent Route");
+        this.labelsMenuItem = new JMenuItem("Labels");
+        
+        this.startSimulationMenuItem.setEnabled(true);
+        this.stopSimulationMenuItem.setEnabled(false);
+        this.analyzeSimulationMenuItem.setEnabled(false);
+        
+        this.setJMenuBar(menuBar);
+        this.menuBar.add(simulationMenu);
+        this.menuBar.add(optionsMenu);
+        this.menuBar.add(helpMenu);
+        
+        this.simulationMenu.add(startSimulationMenuItem);
+        this.simulationMenu.add(stopSimulationMenuItem);
+        this.simulationMenu.add(analyzeSimulationMenuItem);
+        this.simulationMenu.add(testAgentRoute);
+        this.optionsMenu.add(configureSimulationMenuItem);
+        this.helpMenu.add(labelsMenuItem);
+        
+        this.initializeMenuItemActionListerners();
+    }
+    
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private void initializeMenuItemActionListerners() {
+        this.startSimulationMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SimulationFrame.this.startSimulationButton.setEnabled(false);
-                SimulationFrame.this.stopSimulationButton.setEnabled(true);
-                SimulationFrame.this.analyzeSimulationButton.setEnabled(true);
+                SimulationFrame.this.startSimulationMenuItem.setEnabled(false);
+                SimulationFrame.this.testAgentRoute.setEnabled(false);
+                SimulationFrame.this.stopSimulationMenuItem.setEnabled(true);
+                SimulationFrame.this.analyzeSimulationMenuItem.setEnabled(true);
                 SimulationFrame.this.startSimulation();
             }
         });
-
-        this.stopSimulationButton = new JButton("Stop Simulation");
-        this.stopSimulationButton.setEnabled(false);
-        this.stopSimulationButton.addActionListener(new ActionListener() {
+        
+        this.stopSimulationMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SimulationFrame.this.stopSimulation();
-                SimulationFrame.this.startSimulationButton.setEnabled(true);
-                SimulationFrame.this.stopSimulationButton.setEnabled(false);
-                SimulationFrame.this.analyzeSimulationButton.setEnabled(false);
+                SimulationFrame.this.startSimulationMenuItem.setEnabled(true);
+                SimulationFrame.this.testAgentRoute.setEnabled(true);
+                SimulationFrame.this.stopSimulationMenuItem.setEnabled(false);
+                SimulationFrame.this.analyzeSimulationMenuItem.setEnabled(false);
             }
         });
         
-        this.analyzeSimulationButton = new JButton("Analyze Simulation");
-        this.analyzeSimulationButton.setEnabled(false);
-        this.analyzeSimulationButton.addActionListener(new ActionListener() {
+        this.analyzeSimulationMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SimulationFrame.this.analyzeSimulation();
+                SimulationFrame.this.resultsFrame.setSize(350, 150);
+                SimulationFrame.this.resultsFrame.setVisible(true);
+            }
+        });
+        
+        this.testAgentRoute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SimulationFrame.this.startSimulationMenuItem.setEnabled(false);
+                SimulationFrame.this.testAgentRoute.setEnabled(false);
+                SimulationFrame.this.stopSimulationMenuItem.setEnabled(true);
+                SimulationFrame.this.analyzeSimulationMenuItem.setEnabled(false);
+                SimulationFrame.this.testAgentRoute();
+            }
+        });
+        
+        this.configureSimulationMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SimulationFrame.this.configurationFrame.setSize(330, 170);
+                SimulationFrame.this.configurationFrame.setVisible(true);
+            }
+        });
+        
+        this.labelsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SimulationFrame.this.labelsFrame.setSize(190, 100);
+                SimulationFrame.this.labelsFrame.setVisible(true);
             }
         });
     }
-    
+
     /**
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
      * @param
@@ -256,57 +316,24 @@ public class SimulationFrame extends JFrame {
      * @return
      */
     private void initializeLayout() {
-        
-        
         GroupLayout mainGroupLayout = new GroupLayout(getContentPane());
-        this.getContentPane().setLayout(mainGroupLayout);
         mainGroupLayout.setHorizontalGroup(
             mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(mainGroupLayout.createSequentialGroup()
-                    .addGroup(mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                        .addGroup(mainGroupLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(mainGroupLayout.createParallelGroup(Alignment.TRAILING)
-                                .addComponent(simulationFrame, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
-                                .addGroup(mainGroupLayout.createSequentialGroup()
-                                    .addComponent(configurationFrame, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(resultsFrame, GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(labelsFrame, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(mainGroupLayout.createSequentialGroup()
-                            .addGap(408)
-                            .addComponent(horusEyeLabel)))
+                .addGroup(Alignment.TRAILING, mainGroupLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(drawingPanel, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                     .addContainerGap())
         );
         mainGroupLayout.setVerticalGroup(
             mainGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(mainGroupLayout.createSequentialGroup()
-                    .addGap(6)
-                    .addComponent(horusEyeLabel)
-                    .addGap(18)
-                    .addGroup(mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(resultsFrame, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                        .addComponent(configurationFrame, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                        .addComponent(labelsFrame, 0, 0, Short.MAX_VALUE))
-                    .addPreferredGap(ComponentPlacement.RELATED)
-                    .addComponent(simulationFrame, GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
+                    .addContainerGap()
+                    .addComponent(drawingPanel, GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
                     .addContainerGap())
         );
-        
-        GroupLayout simulationGroupLayout = new GroupLayout(simulationFrame.getContentPane());
-        this.simulationFrame.getContentPane().setLayout(simulationGroupLayout);
-        simulationGroupLayout.setHorizontalGroup(
-            simulationGroupLayout.createParallelGroup(Alignment.TRAILING)
-                .addComponent(drawingPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
-        );
-        simulationGroupLayout.setVerticalGroup(
-            simulationGroupLayout.createParallelGroup(Alignment.LEADING)
-                .addComponent(drawingPanel, GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
-        );
+        this.getContentPane().setLayout(mainGroupLayout);
         
         GroupLayout configurationGroupLayout = new GroupLayout(configurationFrame.getContentPane());
-        this.configurationFrame.getContentPane().setLayout(configurationGroupLayout);
         configurationGroupLayout.setHorizontalGroup(
             configurationGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(configurationGroupLayout.createSequentialGroup()
@@ -324,41 +351,29 @@ public class SimulationFrame extends JFrame {
                             .addComponent(numberOfFixedSensorsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                             .addComponent(numberOfFixedAgentsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                             .addComponent(numberOfMobileSensorsTextField, 0, 0, Short.MAX_VALUE)))
-                    .addGap(36)
-                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
-                        .addComponent(analyzeSimulationButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(stopSimulationButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(startSimulationButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap(74, Short.MAX_VALUE))
+                    .addContainerGap(218, Short.MAX_VALUE))
         );
         configurationGroupLayout.setVerticalGroup(
             configurationGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(configurationGroupLayout.createSequentialGroup()
                     .addContainerGap()
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(numberOfFixedAgentsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(numberOfFixedAgentsLabel))
+                    .addGap(10)
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(numberOfMobileAgentsLabel)
+                        .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(ComponentPlacement.RELATED)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING)
-                        .addGroup(configurationGroupLayout.createSequentialGroup()
-                            .addComponent(startSimulationButton)
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addComponent(stopSimulationButton)
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addComponent(analyzeSimulationButton))
-                        .addGroup(configurationGroupLayout.createSequentialGroup()
-                            .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
-                                .addComponent(numberOfFixedAgentsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(numberOfFixedAgentsLabel))
-                            .addGap(10)
-                            .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
-                                .addComponent(numberOfMobileAgentsLabel)
-                                .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING)
-                                .addComponent(numberOfFixedSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(numberOfFixedSensorsLabel))
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
-                                .addComponent(numberOfMobileSensors)
-                                .addComponent(numberOfMobileSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(numberOfFixedSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(numberOfFixedSensorsLabel))
+                    .addPreferredGap(ComponentPlacement.RELATED)
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(numberOfMobileSensors)
+                        .addComponent(numberOfMobileSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         );
+        this.configurationFrame.getContentPane().setLayout(configurationGroupLayout);
         
         GroupLayout labelsGroupLayout = new GroupLayout(labelsFrame.getContentPane());
         this.labelsFrame.getContentPane().setLayout(labelsGroupLayout);
@@ -388,21 +403,21 @@ public class SimulationFrame extends JFrame {
         );
         
         GroupLayout resultsGroupLayout = new GroupLayout(resultsFrame.getContentPane());
-        resultsFrame.getContentPane().setLayout(resultsGroupLayout);
         resultsGroupLayout.setHorizontalGroup(
             resultsGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(resultsGroupLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                    .addContainerGap())
+                    .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 334, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(642, Short.MAX_VALUE))
         );
         resultsGroupLayout.setVerticalGroup(
-            resultsGroupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(Alignment.TRAILING, resultsGroupLayout.createSequentialGroup()
+            resultsGroupLayout.createParallelGroup(Alignment.TRAILING)
+                .addGroup(Alignment.LEADING, resultsGroupLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                    .addContainerGap())
+                    .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(42, Short.MAX_VALUE))
         );
+        resultsFrame.getContentPane().setLayout(resultsGroupLayout);
     }
     
     public void startSimulation() {
@@ -412,27 +427,30 @@ public class SimulationFrame extends JFrame {
     public void stopSimulation() {
         this.drawingPanel.stopSimulation();
     }
+    
+    public void testAgentRoute() {
+        this.drawingPanel.testAgentRoute();
+    }
 
     public void analyzeSimulation() {
         final List<Device> devices = DevicesController.getInstance().getDevices();
         final List<AnalyzedData> analyzedData = DataAnalyzer.predictDevicesClasses(devices);
         
-        this.simulationResults = new SimulationResults();
+        final SimulationResults simulationResults = new SimulationResults();
         
         for (AnalyzedData data : analyzedData) {
             if(data.isPredictionCorrect()) {
-                this.simulationResults.increaseNumberOfCorrectPredictions();
+                simulationResults.increaseNumberOfCorrectPredictions();
             } else if(data.isPredictionUndefined()) {
-                this.simulationResults.increaseNumberOfUndetectedAgents();
+                simulationResults.increaseNumberOfUndetectedAgents();
             } else {
-                this.simulationResults.increaseNumberOfWrongPredictions();
+                simulationResults.increaseNumberOfWrongPredictions();
             }
         }
         
-        this.resultsTable.setValueAt(this.simulationResults.getNumberOfCorrectPredictions(), 0, 0);
-        this.resultsTable.setValueAt(this.simulationResults.getNumberOfWrongPredictions(), 0, 1);
-        this.resultsTable.setValueAt(this.simulationResults.getNumberOfUndetectedAgents(), 0, 2);
-//        SimulationAnalysisFrame.showAnalysis(analyzedData);
+        this.resultsTable.setValueAt(simulationResults.getNumberOfCorrectPredictions(), 0, 0);
+        this.resultsTable.setValueAt(simulationResults.getNumberOfWrongPredictions(), 0, 1);
+        this.resultsTable.setValueAt(simulationResults.getNumberOfUndetectedAgents(), 0, 2);
     }
     
     public short getNumberOfFixedAgents() {

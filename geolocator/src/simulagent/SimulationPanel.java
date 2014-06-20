@@ -41,6 +41,11 @@ public class SimulationPanel extends JPanel {
         this.startAnimation();
     }
     
+    public void testAgentRoute() {
+        ModelEnviroment.getInstance().createTraceableAgent();
+        this.startAnimation();
+    }
+    
     /**
      * <p></p>
      * 
@@ -56,7 +61,7 @@ public class SimulationPanel extends JPanel {
         final short numberOfFixedSensors = this.simulationFrame.getNumberOfFixedSensors();
         final short numberOfMobileSensors = this.simulationFrame.getNumberOfMobileSensors();
         
-        ModelEnviroment.getInstance().createDevices(numberOfFixedAgents, numberOfFixedSensors, numberOfMobileAgents, numberOfMobileSensors); 
+        ModelEnviroment.getInstance().createDevices(numberOfFixedAgents, numberOfFixedSensors, numberOfMobileAgents, numberOfMobileSensors);
     }
 
     public void stopSimulation() {

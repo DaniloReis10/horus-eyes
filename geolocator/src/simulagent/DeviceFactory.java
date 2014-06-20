@@ -63,8 +63,15 @@ public class DeviceFactory {
 
     
     private static <T> Path createPath(Class<T> deviceClass) {
-        final Random randomNumberGenerator = new Random();
-        final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 10);
+        final short numberOfPositions;
+        
+        if (deviceClass.getSimpleName().equalsIgnoreCase("TraceableAgent")) {
+            numberOfPositions = 3;
+        } else {
+            final Random randomNumberGenerator = new Random();
+            numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 10);
+        }
+        
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
             return PathFactory.createSensorPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
         } else {
