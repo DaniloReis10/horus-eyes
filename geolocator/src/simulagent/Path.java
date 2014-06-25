@@ -122,7 +122,7 @@ public class Path {
             // posiNext.print();
             // verifica se no tempo especificado a agente esta entre estes
             // pontos
-            if ((posiPrev.getLeaveTime() <= time) && (posiNext.getArriveTime() >= time)) {
+            if ((posiPrev.getLeaveTime() < time) && (posiNext.getArriveTime() > time)) {
                 deltax = (ScaleConverter.convertToX(posiNext) - ScaleConverter.convertToX(posiPrev));
                 deltay = (ScaleConverter.convertToY(posiNext) - ScaleConverter.convertToY(posiPrev));
                 x0 = ScaleConverter.convertToX(posiPrev);
@@ -133,8 +133,8 @@ public class Path {
                 xc = x0 + (int) (deltax * tpercent);
                 yc = y0 + (int) (deltay * tpercent);
                 // Cria a nova posicao
-                pos = new GeoPosition(ScaleConverter.convertToLatitude(xc),
-                        ScaleConverter.convertToLongitude(yc));
+                pos = new GeoPosition(ScaleConverter.convertToLatitude(yc),
+                        ScaleConverter.convertToLongitude(xc));
 
                 return pos;
             }
@@ -201,7 +201,7 @@ public class Path {
     	}
 	    yy = this.getPositionAtTime(0).getLatitude();
 		xx = this.getPositionAtTime(0).getLongitude();
-    	for( int i=0 ; i < 24*60*60;i++){
+    	for( int i=0 ; i < 24*60*60L;i++){
     		pos = this.getPositionAtTime(i);
     		if((pos.getLatitude()!= yy)||(pos.getLongitude()!= xx)){
     	  		System.out.printf("%d  lat = %f  long = %f\n",i,pos.getLatitude(),pos.getLongitude());
