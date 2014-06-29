@@ -5,17 +5,15 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import trilaceration.ScaleConverter;
-import location.facade.DetectableDevice;
-import location.facade.GeopositionFacade;
 import location.facade.IGeoPosition;
+import trilaceration.ScaleConverter;
 
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
  *
  */
-public class TraceableAgent extends Device implements DetectableDevice{
+public class TraceableAgent extends Device {
 
     private IGeoPosition previousPosition;
     private List<IGeoPosition> route;
@@ -33,7 +31,6 @@ public class TraceableAgent extends Device implements DetectableDevice{
         
         this.previousPosition = this.currentPosition;
         super.move();
-        this.notifySensors();
     }
     
     @Override
@@ -57,20 +54,6 @@ public class TraceableAgent extends Device implements DetectableDevice{
         graphics.fillRect(ScaleConverter.convertToX(currentPosition) - 3, ScaleConverter.convertToY(currentPosition) - 3, 6, 6);
     }
     
-    @Override
-    public double getDistanceFrom(DetectableDevice device) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void notifySensors() {
-        if (hasMoved()) {
-            GeopositionFacade.getInstance().notifyDetectors();
-        }
-    }
-
-    @Override
     public boolean hasMoved() {
         final boolean isFirstTime = this.previousPosition == null;
         final boolean isLatitudeDifferent = this.previousPosition != null && this.currentPosition.getLatitude() != this.previousPosition.getLatitude();
