@@ -1,9 +1,7 @@
 package simulagent;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
-import trilaceration.ScaleConverter;
 import location.facade.IGeoPosition;
 import location.geoengine.GeoPosition;
 
@@ -18,7 +16,8 @@ public abstract class Device implements IActionTick{
     protected int currentTime;
     protected Path path;
     protected MovementStrategy movementStrategy;
-    
+    protected DrawStrategy drawStrategy;
+
     /**
      * @param agentID
      * @param mobility
@@ -27,11 +26,19 @@ public abstract class Device implements IActionTick{
         this.id = agentID;
         this.mobility = mobility;
         this.movementStrategy = MovementStrategy.createMovementStrategy(this.mobility);
+        this.drawStrategy = DrawStrategy.createDrawStrategy(this.getClass());
         this.path = new Path();
     }
 
     /**
-     * Interface de anima??ao do agente
+     * <p>
+     *     Uses a MovementStrategy to move the device
+     * </p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
      */
     @Override
     public void move() {
@@ -40,12 +47,11 @@ public abstract class Device implements IActionTick{
     
     /**
      * <p>
-     *      Draws a rect representing agents and sensors.<br/>
+     *      Uses a DrawStrategy to draw the device<br/>
      *      Labels: Fixed Agents = ORANGE<br/>
      *              Mobile Agents = BLUE<br/>
      *              Fixed Sensors = BLACK<br/>
      *              Mobile Sensors = RED
-     *              
      * </p>
      * 
      * 
@@ -55,31 +61,7 @@ public abstract class Device implements IActionTick{
      */
     @Override
     public void draw(Graphics graphics) {
-        Color color = null;
-        
-        if (this instanceof Agent) {
-            if (mobility.equals(Mobility.FIXED)) {
-                color = Color.ORANGE;
-            } else if (mobility.equals(Mobility.MOBILE)) {
-                color = Color.BLUE;
-            }
-        } else if (this instanceof Sensor) {
-            if (mobility.equals(Mobility.FIXED)) {
-                color = Color.BLACK;
-            } else if (mobility.equals(Mobility.MOBILE)) {
-                color = Color.RED;
-            }
-            
-//            final int diameter = Sensor.RADIUS * 2;
-//            graphics.setColor(Color.LIGHT_GRAY);
-//            graphics.fillOval(ScaleConverter.convertToX(currentPosition) - Sensor.RADIUS, ScaleConverter.convertToY(currentPosition) - Sensor.RADIUS, diameter, diameter);
-        }
-        
-        graphics.setColor(color);
-        graphics.fillRect(ScaleConverter.convertToX(currentPosition), ScaleConverter.convertToY(currentPosition), 10, 10);
-        
-        graphics.setColor(Color.BLACK);
-        graphics.drawString(String.valueOf(this.id), ScaleConverter.convertToX(currentPosition), ScaleConverter.convertToY(currentPosition));
+       this.drawStrategy.draw(this, graphics);
     }
     
     public Integer getId() {
