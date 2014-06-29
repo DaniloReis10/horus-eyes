@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -19,11 +20,13 @@ public class SimulationPanel extends JPanel {
     private int width; // largura da imagem
     private int height; // altura da imagem
     private Timer animationTimer; // O timer guia a anima����o
+    private int simulationTime;
 
     public SimulationPanel(int width, int height, SimulationFrame simulationFrame) {
         this.width = width;
         this.height = height;
         this.simulationFrame = simulationFrame;
+        this.simulationTime = 0;
     }
     
     /**
@@ -34,6 +37,28 @@ public class SimulationPanel extends JPanel {
         super.paintComponent(graphics);
         ModelEnviroment.getInstance().move();
         ModelEnviroment.getInstance().draw(graphics);
+        this.updateSimulationTime();
+    }
+
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private void updateSimulationTime() {
+        this.simulationTime = (this.simulationTime % PathFactory.TICKS_DAY);
+        
+        final long days = TimeUnit.SECONDS.toDays(this.simulationTime);
+        final long hours = TimeUnit.SECONDS.toHours(this.simulationTime) - TimeUnit.DAYS.toHours(TimeUnit.SECONDS.toDays(this.simulationTime));
+        final long minutes = TimeUnit.SECONDS.toMinutes(this.simulationTime) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(this.simulationTime)); 
+        final long seconds = TimeUnit.SECONDS.toSeconds(this.simulationTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(this.simulationTime));
+        
+        final String formattedSimulationTime = String.format("%02d Day(s) %02d Hour(s) %02d Minute(s) %02d Second(s)", days, hours, minutes, seconds);
+        this.simulationFrame.updateProgressBar(this.simulationTime, formattedSimulationTime);
+        this.simulationTime++;
     }
 
     public void startSimulation() {

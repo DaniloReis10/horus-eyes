@@ -2,20 +2,19 @@ package simulagent;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -26,9 +25,6 @@ import location.geoengine.DevicesController;
 import sensordataset.AnalyzedData;
 import sensordataset.DataAnalyzer;
 import trilaceration.ScaleConverter;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -56,6 +52,7 @@ public class SimulationFrame extends JFrame {
     private int width;
     private int height;
 
+    private JProgressBar progressBar;
     private SimulationPanel drawingPanel;
     
     private JFrame configurationFrame;
@@ -77,11 +74,8 @@ public class SimulationFrame extends JFrame {
     private JMenuItem stopSimulationMenuItem;
     private JMenuItem analyzeSimulationMenuItem;
     private JMenuItem testAgentRoute;
-
     private JMenuItem configureSimulationMenuItem;
-
     private JMenu helpMenu;
-
     private JMenuItem labelsMenuItem;
     
     /**
@@ -103,7 +97,7 @@ public class SimulationFrame extends JFrame {
         this.setSize(width, height);
 
         initializeFrames();
-        initializeFormComponents();
+        initializeComponents();
         initializeMenu();
         initializeLabels();
         initializeResultTable();
@@ -115,7 +109,7 @@ public class SimulationFrame extends JFrame {
      * @param
      * @return
      */
-    private void initializeFormComponents() {
+    private void initializeComponents() {
 
         this.numberOfFixedAgentsLabel = new JLabel("Number of Fixed Agents");
         this.numberOfFixedAgentsTextField = new JTextField();
@@ -135,6 +129,9 @@ public class SimulationFrame extends JFrame {
         
         this.drawingPanel = new SimulationPanel(ScaleConverter.width, ScaleConverter.height, this);
         this.drawingPanel.setBackground(Color.WHITE);
+        
+        this.progressBar = new JProgressBar(0, PathFactory.TICKS_DAY);
+        this.progressBar.setStringPainted(true);
     }
 
     /**
@@ -318,17 +315,21 @@ public class SimulationFrame extends JFrame {
     private void initializeLayout() {
         GroupLayout mainGroupLayout = new GroupLayout(getContentPane());
         mainGroupLayout.setHorizontalGroup(
-            mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(Alignment.TRAILING, mainGroupLayout.createSequentialGroup()
+            mainGroupLayout.createParallelGroup(Alignment.TRAILING)
+                .addGroup(Alignment.LEADING, mainGroupLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(drawingPanel, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                    .addGroup(mainGroupLayout.createParallelGroup(Alignment.LEADING)
+                        .addComponent(progressBar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                        .addComponent(drawingPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE))
                     .addContainerGap())
         );
         mainGroupLayout.setVerticalGroup(
             mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(mainGroupLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(drawingPanel, GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+                .addGroup(Alignment.TRAILING, mainGroupLayout.createSequentialGroup()
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addComponent(drawingPanel, GroupLayout.PREFERRED_SIZE, 668, GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
         );
         this.getContentPane().setLayout(mainGroupLayout);
@@ -467,5 +468,18 @@ public class SimulationFrame extends JFrame {
     
     public short getNumberOfMobileSensors() {
         return this.numberOfMobileSensorsTextField.getText().isEmpty()? 0: Short.parseShort(this.numberOfMobileSensorsTextField.getText());
+    }
+
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void updateProgressBar(final int simulationTime, final String formattedSimulationTime) {
+        this.progressBar.setValue(simulationTime);
+        this.progressBar.setString(formattedSimulationTime);
     }
 }

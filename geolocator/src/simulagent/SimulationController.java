@@ -18,10 +18,10 @@ public class SimulationController {
             private void buildGUI() {
                 ScaleConverter.latIni = 0.0;
                 ScaleConverter.longIni = 0.0;
-                ScaleConverter.latEnd = 0.01;
-                ScaleConverter.longEnd = 0.01;
+                ScaleConverter.latEnd = 0.25;
+                ScaleConverter.longEnd = 0.25;
                 ScaleConverter.width  = 978;
-                ScaleConverter.height = 670;
+                ScaleConverter.height = 650;
                 
                 SimulationFrame frame = new SimulationFrame();
                 frame.pack();
