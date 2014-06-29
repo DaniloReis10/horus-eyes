@@ -12,9 +12,11 @@ import location.facade.IGeoPosition;
 public class Agent extends Device implements DetectableDevice{
 
     private IGeoPosition previousPosition;
+    private boolean hasBeenDetected;
     
     public Agent(Integer agentID, Mobility mobility) {
         super(agentID, mobility);
+        this.hasBeenDetected = false;
     }
 
     @Override
@@ -48,5 +50,20 @@ public class Agent extends Device implements DetectableDevice{
         final boolean hasMoved = isLatitudeDifferent || isLongitudeDifferent;
         
         return hasMoved;
+    }
+
+    @Override
+    public boolean wasDetected() {
+        return this.hasBeenDetected;
+    }
+
+    @Override
+    public void detect() {
+        this.hasBeenDetected = true;
+    }
+
+    @Override
+    public void undetect() {
+        this.hasBeenDetected = false;
     }
 }

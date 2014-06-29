@@ -37,4 +37,34 @@ public interface DetectableDevice {
      * @return
      */
     public abstract boolean hasMoved();
+    
+    /**
+     * <p>This method is called to verify the detected status of this device</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return boolean
+     */
+    public abstract boolean wasDetected();
+    
+    /**
+     * <p>This method is called when a Sensor detects this device</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public abstract void detect();
+    
+    /**
+     * <p>This method is called to reset the detected status of this device</p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public abstract void undetect();
 }

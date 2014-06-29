@@ -51,6 +51,7 @@ public class Sensor extends Device implements Detector {
                 final IGeoPosition sensorPositionAtDetection = this.currentPosition;
                 final DetectedDevice detectedDevice = new DetectedDevice(id, time, RADIUS, sensorPositionAtDetection);
                 this.addDetectedDevice(detectedDevice);
+                device.detect();
             }
         }
     }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
+import location.facade.DetectableDevice;
 import trilaceration.ScaleConverter;
 
 
@@ -17,10 +18,14 @@ public class AgentDrawing extends DrawStrategy {
     public void draw(Device device, Graphics graphics) {
         Color color = null;
         
+        final DetectableDevice detectableDevice = (DetectableDevice) device;
         final boolean isDeviceMobilityFixed = device.getMobility().equals(Mobility.FIXED);
         final boolean isDeviceMobilityMobile = device.getMobility().equals(Mobility.MOBILE);
         
-        if (isDeviceMobilityFixed) {
+        if(detectableDevice.wasDetected()) {
+            color = Color.YELLOW;
+            detectableDevice.undetect();
+        } else if (isDeviceMobilityFixed) {
             color = Color.ORANGE;
         } else if (isDeviceMobilityMobile) {
             color = Color.BLUE;
