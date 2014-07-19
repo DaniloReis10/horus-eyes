@@ -1,5 +1,8 @@
 package simulagent;
 
+import location.facade.IGeoPosition;
+import location.geoengine.DevicesController;
+import location.geoengine.GeoPosition;
 import trilaceration.ScaleConverter;
 
 /**
@@ -18,10 +21,12 @@ public class SimulationController {
             private void buildGUI() {
                 ScaleConverter.latIni = 0.0;
                 ScaleConverter.longIni = 0.0;
-                ScaleConverter.latEnd = 0.25;
-                ScaleConverter.longEnd = 0.25;
+                ScaleConverter.latEnd = 0.00332;
+                ScaleConverter.longEnd = 0.00332;
                 ScaleConverter.width  = 978;
                 ScaleConverter.height = 650;
+                
+                ScaleConverter.printScalePixelCorrespondence();
                 
                 SimulationFrame frame = new SimulationFrame();
                 frame.pack();

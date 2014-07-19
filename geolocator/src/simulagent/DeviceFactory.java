@@ -38,7 +38,7 @@ public class DeviceFactory {
         final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
  
         if (device instanceof Sensor) {
-            return new SensorPosition(latitude, longitude, Sensor.RADIUS);
+            return new SensorPosition(latitude, longitude, Sensor.RADIUS_IN_METERS);
         } else {
             return new GeoPosition(latitude, longitude);
         }

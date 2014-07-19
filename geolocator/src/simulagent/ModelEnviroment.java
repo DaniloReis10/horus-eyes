@@ -23,8 +23,6 @@ public class ModelEnviroment implements IActionTick {
     private static ModelEnviroment instance;        // Instancia do modelo
     private List<Device> devices;                      // lista de agentes criados
     private int deviceIdController = 0;
-    private List<Agent> agents;
-    private List<Sensor> sensors;
 
     /**
      * Retorna a instancia do modelo (Padrão de projeto singleton)
@@ -88,7 +86,7 @@ public class ModelEnviroment implements IActionTick {
     @Override
     public void move() {
         final Iterator<Device> iterator = this.devices.iterator();
-        
+
         while (iterator.hasNext()) {
             final Device device = iterator.next();
             device.move();

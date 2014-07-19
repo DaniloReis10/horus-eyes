@@ -39,11 +39,18 @@ public class SimulationPanel extends JPanel {
         ModelEnviroment.getInstance().draw(graphics);
         this.updateSimulationTime();
     }
-
+    
     /**
-     * <p></p>
-     * 
-     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private void resetTimer() {
+        this.simulationTime = 0;
+        this.updateSimulationTime();
+    }
+    
+    /**
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
      * @param
      * @return
@@ -59,13 +66,14 @@ public class SimulationPanel extends JPanel {
         final String formattedSimulationTime = String.format("%02d Day(s) %02d Hour(s) %02d Minute(s) %02d Second(s)", days, hours, minutes, seconds);
         this.simulationFrame.updateProgressBar(this.simulationTime, formattedSimulationTime);
         this.simulationTime++;
-    }
-
+    }    
+    
     public void startSimulation() {
         this.createDevices();
+        this.resetTimer();
         this.startAnimation();
     }
-    
+
     public void testAgentRoute() {
         ModelEnviroment.getInstance().createTraceableAgent();
         this.startAnimation();

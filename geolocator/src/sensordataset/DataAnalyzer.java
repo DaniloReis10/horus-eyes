@@ -42,22 +42,25 @@ public class DataAnalyzer {
             intersectionGraphics.setColor(LocationArea2.BASE_AREA_COLOR);
             intersectionGraphics.fillRect(0, 0, ScaleConverter.width, ScaleConverter.height);
             
+            boolean isFirstSensorAnalysis = true;
+            
             for (Sensor sensor : sensorsThatDetectedTheDevice) {
                 final List<DetectedDevice> detectedDevices = sensor.getDetectedDevices().get(agentID);
-                final boolean hasDetectedDeviceMoreThanOnce = detectedDevices.size() > 1;
+                final boolean hasSensorDetectedDeviceMoreThanOnce = detectedDevices.size() > 1;
                 final LocationArea2 locationArea = new LocationArea2();
                 int startIndex = 0;
                 
-                if (hasDetectedDeviceMoreThanOnce) {
+                if (hasSensorDetectedDeviceMoreThanOnce && isFirstSensorAnalysis) {
                     final DetectedDevice firstDetectedDevice = detectedDevices.get(0);
                     final DetectedDevice secondDetectedDevice = detectedDevices.get(1);
-                    intersectionArea = locationArea.calculateIntersectionArea(firstDetectedDevice.getSensorPositionAtDetection(), secondDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS);
+                    intersectionArea = locationArea.calculateIntersectionArea(firstDetectedDevice.getSensorPositionAtDetection(), secondDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS_IN_PIXELS);
                     startIndex = 2;
+                    isFirstSensorAnalysis = false;
                 }
                 
                 for (int currentIndex = startIndex; currentIndex < detectedDevices.size(); currentIndex++) {
                     final DetectedDevice currentDetectedDevice = detectedDevices.get(currentIndex);
-                    intersectionArea = locationArea.calculateIntersectionArea(intersectionArea, currentDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS);
+                    intersectionArea = locationArea.calculateIntersectionArea(intersectionArea, currentDetectedDevice.getSensorPositionAtDetection(), Sensor.RADIUS_IN_PIXELS);
                 }
             }
             

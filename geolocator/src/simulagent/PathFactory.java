@@ -3,7 +3,6 @@ package simulagent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import location.facade.IGeoPosition;
 import location.geoengine.DevicesController;
@@ -111,7 +110,7 @@ public class PathFactory {
         double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni)*factor;
  
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
-            return new SensorPosition(latitude, longitude, Sensor.RADIUS);
+            return new SensorPosition(latitude, longitude, Sensor.RADIUS_IN_METERS);
         } else {
             return new GeoPosition(latitude, longitude);
         }

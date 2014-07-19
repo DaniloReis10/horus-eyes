@@ -34,7 +34,7 @@ public class AgentDrawing extends DrawStrategy {
         final int deviceCurrentX = ScaleConverter.convertToX(device.getCurrentPosition());
         final int deviceCurrentY = ScaleConverter.convertToY(device.getCurrentPosition());
         
-        final int halfDrawSize = DrawStrategy.DRAW_SIZE / 2;
+        final int halfDrawSize = DrawStrategy.DRAW_SIZE_IN_PIXELS / 2;
         final int[] polygonXs = new int[]{deviceCurrentX, deviceCurrentX + halfDrawSize, deviceCurrentX - halfDrawSize};
         final int[] polygonYs = new int[]{deviceCurrentY - halfDrawSize, deviceCurrentY + halfDrawSize, deviceCurrentY + halfDrawSize};
         

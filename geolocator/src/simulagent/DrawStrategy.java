@@ -8,7 +8,7 @@ import java.awt.Graphics;
  */
 public abstract class DrawStrategy {
     
-    protected static final int DRAW_SIZE = 10;
+    protected static final int DRAW_SIZE_IN_PIXELS = 10;
     
     /**
      * <p>Defines the algorithm for device movements</p>

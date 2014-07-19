@@ -5,7 +5,7 @@ import location.geoengine.DevicesController;
 import location.geoengine.GeoPosition;
 public class ScaleConverter {
 
-    public static final double EARTHRATIO = 6378160; // Raio da terra em metros
+    public static final double EARTH_RADIUS = 6378160; // Raio da terra em metros
     public static double  latIni;
     public static double  latEnd;
     public static double longIni;
@@ -96,4 +96,34 @@ public class ScaleConverter {
     	return rdistance;
     }
     
+    public static void printScalePixelCorrespondence() {
+        
+        ScaleConverter.width  = 978;
+        ScaleConverter.height = 670;
+        
+        System.out.println("EARTH RADIUS  = 6378160 metros");
+        System.out.println("SCREEN WIDTH  = 978");
+        System.out.println("SCREEN HEIGHT = 670");
+        
+        System.out.println("==================================");
+        
+        final double[] scales = {1, 0.5, 0.25, 0.1, 0.06, 0.05, 0.025, 0.01, 0.006, 0.00332, 0.003};
+        
+        for (int scale = 0; scale < scales.length; scale++) {
+            
+            ScaleConverter.latEnd = scales[scale];
+            ScaleConverter.longEnd = scales[scale];
+            
+            final double firstLongitude = ScaleConverter.convertToLongitude(0);
+            final double firstLatitude = ScaleConverter.convertToLatitude(0);
+            final double secondLongitude = ScaleConverter.convertToLongitude(15);
+            final double secondLatitude = ScaleConverter.convertToLatitude(15);
+            final IGeoPosition firstPosition = new GeoPosition(firstLatitude, firstLongitude);
+            final IGeoPosition secondPosition = new GeoPosition(secondLatitude, secondLongitude);
+            
+            final double distance = DevicesController.calculateDistance(firstPosition, secondPosition);
+            System.out.println("First: (" + firstLongitude + ", " + firstLatitude + "), Second: (" + secondLongitude + ", " + secondLatitude + ")");
+            System.out.println("Scale :" + scales[scale] + " | Distance: " + distance);
+        }
+    }
 }

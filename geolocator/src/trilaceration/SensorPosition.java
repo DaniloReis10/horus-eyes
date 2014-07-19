@@ -36,9 +36,9 @@ public class SensorPosition  extends GeoPosition{
 	 * @param longitude
 	 * @param ratio
 	 */
-	public SensorPosition(double latitude, double longitude, double ratio) {
+	public SensorPosition(double latitude, double longitude, double radius) {
 		super(new Date(),latitude,longitude);
-		this.radius = ratio;
+		this.radius = radius;
 	}
 	// Metodos Set e gets dos atributos
 	public double getHeight() {
