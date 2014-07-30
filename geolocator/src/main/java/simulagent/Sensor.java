@@ -54,6 +54,8 @@ public class Sensor extends Device implements Detector {
                 final DetectedDevice detectedDevice = new DetectedDevice(id, time, RADIUS_IN_METERS, sensorPositionAtDetection);
                 this.addDetectedDevice(detectedDevice);
                 device.detect();
+            } else if(hasBeenDetected) {
+                device.detect();
             }
         }
     }

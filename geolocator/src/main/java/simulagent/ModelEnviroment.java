@@ -56,14 +56,14 @@ public class ModelEnviroment implements IActionTick {
      */
     public void createDevices(short numberOfFixedAgents, short numberOfFixedSensors, short numberOfMobileAgents, short numberOfMobileSensors) {
         List<Device> fixedAgents = DeviceFactory.createStaticDevices(Agent.class, numberOfFixedAgents);
-        List<Device> fixedSensors = DeviceFactory.createStaticDevices(Sensor.class, numberOfFixedSensors);
         List<Device> mobileAgents = DeviceFactory.createMobileDevices(Agent.class, numberOfMobileAgents);
         List<Device> mobileSensors = DeviceFactory.createMobileDevices(Sensor.class, numberOfMobileSensors);
+        List<Device> fixedSensors = DeviceFactory.createStaticDevices(Sensor.class, numberOfFixedSensors);
         
         this.devices.addAll(fixedAgents);
-        this.devices.addAll(fixedSensors);
         this.devices.addAll(mobileAgents);
         this.devices.addAll(mobileSensors);
+        this.devices.addAll(fixedSensors);
         
         GeopositionFacade.getInstance().addDevicesToTrack(devices);
     }

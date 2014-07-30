@@ -21,12 +21,14 @@ public class SimulationPanel extends JPanel {
     private int height; // altura da imagem
     private Timer animationTimer; // O timer guia a anima����o
     private int simulationTime;
+    private int simulationRunningDays;
 
     public SimulationPanel(int width, int height, SimulationFrame simulationFrame) {
         this.width = width;
         this.height = height;
         this.simulationFrame = simulationFrame;
         this.simulationTime = 0;
+        this.simulationRunningDays = 0;
     }
     
     /**
@@ -58,13 +60,18 @@ public class SimulationPanel extends JPanel {
     private void updateSimulationTime() {
         this.simulationTime = (this.simulationTime % PathFactory.TICKS_DAY);
         
-        final long days = TimeUnit.SECONDS.toDays(this.simulationTime);
         final long hours = TimeUnit.SECONDS.toHours(this.simulationTime) - TimeUnit.DAYS.toHours(TimeUnit.SECONDS.toDays(this.simulationTime));
         final long minutes = TimeUnit.SECONDS.toMinutes(this.simulationTime) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(this.simulationTime)); 
         final long seconds = TimeUnit.SECONDS.toSeconds(this.simulationTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(this.simulationTime));
-        
-        final String formattedSimulationTime = String.format("%02d Day(s) %02d Hour(s) %02d Minute(s) %02d Second(s)", days, hours, minutes, seconds);
+
+        final String formattedSimulationTime = String.format("%02d Day(s) %02d Hour(s) %02d Minute(s) %02d Second(s)", this.simulationRunningDays, hours, minutes, seconds);
         this.simulationFrame.updateProgressBar(this.simulationTime, formattedSimulationTime);
+        
+        if(hours == 23 && minutes == 59 && seconds == 59) {
+            this.simulationFrame.analyzeSimulation();
+            this.simulationRunningDays++;
+        }
+        
         this.simulationTime++;
     }    
     

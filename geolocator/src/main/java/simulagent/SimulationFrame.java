@@ -452,6 +452,8 @@ public class SimulationFrame extends JFrame {
         this.resultsTable.setValueAt(simulationResults.getNumberOfCorrectPredictions(), 0, 0);
         this.resultsTable.setValueAt(simulationResults.getNumberOfWrongPredictions(), 0, 1);
         this.resultsTable.setValueAt(simulationResults.getNumberOfUndetectedAgents(), 0, 2);
+        
+        FileUtils.saveSimulationAnalyses(this.progressBar.getString(), simulationResults);
     }
     
     public short getNumberOfFixedAgents() {
