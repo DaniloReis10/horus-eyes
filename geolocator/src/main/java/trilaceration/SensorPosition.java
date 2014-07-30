@@ -2,7 +2,7 @@ package trilaceration;
 
 import java.util.Date;
 
-import location.geoengine.GeoPosition;
+import br.com.fujitec.location.geoengine.GeoPosition;
 
 public class SensorPosition  extends GeoPosition{
 

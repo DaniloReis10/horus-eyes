@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
+import br.com.fujitec.location.facade.IGeoPosition;
+import br.com.fujitec.simulagent.models.Sensor;
+
+/*Classe responsável por calculo da trileceração em uma área de estudo*/
 public class LocationArea {
-    private double       lati,longi;// coordenadas do canto superior esquerdo da area
-    private double       latf,longf;// coordenadas do canto inferior direito da area
+    private double       initialLatitude, initialLongitude;// coordenadas do canto superior esquerdo da area
+    private double       finalLatitude, finalLongitude;// coordenadas do canto inferior direito da area
     private int        width,height;// largura e altura da area em analise
     private double    deltaX,deltaY;// Variacao de pixels no eixo X e Y
     private int              status;// flag para indicar se o elemento a ser localizado ja foi detectado por algum sensor
@@ -26,38 +27,43 @@ public class LocationArea {
     public static final int SX[]={ 0, 1, 1, 1, 0,-1,-1,-1};
     public static final int SY[]={-1,-1, 0, 1, 1, 1, 0,-1};
     
-    /**
-     * Classe respons��vel por calculo da trilecera��ao em uma ��rea de estudo
-     * @param lati  latitude do canto inferior esquerdo da ��rea em estudo.
-     * @param longi longitude do canto inferior esquerdo da ��rea em estudo.
-     * @param latf latitude do canto superior direito da ��rea em estudo.
-     * @param longf longitude do canto superior direito da ��rea em estudo.
-     * @param width largura em pixeis da imagem da ��rea em estudo.
-     * @param height altura em pixeis da imagem da ��rea em estudo.
-     */
-    public LocationArea(double lati,double longi,double latf,double longf,int width,int height) {
-        super();
-        // Verifica se paramentros sao validos
-        if( (lati < latf)&&(longi < longf) &&(width > 0) &&(height > 0)){
-            // Seta parametros
-            this.lati   = lati;
-            this.longi  = longi;
-            this.latf   = latf;
-            this.longf  = longf;
-            this.width  = width;
-            this.height = height;
-            img = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
-            Graphics g = img.createGraphics();
-            g.setColor( Color.WHITE );
-            g.fillRect( 0, 0, width, height );
-            //g.setColor( Color.BLACK );
-            //g.drawLine( 0, 0, width, height );
-            deltaY = (latf - lati)/height;
-            deltaX = (longf - longi)/width;
-            status = NO_POSITION;
-        }
-        
+    public static final Color BASE_AREA_COLOR = Color.RED;
+    public static final Color COMPARED_AREA_COLOR = Color.YELLOW;
+    
+    public LocationArea() {
+        this(ScaleConverter.latIni, ScaleConverter.longIni, ScaleConverter.latEnd, ScaleConverter.longEnd, ScaleConverter.width,
+                ScaleConverter.height);
     }
+
+    public LocationArea(double initialLongitude, double initialLatitude, double finalLongitude, double finalLatitude, int width, int height) {
+        final boolean isLongitudeValid = (initialLongitude < finalLongitude);
+        final boolean isLatitudeValid = (initialLatitude < finalLatitude);
+        final boolean isWidthValid = (width > 0);
+        final boolean isHeightValid = (height > 0);
+        final boolean areParametersValid = isLongitudeValid && isLatitudeValid && isWidthValid && isHeightValid;
+
+        if (areParametersValid) {
+            this.initialLongitude = initialLongitude;
+            this.initialLatitude = initialLatitude;
+
+            this.finalLongitude = finalLongitude;
+            this.finalLatitude = finalLatitude;
+
+            this.width = width;
+            this.height = height;
+
+            this.deltaX = (finalLongitude - initialLongitude) / width;
+            this.deltaY = (finalLatitude - initialLatitude) / height;
+            
+            this.img = new BufferedImage(width,height,java.awt.image.BufferedImage.TYPE_INT_RGB);
+            final Graphics graphics = img.createGraphics();
+            graphics.setColor( Color.WHITE );
+            graphics.fillRect( 0, 0, width, height );
+        } else {
+            throw new RuntimeException("Location Area parameters are invalid!");
+        }
+    }
+    
     /**
      * Desenha um circulo preenchido com centro x,y e raio (ratio) na miagem image.
      * @param x coordenadas do centro do circulo.
@@ -181,18 +187,18 @@ public class LocationArea {
         double           dratio;
         BufferedImage      img1;
         // Verifica se o sensor estar dentro da area
-        if( (sensor.getLatitude() >= lati)&&(sensor.getLatitude() <= latf)&&
-            (sensor.getLongitude() >= longi)&&(sensor.getLongitude()<=longf)){
+        if( (sensor.getLatitude() >= initialLatitude)&&(sensor.getLatitude() <= finalLatitude)&&
+            (sensor.getLongitude() >= initialLongitude)&&(sensor.getLongitude()<=finalLongitude)){
         
             // Calcula coordenadas dentro da imagem
-            db = new Double( (sensor.getLatitude() - lati)/deltaY);
+            db = new Double( (sensor.getLatitude() - initialLatitude)/deltaY);
             ys = height - db.intValue();
-            db = new Double( (sensor.getLongitude() - longi)/deltaX);
+            db = new Double( (sensor.getLongitude() - initialLongitude)/deltaX);
             xs = db.intValue();
             // Raio convertido para graus
             dratio = ScaleConverter.convertToGrades(ratio, sensor.getLatitude(), sensor.getLongitude());
             // converte o raio em pixeis
-            db = new Double( (dratio /(latf - lati))*height);
+            db = new Double( (dratio /(finalLatitude - initialLatitude))*height);
             rs = db.intValue();
             // Verifica se parametros sao validos
             if( (rs >0)&&(xs >=0)&&(ys>=0)){
@@ -307,64 +313,72 @@ public class LocationArea {
         g.drawLine(xc, yc - 2, xc, yc + 2);
         g.drawOval(xc -ratio, yc-ratio, 2*ratio, 2*ratio);
     }
-    /**
-     * @param args
-     */
-    @SuppressWarnings("deprecation")
-    public static void main(String[] args) {
-        BufferedImage   image;
-
-        LocationArea   area   = new LocationArea (-3,-5,-1,-1,400,200);
-        SensorPosition sensor1 = new SensorPosition(-2,-3,0.5);
-        SensorPosition sensor2 = new SensorPosition(-2.5,-3,0.5);
-        SensorPosition sensor3 = new SensorPosition(-2.0,-2.5,0.5);
-        area.addSensorDetection(sensor1, 1);
-        area.addSensorDetection(sensor2, 1);
-        area.addSensorDetection(sensor3, 1);
-        area.showCentroide();
-        /**
-        image = new BufferedImage(400,400,java.awt.image.BufferedImage.TYPE_INT_RGB);
-        
-        ScaleConverter.latIni = 0.0;
-        ScaleConverter.longIni = 0.0;
-        ScaleConverter.latEnd = 4.0;
-        ScaleConverter.longEnd = 4.0;
-        ScaleConverter.height = 400;
-        ScaleConverter.width  = 400;
-        
-        ElectronicFence fence = new ElectronicFence();
-        
-        GeoPosition   p1,p2,p3,p4,p5;
-        
-        p1 = new GeoPosition(new Date(),0.3,0.2);
-        p2 = new GeoPosition(new Date(),0.3,1.3);
-        p3 = new GeoPosition(new Date(),2.3,1.3);
-        p4 = new GeoPosition(new Date(),2.3,0.2);
-       // p5 = new GeoPosition(new Date(),0.8,1.2);     
-        
-        fence.addPoint(p1);
-        fence.addPoint(p2);
-        fence.addPoint(p3);
-        fence.addPoint(p4);
-        //fence.addPoint(p5);
-        
-        p1 = new GeoPosition(new Date(),0.1,0.1);
-        
-        boolean result = fence.isInsideFence(p1);
-        System.out.print(result);
-        fence.drawFenceArea(image);
-        */
-        // TODO Auto-generated method stub
-        JFrame frm = new JFrame("Teste Imagem");
-        JPanel pan = new JPanel();
-        JLabel lbl = new JLabel( area.getImagem() );
-        //JLabel lbl = new JLabel( new ImageIcon( image ));
-        pan.add( lbl );
-        frm.getContentPane().add( pan );
-        frm.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        frm.pack();
-        frm.show();     
-
+    
+    public BufferedImage calculateIntersectionArea(final IGeoPosition basePosition, final IGeoPosition comparedPosition, final int areaRadius) {
+        final BufferedImage baseAreaImage = this.getAreaImage(basePosition, areaRadius, BASE_AREA_COLOR);
+        return this.calculateIntersectionArea(baseAreaImage, comparedPosition, areaRadius);
     }
 
+    public BufferedImage calculateIntersectionArea(final BufferedImage baseAreaImage, final IGeoPosition comparedPosition, final int areaRadius) {
+        final BufferedImage comparedSensorAreaImage = this.getAreaImage(comparedPosition, areaRadius, COMPARED_AREA_COLOR);
+        
+        if(baseAreaImage == null) {
+            return null;
+        } else {
+            return this.getIntersectionAreaImage(baseAreaImage, comparedSensorAreaImage, comparedPosition);
+        }
+    }
+
+    public BufferedImage getAreaImage(final IGeoPosition position, final int areaRadius) {
+        return this.getAreaImage(position, areaRadius, BASE_AREA_COLOR);
+    }
+    
+    private BufferedImage getAreaImage(final IGeoPosition position, final int areaRadius, Color color) {
+        final int diameter = areaRadius * 2;
+        final BufferedImage sensorArea = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+        final Graphics graphics = sensorArea.createGraphics();
+
+        graphics.setColor(color);
+        graphics.fillOval(ScaleConverter.convertToX(position) - areaRadius, ScaleConverter.convertToY(position) - areaRadius, diameter, diameter);
+
+        return sensorArea;
+    }
+
+    private BufferedImage getIntersectionAreaImage(BufferedImage baseAreaImage, BufferedImage comparedAreaImage, IGeoPosition comparedAreaPosition) {
+        final int radius = Sensor.RADIUS_IN_PIXELS;
+
+        BufferedImage intersectionAreaImage = null;
+
+        final int rgbRepresentationOfBaseArea = BASE_AREA_COLOR.getRGB();
+        final int rgbRepresentationOfComparedArea = COMPARED_AREA_COLOR.getRGB();
+
+        final int comparedAreaX = ScaleConverter.convertToX(comparedAreaPosition);
+        final int comparedAreaY = ScaleConverter.convertToY(comparedAreaPosition);
+        
+        final int comparedAreaBeginX = ((comparedAreaX - radius) > 0) ? (comparedAreaX - radius) : 0;
+        final int comparedAreaBeginY = ((comparedAreaY - radius) > 0) ? (comparedAreaY - radius) : 0;
+        final int comparedAreaEndX = ((comparedAreaX + radius+1) > (width -1)) ? (width - 1) : (comparedAreaX + radius + 1);
+        final int comparedAreaEndY = ((comparedAreaY + radius+1) > (height -1)) ? (height - 1) : (comparedAreaY + radius + 1);
+        
+        for (int row = comparedAreaBeginX; row < comparedAreaEndX; row++) {
+            for (int column = comparedAreaBeginY; column < comparedAreaEndY; column++) {
+
+                final int baseAreaPixel = baseAreaImage.getRGB(row, column);
+                final int comparedAreaPixel = comparedAreaImage.getRGB(row, column);
+                final boolean isBaseAreaPixelPainted = (baseAreaPixel == rgbRepresentationOfBaseArea);
+                final boolean isComparedAreaPixelPainted = (comparedAreaPixel == rgbRepresentationOfComparedArea);
+                final boolean hasIntersection = isBaseAreaPixelPainted && isComparedAreaPixelPainted;
+
+                if (hasIntersection) {
+                    if (intersectionAreaImage == null) {
+                        intersectionAreaImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    }
+                    
+                    intersectionAreaImage.setRGB(row, column, BASE_AREA_COLOR.getRGB());
+                }
+            }
+        }
+        
+        return intersectionAreaImage;
+    }
 }

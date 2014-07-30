@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import location.facade.IGeoPosition;
+import br.com.fujitec.location.facade.IGeoPosition;
 
 public class ElectronicFence {
 	 int[]     xv;

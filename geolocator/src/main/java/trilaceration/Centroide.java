@@ -2,7 +2,7 @@ package trilaceration;
 
 import java.util.Date;
 
-import location.facade.IGeoPosition;
+import br.com.fujitec.location.facade.IGeoPosition;
 
 public class Centroide implements IGeoPosition{
 	

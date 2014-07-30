@@ -1,8 +1,8 @@
 package trilaceration;
 
-import location.facade.*;
-import location.geoengine.DevicesController;
-import location.geoengine.GeoPosition;
+import br.com.fujitec.location.facade.*;
+import br.com.fujitec.location.geoengine.DevicesController;
+import br.com.fujitec.location.geoengine.GeoPosition;
 public class ScaleConverter {
 
     public static final double EARTH_RADIUS = 6378160; // Raio da terra em metros
