@@ -72,6 +72,10 @@ public class SimulationPanel extends JPanel {
             this.simulationRunningDays++;
         }
         
+        if(this.simulationRunningDays == this.simulationFrame.getNumberOfSimulationDays()) {
+            this.simulationFrame.resetSimulationToDefault();
+        }
+        
         this.simulationTime++;
     }    
     

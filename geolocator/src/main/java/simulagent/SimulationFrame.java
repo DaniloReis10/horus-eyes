@@ -46,8 +46,11 @@ public class SimulationFrame extends JFrame {
     private JLabel numberOfFixedSensorsLabel;
     private JTextField numberOfFixedSensorsTextField;
     
-    private JLabel numberOfMobileSensors;
+    private JLabel numberOfMobileSensorsLabel;
     private JTextField numberOfMobileSensorsTextField;
+    
+    private JLabel numberOfSimulationDaysLabel;
+    private JTextField numberOfSimulationDaysTextField;
 
     private int width;
     private int height;
@@ -123,9 +126,13 @@ public class SimulationFrame extends JFrame {
         this.numberOfFixedSensorsTextField = new JTextField();
         this.numberOfFixedSensorsTextField.setColumns(10);
 
-        this.numberOfMobileSensors = new JLabel("Number of Mobile Sensors");
+        this.numberOfMobileSensorsLabel = new JLabel("Number of Mobile Sensors");
         this.numberOfMobileSensorsTextField = new JTextField();
         this.numberOfMobileSensorsTextField.setColumns(10);
+        
+        this.numberOfSimulationDaysLabel = new JLabel("Number of Simulation Days");
+        this.numberOfSimulationDaysTextField = new JTextField();
+        this.numberOfSimulationDaysTextField.setColumns(10);
         
         this.drawingPanel = new SimulationPanel(ScaleConverter.width, ScaleConverter.height, this);
         this.drawingPanel.setBackground(Color.WHITE);
@@ -236,7 +243,7 @@ public class SimulationFrame extends JFrame {
         this.configureSimulationMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SimulationFrame.this.configurationFrame.setSize(330, 170);
+                SimulationFrame.this.configurationFrame.setSize(330, 200);
                 SimulationFrame.this.configurationFrame.setVisible(true);
             }
         });
@@ -340,18 +347,21 @@ public class SimulationFrame extends JFrame {
                 .addGroup(configurationGroupLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(numberOfMobileSensors)
+                        .addComponent(numberOfMobileSensorsLabel)
                         .addComponent(numberOfFixedSensorsLabel)
-                        .addGroup(configurationGroupLayout.createParallelGroup(Alignment.TRAILING, false)
-                            .addComponent(numberOfMobileAgentsLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(numberOfFixedAgentsLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.TRAILING, false)
+                        .addComponent(numberOfMobileAgentsLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(numberOfFixedAgentsLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.TRAILING, false)
+                        .addComponent(numberOfSimulationDaysLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addPreferredGap(ComponentPlacement.RELATED)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
-                        .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
-                            .addComponent(numberOfFixedSensorsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                            .addComponent(numberOfFixedAgentsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                            .addComponent(numberOfMobileSensorsTextField, 0, 0, Short.MAX_VALUE)))
+                    .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
+                        .addComponent(numberOfFixedSensorsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                        .addComponent(numberOfFixedAgentsTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                        .addComponent(numberOfMobileSensorsTextField, 0, 0, Short.MAX_VALUE)
+                        .addComponent(numberOfSimulationDaysTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)))
                     .addContainerGap(218, Short.MAX_VALUE))
         );
         configurationGroupLayout.setVerticalGroup(
@@ -366,13 +376,19 @@ public class SimulationFrame extends JFrame {
                         .addComponent(numberOfMobileAgentsLabel)
                         .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(ComponentPlacement.RELATED)
+                    .addGap(10)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING)
                         .addComponent(numberOfFixedSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(numberOfFixedSensorsLabel))
                     .addPreferredGap(ComponentPlacement.RELATED)
+                    .addGap(10)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(numberOfMobileSensors)
-                        .addComponent(numberOfMobileSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(numberOfMobileSensorsLabel)
+                        .addComponent(numberOfMobileSensorsTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(10)
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
+                            .addComponent(numberOfSimulationDaysLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numberOfSimulationDaysTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         );
         this.configurationFrame.getContentPane().setLayout(configurationGroupLayout);
         
@@ -425,6 +441,10 @@ public class SimulationFrame extends JFrame {
         this.drawingPanel.startSimulation();
     }
     
+    public void resetSimulationToDefault() {
+        this.stopSimulationMenuItem.doClick();
+    }
+    
     public void stopSimulation() {
         this.drawingPanel.stopSimulation();
     }
@@ -470,6 +490,10 @@ public class SimulationFrame extends JFrame {
     
     public short getNumberOfMobileSensors() {
         return this.numberOfMobileSensorsTextField.getText().isEmpty()? 0: Short.parseShort(this.numberOfMobileSensorsTextField.getText());
+    }
+    
+    public short getNumberOfSimulationDays() {
+        return this.numberOfSimulationDaysTextField.getText().isEmpty()? 1: Short.parseShort(this.numberOfSimulationDaysTextField.getText());
     }
 
     /**
