@@ -29,7 +29,15 @@ public class FileUtils {
         try {
             final DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             final String timeStamp = formatter.format(new Date()); 
-            final File file = new File("Simulation Logs/simulation_"+timeStamp);
+            final File file = new File("Logs/simulation_"+timeStamp);
+            
+            if(!file.exists()) {
+                file.createNewFile();
+                file.setExecutable(true);
+                file.setReadable(true);
+                file.setWritable(true);
+            }
+            
             final PrintStream printStream = new PrintStream(new FileOutputStream(file, true));
             final String log = String.format("%s: Correct Predictions: %s | Wrong Predictions: %s | Undetected Agents: %s", date, simulationResults.getNumberOfCorrectPredictions(), simulationResults.getNumberOfWrongPredictions(), simulationResults.getNumberOfUndetectedAgents());
             printStream.println(log);
