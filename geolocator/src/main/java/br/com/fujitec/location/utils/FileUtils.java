@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,8 @@ public class FileUtils {
         try {
             final DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             final String timeStamp = formatter.format(new Date()); 
-            final File file = new File("Logs/simulation_"+timeStamp);
+            final String path = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            final File file = new File(path.replace("target/classes/", "Logs/simulation_"+timeStamp+".txt"));
             
             if(!file.exists()) {
                 file.createNewFile();
@@ -48,7 +50,7 @@ public class FileUtils {
             
             printStream.close();
         } catch (IOException e) {
-            System.out.println("IOException trying to write: " + e);
+            System.out.println(e);
         } catch (Exception e) {
             e.printStackTrace();
         }
