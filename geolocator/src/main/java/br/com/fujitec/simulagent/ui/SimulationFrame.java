@@ -21,13 +21,13 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import trilaceration.ScaleConverter;
 import br.com.fujitec.location.geoengine.DevicesController;
 import br.com.fujitec.location.utils.DataAnalyzer;
 import br.com.fujitec.location.utils.FileUtils;
 import br.com.fujitec.simulagent.factories.PathFactory;
 import br.com.fujitec.simulagent.models.AnalyzedData;
 import br.com.fujitec.simulagent.models.Device;
-import trilaceration.ScaleConverter;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -469,6 +469,7 @@ public class SimulationFrame extends JFrame {
                 simulationResults.increaseNumberOfUndetectedAgents();
             } else {
                 simulationResults.increaseNumberOfWrongPredictions();
+                simulationResults.addWrongPredictionData(data);
             }
         }
         

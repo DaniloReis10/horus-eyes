@@ -3,13 +3,12 @@ package br.com.fujitec.location.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import br.com.fujitec.simulagent.models.AnalyzedData;
 import br.com.fujitec.simulagent.ui.SimulationResults;
 
 /**
@@ -43,6 +42,11 @@ public class FileUtils {
             final PrintStream printStream = new PrintStream(new FileOutputStream(file, true));
             final String log = String.format("%s: Correct Predictions: %s | Wrong Predictions: %s | Undetected Agents: %s", date, simulationResults.getNumberOfCorrectPredictions(), simulationResults.getNumberOfWrongPredictions(), simulationResults.getNumberOfUndetectedAgents());
             printStream.println(log);
+            
+            for (AnalyzedData data: simulationResults.getWrongPredictions()) {
+                final String logDetails = String.format("    - Real Mobility: %s | Predicted Mobility: %s", data.getRealMobility(), data.getPredictedMobility());
+                printStream.println(logDetails);
+            }
             
             if (printStream.checkError()){
                 System.out.println("Could not save the data!");
