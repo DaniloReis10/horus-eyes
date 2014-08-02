@@ -1,1 +1,12 @@
-00 Day(s) 00 Hour(s) 00 Minute(s) 52 Second(s): Correct Predictions: 0 | Wrong Predictions: 0 | Undetected Agents: 0
+00 Day(s) 00 Hour(s) 23 Minute(s) 11 Second(s): Correct Predictions: 0 | Wrong Predictions: 2 | Undetected Agents: 18
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+00 Day(s) 01 Hour(s) 03 Minute(s) 45 Second(s): Correct Predictions: 3 | Wrong Predictions: 3 | Undetected Agents: 14
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+00 Day(s) 01 Hour(s) 35 Minute(s) 47 Second(s): Correct Predictions: 3 | Wrong Predictions: 4 | Undetected Agents: 13
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
+    - Real Mobility: MOBILE | Predicted Mobility: FIXED
