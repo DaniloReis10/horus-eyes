@@ -68,11 +68,12 @@ public class SimulationPanel extends JPanel {
         final long seconds = TimeUnit.SECONDS.toSeconds(this.simulationTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(this.simulationTime));
 
         final String formattedSimulationTime = String.format("%02d Day(s) %02d Hour(s) %02d Minute(s) %02d Second(s)", this.simulationRunningDays, hours, minutes, seconds);
-        this.simulationFrame.updateProgressBar(this.simulationTime, formattedSimulationTime);
+        this.simulationFrame.updateSimulationProgressBar(this.simulationTime, formattedSimulationTime);
         
         if(hours == 23 && minutes == 59 && seconds == 59) {
             this.simulationFrame.analyzeSimulation();
             this.simulationRunningDays++;
+            ModelEnviroment.getInstance().deleteSensorsDetectedDevices();
         }
         
         if(this.simulationRunningDays == this.simulationFrame.getNumberOfSimulationDays()) {

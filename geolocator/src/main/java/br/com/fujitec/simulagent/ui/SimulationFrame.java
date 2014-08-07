@@ -58,7 +58,7 @@ public class SimulationFrame extends JFrame {
     private int width;
     private int height;
 
-    private JProgressBar progressBar;
+    private JProgressBar simulationProgressBar;
     private SimulationPanel drawingPanel;
     
     private JFrame configurationFrame;
@@ -140,8 +140,8 @@ public class SimulationFrame extends JFrame {
         this.drawingPanel = new SimulationPanel(ScaleConverter.width, ScaleConverter.height, this);
         this.drawingPanel.setBackground(Color.WHITE);
         
-        this.progressBar = new JProgressBar(0, PathFactory.TICKS_DAY);
-        this.progressBar.setStringPainted(true);
+        this.simulationProgressBar = new JProgressBar(0, PathFactory.TICKS_DAY);
+        this.simulationProgressBar.setStringPainted(true);
     }
 
     /**
@@ -329,7 +329,7 @@ public class SimulationFrame extends JFrame {
                 .addGroup(Alignment.LEADING, mainGroupLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(mainGroupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(progressBar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                        .addComponent(simulationProgressBar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
                         .addComponent(drawingPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE))
                     .addContainerGap())
         );
@@ -337,7 +337,7 @@ public class SimulationFrame extends JFrame {
             mainGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(Alignment.TRAILING, mainGroupLayout.createSequentialGroup()
                     .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(simulationProgressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(ComponentPlacement.UNRELATED)
                     .addComponent(drawingPanel, GroupLayout.PREFERRED_SIZE, 668, GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
@@ -457,8 +457,11 @@ public class SimulationFrame extends JFrame {
     }
 
     public void analyzeSimulation() {
+        final String simulationTime = this.simulationProgressBar.getString();
+        System.out.println("---------- Simulation Analysis Starting at: " + simulationTime + " ----------");
+        
         final List<Device> devices = DevicesController.getInstance().getDevices();
-        final List<AnalyzedData> analyzedData = DataAnalyzer.predictDevicesClasses(devices);
+        final List<AnalyzedData> analyzedData = DataAnalyzer.predictDevicesClasses(devices, this);
         
         final SimulationResults simulationResults = new SimulationResults();
         
@@ -477,7 +480,8 @@ public class SimulationFrame extends JFrame {
         this.resultsTable.setValueAt(simulationResults.getNumberOfWrongPredictions(), 0, 1);
         this.resultsTable.setValueAt(simulationResults.getNumberOfUndetectedAgents(), 0, 2);
         
-        FileUtils.saveSimulationAnalyses(this.progressBar.getString(), simulationResults);
+        FileUtils.saveSimulationAnalyses(simulationTime, simulationResults);
+        System.out.println("----------//----------//----------//----------//----------//----------//----------");
     }
     
     public short getNumberOfFixedAgents() {
@@ -508,8 +512,21 @@ public class SimulationFrame extends JFrame {
      * @param
      * @return
      */
-    public void updateProgressBar(final int simulationTime, final String formattedSimulationTime) {
-        this.progressBar.setValue(simulationTime);
-        this.progressBar.setString(formattedSimulationTime);
+    public void updateSimulationProgressBar(final int simulationTime, final String formattedSimulationTime) {
+        this.simulationProgressBar.setValue(simulationTime);
+        this.simulationProgressBar.setString(formattedSimulationTime);
+    }
+    
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void updateAnalysisProgressBar(final int numberOfAgents, final int analysisTime) {
+        System.out.println(analysisTime + "%");
     }
 }
+    

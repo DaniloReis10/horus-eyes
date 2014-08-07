@@ -27,4 +27,14 @@ public interface Detector {
     public abstract void addDetectedDevice(DetectedDevice device);
     
     public abstract Map<Integer, List<DetectedDevice>> getDetectedDevices();
+
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public abstract void deleteAllDetectedDevices();
 }

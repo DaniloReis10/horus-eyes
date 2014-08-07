@@ -72,6 +72,24 @@ public class ModelEnviroment implements IActionTick {
     
     /**
      * <p>
+     *  Clears sensors detected devices info
+     * </p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void deleteSensorsDetectedDevices() {
+        for (Device device : devices) {
+            if (device instanceof Sensor) {
+                ((Sensor) device).deleteAllDetectedDevices();
+            }
+        }
+    }
+    
+    /**
+     * <p>
      *  Creates one traceable agent
      * </p>
      * 

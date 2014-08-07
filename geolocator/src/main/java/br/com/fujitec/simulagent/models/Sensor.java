@@ -76,4 +76,9 @@ public class Sensor extends Device implements Detector {
     public Map<Integer, List<DetectedDevice>> getDetectedDevices() {
         return this.detectedDevices;
     }
+    
+    @Override
+    public void deleteAllDetectedDevices() {
+        this.detectedDevices.clear();
+    }
 }

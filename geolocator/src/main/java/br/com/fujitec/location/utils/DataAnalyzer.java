@@ -13,6 +13,7 @@ import br.com.fujitec.simulagent.models.DetectedDevice;
 import br.com.fujitec.simulagent.models.Device;
 import br.com.fujitec.simulagent.models.Mobility;
 import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.ui.SimulationFrame;
 
 /**
  * @author tiagoportela <tiagoporteladesouza@gmail.com>
@@ -29,13 +30,14 @@ public class DataAnalyzer {
      * @return 
      * @return
      */
-    public static List<AnalyzedData> predictDevicesClasses(final List<Device> devices) {
+    public static List<AnalyzedData> predictDevicesClasses(final List<Device> devices, final SimulationFrame simulationFrame) {
         final List<Agent> agents = getAgentsFromDeviceList(devices);
         final List<Sensor> sensors = getSensorsFromDeviceList(devices);
         
         final List<AnalyzedData> analyzedData = new ArrayList<AnalyzedData>();
         
-        for (Agent agent: agents) {
+        for (int index = 0; index < agents.size(); index++) {
+            final Agent agent = agents.get(index);
             final List<Sensor> sensorsThatDetectedTheDevice = getSensorsThatDetectedTheDevice(agent, sensors);
             final Integer agentID = agent.getId();
             BufferedImage intersectionArea = new BufferedImage(ScaleConverter.width, ScaleConverter.height, BufferedImage.TYPE_INT_RGB);
@@ -82,11 +84,15 @@ public class DataAnalyzer {
             
             final AnalyzedData analyzedDevice = new AnalyzedData(Agent.class, agent.getMobility(), predictedMobility);
             analyzedData.add(analyzedDevice);
+
+            final int analysisTime = (index+1) * 100 / agents.size();
+            simulationFrame.updateAnalysisProgressBar(agents.size(), analysisTime);
         }
         
         return analyzedData;
     }
-
+    
+    
     /**
      * <p></p>
      * 
