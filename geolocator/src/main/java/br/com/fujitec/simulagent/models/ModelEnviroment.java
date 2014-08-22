@@ -4,9 +4,11 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import br.com.fujitec.location.facade.GeopositionFacade;
 import br.com.fujitec.simulagent.factories.DeviceFactory;
+import br.com.fujitec.simulagent.factories.PathFactory;
 import br.com.fujitec.simulagent.interfaces.IActionTick;
 import trilaceration.ScaleConverter;
 
@@ -24,6 +26,8 @@ public class ModelEnviroment implements IActionTick {
 
     private static ModelEnviroment instance;        // Instancia do modelo
     private List<Device> devices;                      // lista de agentes criados
+    private List<Agent> mobileAgents;                      // lista de agentes criados
+    private List<Sensor> sensors;                      // lista de agentes criados
     private int deviceIdController = 0;
 
     /**
@@ -44,6 +48,8 @@ public class ModelEnviroment implements IActionTick {
     public ModelEnviroment() {
         super();
         this.devices = new ArrayList<Device>();
+        this.mobileAgents = new ArrayList<Agent>();
+        this.sensors= new ArrayList<Sensor>();
     }
 
     /**
@@ -84,6 +90,55 @@ public class ModelEnviroment implements IActionTick {
         for (Device device : devices) {
             if (device instanceof Sensor) {
                 ((Sensor) device).deleteAllDetectedDevices();
+            }
+        }
+    }
+    
+    /**
+     * <p>
+     *  Regenerates only mobile agents routes
+     * </p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void regenerateAgentsRoutes() {
+        for (Device device : devices) {
+            if (device.isMobile() && device instanceof Agent) {
+                final Random randomNumberGenerator = new Random();
+                final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 10);
+                final Path newPath = PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                ((Agent) device).setPath(newPath);
+            }
+        }
+    }
+    
+    /**
+     * <p>
+     *  Regenerates all mobile devices routes
+     * </p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public void regenerateDevicesRoutes() {
+        for (Device device : devices) {
+            if (device.isMobile() && device instanceof Agent) {
+                final Random randomNumberGenerator = new Random();
+                final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 10);
+                final Path newPath;
+                
+                if (device instanceof Agent) {
+                    newPath = PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                } else {
+                    newPath = PathFactory.createSensorPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                }
+                
+                device.setPath(newPath);
             }
         }
     }

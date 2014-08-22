@@ -64,10 +64,11 @@ public class SimulationFrame extends JFrame {
     private JFrame configurationFrame;
     
     private JFrame labelsFrame;
-    private JCheckBox chckbxFixedAgent;
-    private JCheckBox chckbxMobileAgent;
-    private JCheckBox chckbxFixedSensor;
-    private JCheckBox chckbxMobileSensor;
+    private JCheckBox checkboxFixedAgent;
+    private JCheckBox checkboxMobileAgent;
+    private JCheckBox checkboxFixedSensor;
+    private JCheckBox checkboxMobileSensor;
+    private JCheckBox checkboxRegenerateOnlyAgentsRoutesEveryday;
     
     private JFrame resultsFrame;
     private JTable resultsTable;
@@ -246,7 +247,7 @@ public class SimulationFrame extends JFrame {
         this.configureSimulationMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SimulationFrame.this.configurationFrame.setSize(330, 200);
+                SimulationFrame.this.configurationFrame.setSize(400, 240);
                 SimulationFrame.this.configurationFrame.setVisible(true);
             }
         });
@@ -266,25 +267,27 @@ public class SimulationFrame extends JFrame {
      * @return
      */
     private void initializeLabels() {
-        this.chckbxMobileAgent = new JCheckBox("Mobile Agent");
-        this.chckbxMobileAgent.setForeground(Color.WHITE);
-        this.chckbxMobileAgent.setBackground(Color.BLUE);
-        this.chckbxMobileAgent.setEnabled(false);
+        this.checkboxMobileAgent = new JCheckBox("Mobile Agent");
+        this.checkboxMobileAgent.setForeground(Color.WHITE);
+        this.checkboxMobileAgent.setBackground(Color.BLUE);
+        this.checkboxMobileAgent.setEnabled(false);
         
-        this.chckbxFixedAgent = new JCheckBox("Fixed Agent");
-        this.chckbxFixedAgent.setEnabled(false);
-        this.chckbxFixedAgent.setForeground(Color.WHITE);
-        this.chckbxFixedAgent.setBackground(Color.ORANGE);
+        this.checkboxFixedAgent = new JCheckBox("Fixed Agent");
+        this.checkboxFixedAgent.setEnabled(false);
+        this.checkboxFixedAgent.setForeground(Color.WHITE);
+        this.checkboxFixedAgent.setBackground(Color.ORANGE);
         
-        this.chckbxFixedSensor = new JCheckBox("Fixed Sensor");
-        this.chckbxFixedSensor.setEnabled(false);
-        this.chckbxFixedSensor.setForeground(Color.WHITE);
-        this.chckbxFixedSensor.setBackground(Color.BLACK);
+        this.checkboxFixedSensor = new JCheckBox("Fixed Sensor");
+        this.checkboxFixedSensor.setEnabled(false);
+        this.checkboxFixedSensor.setForeground(Color.WHITE);
+        this.checkboxFixedSensor.setBackground(Color.BLACK);
         
-        this.chckbxMobileSensor = new JCheckBox("Mobile Sensor");
-        this.chckbxMobileSensor.setForeground(Color.WHITE);
-        this.chckbxMobileSensor.setBackground(Color.RED);
-        this.chckbxMobileSensor.setEnabled(false);
+        this.checkboxMobileSensor = new JCheckBox("Mobile Sensor");
+        this.checkboxMobileSensor.setForeground(Color.WHITE);
+        this.checkboxMobileSensor.setBackground(Color.RED);
+        this.checkboxMobileSensor.setEnabled(false);
+        
+        this.checkboxRegenerateOnlyAgentsRoutesEveryday = new JCheckBox("Gerar novas rotas a cada dia apenas para Agentes");
     }
 
     /**
@@ -358,6 +361,7 @@ public class SimulationFrame extends JFrame {
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.TRAILING, false)
                         .addComponent(numberOfSimulationDaysLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addPreferredGap(ComponentPlacement.RELATED)
+
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
                     .addComponent(numberOfMobileAgentsTextField, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.LEADING, false)
@@ -366,6 +370,9 @@ public class SimulationFrame extends JFrame {
                         .addComponent(numberOfMobileSensorsTextField, 0, 0, Short.MAX_VALUE)
                         .addComponent(numberOfSimulationDaysTextField, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)))
                     .addContainerGap(218, Short.MAX_VALUE))
+                    
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.TRAILING, false)
+                            .addComponent(checkboxRegenerateOnlyAgentsRoutesEveryday, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         configurationGroupLayout.setVerticalGroup(
             configurationGroupLayout.createParallelGroup(Alignment.LEADING)
@@ -391,7 +398,10 @@ public class SimulationFrame extends JFrame {
                     .addGap(10)
                     .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(numberOfSimulationDaysLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(numberOfSimulationDaysTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(numberOfSimulationDaysTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(10)
+                    .addGroup(configurationGroupLayout.createParallelGroup(Alignment.BASELINE)
+                            .addComponent(checkboxRegenerateOnlyAgentsRoutesEveryday)))
         );
         this.configurationFrame.getContentPane().setLayout(configurationGroupLayout);
         
@@ -402,23 +412,23 @@ public class SimulationFrame extends JFrame {
                 .addGroup(Alignment.LEADING, labelsGroupLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(labelsGroupLayout.createParallelGroup(Alignment.TRAILING, false)
-                        .addComponent(chckbxMobileSensor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(chckbxFixedSensor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(chckbxFixedAgent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                        .addComponent(chckbxMobileAgent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(checkboxMobileSensor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(checkboxFixedSensor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(checkboxFixedAgent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                        .addComponent(checkboxMobileAgent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addContainerGap(107, Short.MAX_VALUE))
         );
         labelsGroupLayout.setVerticalGroup(
             labelsGroupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(labelsGroupLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(chckbxFixedAgent)
+                    .addComponent(checkboxFixedAgent)
                     .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addComponent(chckbxMobileAgent)
+                    .addComponent(checkboxMobileAgent)
                     .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addComponent(chckbxFixedSensor)
+                    .addComponent(checkboxFixedSensor)
                     .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addComponent(chckbxMobileSensor)
+                    .addComponent(checkboxMobileSensor)
                     .addContainerGap(14, Short.MAX_VALUE))
         );
         
@@ -502,6 +512,10 @@ public class SimulationFrame extends JFrame {
     
     public short getNumberOfSimulationDays() {
         return this.numberOfSimulationDaysTextField.getText().isEmpty()? 1: Short.parseShort(this.numberOfSimulationDaysTextField.getText());
+    }
+    
+    public boolean regenerateOnlyAgentsRoutesEveryday() {
+        return this.checkboxRegenerateOnlyAgentsRoutesEveryday.isSelected();
     }
 
     /**

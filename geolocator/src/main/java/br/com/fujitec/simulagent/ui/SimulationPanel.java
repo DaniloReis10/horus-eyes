@@ -71,9 +71,10 @@ public class SimulationPanel extends JPanel {
         this.simulationFrame.updateSimulationProgressBar(this.simulationTime, formattedSimulationTime);
         
         if(hours == 23 && minutes == 59 && seconds == 59) {
-            this.simulationFrame.analyzeSimulation();
-            this.simulationRunningDays++;
-            ModelEnviroment.getInstance().deleteSensorsDetectedDevices();
+            if (this.simulationRunningDays == 3) {
+                System.out.println("STOP");
+            }
+            this.prepareSimulationForNextDay();
         }
         
         if(this.simulationRunningDays == this.simulationFrame.getNumberOfSimulationDays()) {
@@ -83,6 +84,28 @@ public class SimulationPanel extends JPanel {
         this.simulationTime++;
     }    
     
+    /**
+     * <p></p>
+     * 
+     * 
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    private void prepareSimulationForNextDay() {
+        this.simulationFrame.analyzeSimulation();
+        this.simulationRunningDays++;
+        
+        System.out.println("Preparing simulation next day...");
+        ModelEnviroment.getInstance().deleteSensorsDetectedDevices();
+        if(this.simulationFrame.regenerateOnlyAgentsRoutesEveryday()) {
+            ModelEnviroment.getInstance().regenerateAgentsRoutes();
+        } else {
+            ModelEnviroment.getInstance().regenerateDevicesRoutes();
+        }
+        System.out.println("Simulation next day preparation complete!");
+    }
+
     public void startSimulation() {
         this.createDevices();
         this.resetTimer();

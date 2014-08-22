@@ -140,4 +140,13 @@ public abstract class Device implements IActionTick{
     public void setMovementStrategy(MovementStrategy movementStrategy) {
         this.movementStrategy = movementStrategy;
     }
+
+    /**
+     * @author tiagoportela <tiagoporteladesouza@gmail.com>
+     * @param
+     * @return
+     */
+    public boolean isMobile() {
+        return this.mobility.equals(Mobility.MOBILE);
+    }
 }
