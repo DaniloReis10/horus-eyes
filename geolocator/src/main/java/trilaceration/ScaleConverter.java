@@ -116,8 +116,8 @@ public class ScaleConverter {
             
             final double firstLongitude = ScaleConverter.convertToLongitude(0);
             final double firstLatitude = ScaleConverter.convertToLatitude(0);
-            final double secondLongitude = ScaleConverter.convertToLongitude(978);
-            final double secondLatitude = ScaleConverter.convertToLatitude(670);
+            final double secondLongitude = ScaleConverter.convertToLongitude(10);
+            final double secondLatitude = ScaleConverter.convertToLatitude(10);
             final IGeoPosition firstPosition = new GeoPosition(firstLatitude, firstLongitude);
             final IGeoPosition secondPosition = new GeoPosition(secondLatitude, secondLongitude);
             

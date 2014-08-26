@@ -23,7 +23,7 @@ public class SimulationController {
                 ScaleConverter.width  = 978;
                 ScaleConverter.height = 650;
                 
-//                ScaleConverter.printScalePixelCorrespondence();
+                ScaleConverter.printScalePixelCorrespondence();
                 
                 SimulationFrame frame = new SimulationFrame();
                 frame.pack();

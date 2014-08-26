@@ -82,7 +82,7 @@ public class DataAnalyzer {
                 }
             }
             
-            final AnalyzedData analyzedDevice = new AnalyzedData(Agent.class, agent.getMobility(), predictedMobility);
+            final AnalyzedData analyzedDevice = new AnalyzedData(agent.getCurrentPosition(), sensorsThatDetectedTheDevice, agent.getMobility(), predictedMobility);
             analyzedData.add(analyzedDevice);
 
             final int analysisTime = (index+1) * 100 / agents.size();
@@ -94,9 +94,6 @@ public class DataAnalyzer {
     
     
     /**
-     * <p></p>
-     * 
-     * 
      * @author tiagoportela <tiagoporteladesouza@gmail.com>
      * @param
      * @return

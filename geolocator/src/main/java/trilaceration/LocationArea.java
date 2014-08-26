@@ -345,7 +345,7 @@ public class LocationArea {
     }
 
     private BufferedImage getIntersectionAreaImage(BufferedImage baseAreaImage, BufferedImage comparedAreaImage, IGeoPosition comparedAreaPosition) {
-        final int radius = Sensor.RADIUS_IN_PIXELS;
+        final int radius = (int) (Sensor.RADIUS_IN_PIXELS * 1.1);
 
         BufferedImage intersectionAreaImage = null;
 

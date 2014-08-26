@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.com.fujitec.simulagent.models.AnalyzedData;
+import br.com.fujitec.simulagent.models.Sensor;
 import br.com.fujitec.simulagent.ui.SimulationResults;
 
 /**
@@ -40,12 +41,17 @@ public class FileUtils {
             }
             
             final PrintStream printStream = new PrintStream(new FileOutputStream(file, true));
-            final String log = String.format("%s: Correct Predictions: %s | Wrong Predictions: %s | Undetected Agents: %s", date, simulationResults.getNumberOfCorrectPredictions(), simulationResults.getNumberOfWrongPredictions(), simulationResults.getNumberOfUndetectedAgents());
+            final String log = String.format("+ %s: Correct Predictions: %s | Wrong Predictions: %s | Undetected Agents: %s", date, simulationResults.getNumberOfCorrectPredictions(), simulationResults.getNumberOfWrongPredictions(), simulationResults.getNumberOfUndetectedAgents());
             printStream.println(log);
             
             for (AnalyzedData data: simulationResults.getWrongPredictions()) {
-                final String logDetails = String.format("    - Real Mobility: %s | Predicted Mobility: %s", data.getRealMobility(), data.getPredictedMobility());
+                final String logDetails = String.format("   ++ Device Position at Detection -> Latitude: %s | Longitude: %s | Real Mobility: %s | Predicted Mobility: %s", data.getDevicePosition().getLatitude(), data.getDevicePosition().getLongitude(), data.getRealMobility(), data.getPredictedMobility());
                 printStream.println(logDetails);
+                
+                for (Sensor sensor: data.getSensorsThatDetectedTheDevice()) {
+                    final String logSubDetails = String.format("       +++ Sensor Position at Detection -> Latitude: %s | Longitude: %s", sensor.getCurrentPosition().getLatitude(), sensor.getCurrentPosition().getLongitude());
+                    printStream.println(logSubDetails);
+                }
             }
             
             if (printStream.checkError()){
