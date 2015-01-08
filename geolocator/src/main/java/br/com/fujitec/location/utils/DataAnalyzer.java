@@ -5,14 +5,17 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import trilaceration.Centroide;
 import trilaceration.LocationArea;
 import trilaceration.ScaleConverter;
+import trilaceration.SensorPosition;
 import br.com.fujitec.simulagent.models.Agent;
 import br.com.fujitec.simulagent.models.AnalyzedData;
 import br.com.fujitec.simulagent.models.DetectedDevice;
 import br.com.fujitec.simulagent.models.Device;
 import br.com.fujitec.simulagent.models.Mobility;
 import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import br.com.fujitec.simulagent.ui.SimulationFrame;
 
 /**
@@ -20,7 +23,7 @@ import br.com.fujitec.simulagent.ui.SimulationFrame;
  *
  */
 public class DataAnalyzer {
-    
+    private static ScaleConverter scale = SimulationController.getScaleInstance();
     /**
      * <p>Compares all DetectedDevice information collected by the sensors, to infere if the DetectedDevice has mobile or fixed Mobility.</p>
      * 
@@ -30,7 +33,7 @@ public class DataAnalyzer {
      * @return 
      * @return
      */
-    public static List<AnalyzedData> predictDevicesClasses(final List<Device> devices, final SimulationFrame simulationFrame) {
+    public static List<AnalyzedData> predictDevicesClasses_old(final List<Device> devices, final SimulationFrame simulationFrame) {
         final List<Agent> agents = getAgentsFromDeviceList(devices);
         final List<Sensor> sensors = getSensorsFromDeviceList(devices);
         
@@ -40,17 +43,17 @@ public class DataAnalyzer {
             final Agent agent = agents.get(index);
             final List<Sensor> sensorsThatDetectedTheDevice = getSensorsThatDetectedTheDevice(agent, sensors);
             final Integer agentID = agent.getId();
-            BufferedImage intersectionArea = new BufferedImage(ScaleConverter.width, ScaleConverter.height, BufferedImage.TYPE_INT_RGB);
+            BufferedImage intersectionArea = new BufferedImage(scale.getWidth(), scale.getHeight(), BufferedImage.TYPE_INT_RGB);
             final Graphics intersectionGraphics = intersectionArea.getGraphics();
             intersectionGraphics.setColor(LocationArea.BASE_AREA_COLOR);
-            intersectionGraphics.fillRect(0, 0, ScaleConverter.width, ScaleConverter.height);
+            intersectionGraphics.fillRect(0, 0, scale.getWidth(), scale.getHeight());
             
             boolean isFirstSensorAnalysis = true;
             
             for (Sensor sensor : sensorsThatDetectedTheDevice) {
                 final List<DetectedDevice> detectedDevices = sensor.getDetectedDevices().get(agentID);
                 final boolean hasSensorDetectedDeviceMoreThanOnce = detectedDevices.size() > 1;
-                final LocationArea locationArea = new LocationArea();
+                final LocationArea locationArea = new LocationArea(scale);
                 int startIndex = 0;
                 
                 if (hasSensorDetectedDeviceMoreThanOnce && isFirstSensorAnalysis) {
@@ -83,6 +86,72 @@ public class DataAnalyzer {
             }
             
             final AnalyzedData analyzedDevice = new AnalyzedData(agent.getCurrentPosition(), sensorsThatDetectedTheDevice, agent.getMobility(), predictedMobility);
+            analyzedData.add(analyzedDevice);
+
+            final int analysisTime = (index+1) * 100 / agents.size();
+            simulationFrame.updateAnalysisProgressBar(agents.size(), analysisTime);
+        }
+        
+        return analyzedData;
+    }
+    public static List<AnalyzedData> predictDevicesClasses(final List<Device> devices, final SimulationFrame simulationFrame) {
+        boolean hasIntersection=false;
+        Mobility predictedMobility;
+
+    	final List<Agent> agents = getAgentsFromDeviceList(devices);
+        final List<Sensor> sensors = getSensorsFromDeviceList(devices);
+        
+        final List<AnalyzedData> analyzedData = new ArrayList<AnalyzedData>();
+        
+        for (int index = 0; index < agents.size(); index++) {
+            final Agent agent = agents.get(index);
+            final List<Sensor> sensorsThatDetectedTheDevice = getSensorsThatDetectedTheDevice(agent, sensors);
+            final Integer agentID = agent.getId();
+            
+            if(sensorsThatDetectedTheDevice.size() > 0){
+            	hasIntersection=true;
+	            for (Sensor sensor : sensorsThatDetectedTheDevice) {
+	                final List<DetectedDevice> detectedDevices = sensor.getDetectedDevices().get(agentID);
+	                final LocationArea locationArea = new LocationArea(scale);
+	                for (int currentIndex = 0; currentIndex < detectedDevices.size(); currentIndex++) {
+	                    final DetectedDevice currentDetectedDevice = detectedDevices.get(currentIndex);
+	                    final SensorPosition sensorPositionCurrent= new SensorPosition( currentDetectedDevice.getSensorPositionAtDetection().getLatitude(),currentDetectedDevice.getSensorPositionAtDetection().getLongitude(),Sensor.RADIUS_IN_METERS);
+	                    if(!locationArea.addSensorDetection(sensorPositionCurrent)){
+	                    	hasIntersection = false;
+	                    }
+	                }
+	                //final Centroide centroid = locationArea.getCentroide();
+	                //hasIntersection = (centroid != null);
+	            }
+	            
+	            
+	            if (!hasIntersection) {
+	                predictedMobility = Mobility.MOBILE;
+	            } else {
+	                final boolean agentWasntDetected = (sensorsThatDetectedTheDevice.size() == 0); 
+	                
+	                if(agentWasntDetected) {
+	                    predictedMobility = Mobility.UNDEFINED;
+	                } else {
+	                    predictedMobility = Mobility.FIXED;
+	                }
+	            }
+            }
+            else{
+            	predictedMobility = Mobility.UNDEFINED;
+            }
+            
+            final AnalyzedData analyzedDevice = new AnalyzedData(agent.getCurrentPosition(), sensorsThatDetectedTheDevice, agent.getMobility(), predictedMobility);
+            /*
+            if(!analyzedDevice.isPredictionUndefined()){
+            	if(!analyzedDevice.isPredictionCorrect()){
+            		if((analyzedDevice.getPredictedMobility()== Mobility.MOBILE)&&(analyzedDevice.getRealMobility()== Mobility.FIXED)){
+            			analyzedDevice.showDetections(agent.getId(), scale);
+            		}
+            	}
+            }
+            */
+            
             analyzedData.add(analyzedDevice);
 
             final int analysisTime = (index+1) * 100 / agents.size();

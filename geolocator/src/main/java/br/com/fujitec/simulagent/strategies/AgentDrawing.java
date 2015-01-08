@@ -7,6 +7,7 @@ import java.awt.Polygon;
 import br.com.fujitec.simulagent.interfaces.DetectableDevice;
 import br.com.fujitec.simulagent.models.Device;
 import br.com.fujitec.simulagent.models.Mobility;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 
@@ -15,6 +16,7 @@ import trilaceration.ScaleConverter;
  *
  */
 public class AgentDrawing extends DrawStrategy {
+	private ScaleConverter scale = SimulationController.getScaleInstance();
 
     @Override
     public void draw(Device device, Graphics graphics) {
@@ -33,8 +35,8 @@ public class AgentDrawing extends DrawStrategy {
             color = Color.BLUE;
         }
         
-        final int deviceCurrentX = ScaleConverter.convertToX(device.getCurrentPosition());
-        final int deviceCurrentY = ScaleConverter.convertToY(device.getCurrentPosition());
+        final int deviceCurrentX = scale.convertToX(device.getCurrentPosition());
+        final int deviceCurrentY = scale.convertToY(device.getCurrentPosition());
         
         final int halfDrawSize = DrawStrategy.DRAW_SIZE_IN_PIXELS / 2;
         final int[] polygonXs = new int[]{deviceCurrentX, deviceCurrentX + halfDrawSize, deviceCurrentX - halfDrawSize};

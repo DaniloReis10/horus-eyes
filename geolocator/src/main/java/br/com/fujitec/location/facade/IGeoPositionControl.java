@@ -2,9 +2,9 @@ package br.com.fujitec.location.facade;
 
 import java.util.List;
 
-import br.com.fujitec.location.geoengine.DevicePath;
 import br.com.fujitec.simulagent.interfaces.DetectableDevice;
 import br.com.fujitec.simulagent.models.Device;
+import br.com.fujitec.location.geoengine.DevicePath;
 
 /**
  * Interface do controlador de georeferenciamento
@@ -15,11 +15,11 @@ import br.com.fujitec.simulagent.models.Device;
 public interface IGeoPositionControl {
 
     /**
-     * Registra vários dispositivos no controlador de georeferenciamento
+     * Registra v��rios dispositivos no controlador de georeferenciamento
      * 
      * @param device
      * @return true registro feito com sucesso
-     * @return false - falha na atualiza��o
+     * @return false - falha na atualiza������o
      */
     public void addDevicesToTrack(List<Device> devices);
     
@@ -28,16 +28,16 @@ public interface IGeoPositionControl {
      * 
      * @param device
      * @return true registro feito com sucesso
-     * @return false - falha na atualiza��o
+     * @return false - falha na atualiza������o
      */
     public void addDeviceToTrack(Device device);
     
     /**
-     * Remove vários dispositivos do controlador de georeferenciamento
+     * Remove v��rios dispositivos do controlador de georeferenciamento
      * 
      * @param device
      * @return true registro feito com sucesso
-     * @return false - falha na atualiza��o
+     * @return false - falha na atualiza������o
      */
     public void removeDevicesFromTracking();
     
@@ -60,11 +60,11 @@ public interface IGeoPositionControl {
     public DevicePath getDevicePath(Device device);
 
     /**
-     * Retorna os dispositivos em uma �rea circular tendo o dispositivo m�vel no
+     * Retorna os dispositivos em uma ���rea circular tendo o dispositivo m���vel no
      * centro do circulo
      * 
      * @param device
-     *            Interface do dispositivo m�vel
+     *            Interface do dispositivo m���vel
      * @param ratio
      *            raio do circulo em torno do dispositivo
      * @return Lista de dispositivos dentro do circulo

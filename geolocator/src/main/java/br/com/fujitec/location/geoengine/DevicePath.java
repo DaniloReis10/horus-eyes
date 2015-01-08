@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import br.com.fujitec.location.facade.IGeoPosition;
 
+
 public class DevicePath {
 
 	ArrayList<IGeoPosition>  positions;
@@ -104,7 +105,7 @@ public class DevicePath {
 		for(i = index0; i <= index1 - 1; i++ ){
 			pos1 = (IGeoPosition)positions.get(i);
 			pos2 = (IGeoPosition)positions.get(i+1);
-			d += DevicesController.calculateDistance(pos1, pos2);
+			d += DevicesController.calculateDistanceMeters(pos1, pos2);
 		}
 		return d;
 	}

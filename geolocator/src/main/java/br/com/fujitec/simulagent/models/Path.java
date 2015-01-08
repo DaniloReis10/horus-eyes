@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.com.fujitec.location.facade.IGeoPosition;
 import br.com.fujitec.location.geoengine.GeoPosition;
-import br.com.fujitec.simulagent.factories.PathFactory;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 /**
@@ -19,6 +19,7 @@ import trilaceration.ScaleConverter;
 public class Path {
 
     List<PositionPath> dataPath;// Array com as posicoes do agente no dia
+    private ScaleConverter scale= SimulationController.getScaleInstance();
 
     /**
      * Construtor da classe geral
@@ -124,18 +125,17 @@ public class Path {
             // verifica se no tempo especificado a agente esta entre estes
             // pontos
             if ((posiPrev.getLeaveTime() < time) && (posiNext.getArriveTime() > time)) {
-                deltax = (ScaleConverter.convertToX(posiNext) - ScaleConverter.convertToX(posiPrev));
-                deltay = (ScaleConverter.convertToY(posiNext) - ScaleConverter.convertToY(posiPrev));
-                x0 = ScaleConverter.convertToX(posiPrev);
-                y0 = ScaleConverter.convertToY(posiPrev);
+                deltax = (scale.convertToX(posiNext) - scale.convertToX(posiPrev));
+                deltay = (scale.convertToY(posiNext) - scale.convertToY(posiPrev));
+                x0 = scale.convertToX(posiPrev);
+                y0 = scale.convertToY(posiPrev);
                 // calcula a posicao corrente
                 tpercent = (float) (time - posiPrev.getLeaveTime())
                         / (float) (posiNext.getArriveTime() - posiPrev.getLeaveTime());
                 xc = x0 + (int) (deltax * tpercent);
                 yc = y0 + (int) (deltay * tpercent);
                 // Cria a nova posicao
-                pos = new GeoPosition(ScaleConverter.convertToLatitude(yc),
-                        ScaleConverter.convertToLongitude(xc));
+                pos = new GeoPosition(scale.convertToLatitude(yc),scale.convertToLongitude(xc));
 
                 return pos;
             }
@@ -212,7 +212,7 @@ public class Path {
     	}
     }
     public static void main(String[] args){
-    	PathFactory factory;
+ /*   	PathFactory factory;
     	Path    path;
     	
     	ScaleConverter.latIni = 0.0;
@@ -224,6 +224,6 @@ public class Path {
     	factory = new PathFactory();
     	path = factory.createPath(ScaleConverter.width, ScaleConverter.height, 10, Agent.class);
     	path.printPos();
-    	
+   */ 	
     }
 }

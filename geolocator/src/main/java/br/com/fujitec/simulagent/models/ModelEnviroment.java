@@ -10,6 +10,7 @@ import br.com.fujitec.location.facade.GeopositionFacade;
 import br.com.fujitec.simulagent.factories.DeviceFactory;
 import br.com.fujitec.simulagent.factories.PathFactory;
 import br.com.fujitec.simulagent.interfaces.IActionTick;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 /**
@@ -26,9 +27,11 @@ public class ModelEnviroment implements IActionTick {
 
     private static ModelEnviroment instance;        // Instancia do modelo
     private List<Device> devices;                      // lista de agentes criados
-    private List<Agent> mobileAgents;                      // lista de agentes criados
-    private List<Sensor> sensors;                      // lista de agentes criados
+//    private List<Agent> mobileAgents;                      // lista de agentes criados
+//    private List<Sensor> sensors;                      // lista de agentes criados
     private int deviceIdController = 0;
+    private ScaleConverter scale= SimulationController.getScaleInstance();
+  
 
     /**
      * Retorna a instancia do modelo (Padrão de projeto singleton)
@@ -48,8 +51,8 @@ public class ModelEnviroment implements IActionTick {
     public ModelEnviroment() {
         super();
         this.devices = new ArrayList<Device>();
-        this.mobileAgents = new ArrayList<Agent>();
-        this.sensors= new ArrayList<Sensor>();
+        //this.mobileAgents = new ArrayList<Agent>();
+        //this.sensors= new ArrayList<Sensor>();
     }
 
     /**
@@ -109,7 +112,7 @@ public class ModelEnviroment implements IActionTick {
             if (device.isMobile() && device instanceof Agent) {
                 final Random randomNumberGenerator = new Random();
                 final short numberOfPositions = (short) (randomNumberGenerator.nextInt(10) + 10);
-                final Path newPath = PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                final Path newPath = PathFactory.createAgentPath(scale.getWidth(), scale.getHeight(), numberOfPositions);
                 ((Agent) device).setPath(newPath);
             }
         }
@@ -133,9 +136,9 @@ public class ModelEnviroment implements IActionTick {
                 final Path newPath;
                 
                 if (device instanceof Agent) {
-                    newPath = PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                    newPath = PathFactory.createAgentPath(scale.getWidth(), scale.getHeight(), numberOfPositions);
                 } else {
-                    newPath = PathFactory.createSensorPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+                    newPath = PathFactory.createSensorPath(scale.getWidth(), scale.getHeight(), numberOfPositions);
                 }
                 
                 device.setPath(newPath);
@@ -241,11 +244,7 @@ public class ModelEnviroment implements IActionTick {
      *            altura da imagem
      */
     public void setScaleEnviroment(double latitude0, double longitude0, double latitude1, double longitude1, int width, int height) {
-        ScaleConverter.width = width;
-        ScaleConverter.height = height;
-        ScaleConverter.latIni = latitude0;
-        ScaleConverter.longIni = longitude0;
-        ScaleConverter.latEnd = latitude1;
-        ScaleConverter.longEnd = longitude1;
+      
+    	scale = new ScaleConverter(latitude0,latitude1,longitude0,longitude1,width,height);
     }
 }

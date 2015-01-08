@@ -55,14 +55,14 @@ public class ProximityTagListener extends ProximityListener{
 	 * 
 	 * @param device
 	 */
-	private void actionVisibleArea(IMobileDevice device){
-	}
+//	private void actionVisibleArea(IMobileDevice device){
+//	}
 	/**
 	 * 
 	 * @param device
 	 */
-	private void actionCollisionArea(IMobileDevice device){
-	}
+//	private void actionCollisionArea(IMobileDevice device){
+//	}
 	/**
 	 * 
 	 * @param fences

@@ -8,7 +8,7 @@ package myserver.kernel;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+//import java.util.Vector;
 
 /**
  * This class is resxponsable for control data communication using socket
@@ -22,7 +22,7 @@ class SocketManager {
     /**
      * Socket for communication
      */
-    private  Vector             sockets;
+ //   private  Vector             sockets;
     /**
      * TCP/IP Port number
      */
@@ -42,7 +42,7 @@ class SocketManager {
         try {
             // Cria a porta do servidor
             server          = new ServerSocket(port);
-            sockets         = new Vector();
+            //sockets         = new Vector();
             this.bufferSize = bufferSize;
         }
         catch(IOException e){}

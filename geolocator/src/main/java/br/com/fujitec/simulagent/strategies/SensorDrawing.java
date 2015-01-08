@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import br.com.fujitec.simulagent.models.Device;
 import br.com.fujitec.simulagent.models.Mobility;
 import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 
@@ -14,6 +15,7 @@ import trilaceration.ScaleConverter;
  *
  */
 public class SensorDrawing extends DrawStrategy {
+	private ScaleConverter  scale = SimulationController.getScaleInstance();
 
     @Override
     public void draw(Device device, Graphics graphics) {
@@ -30,13 +32,13 @@ public class SensorDrawing extends DrawStrategy {
         
         final int diameter = Sensor.RADIUS_IN_PIXELS * 2;
         graphics.setColor(Color.LIGHT_GRAY);
-        graphics.fillOval(ScaleConverter.convertToX(device.getCurrentPosition()) - Sensor.RADIUS_IN_PIXELS, ScaleConverter.convertToY(device.getCurrentPosition()) - Sensor.RADIUS_IN_PIXELS, diameter, diameter);
+        graphics.fillOval(scale.convertToX(device.getCurrentPosition()) - Sensor.RADIUS_IN_PIXELS, scale.convertToY(device.getCurrentPosition()) - Sensor.RADIUS_IN_PIXELS, diameter, diameter);
 
         final int halfDrawSize = DrawStrategy.DRAW_SIZE_IN_PIXELS / 2;
         graphics.setColor(color);
-        graphics.fillRect(ScaleConverter.convertToX(device.getCurrentPosition()) - halfDrawSize, ScaleConverter.convertToY(device.getCurrentPosition()) - halfDrawSize, DrawStrategy.DRAW_SIZE_IN_PIXELS, DrawStrategy.DRAW_SIZE_IN_PIXELS);
+        graphics.fillRect(scale.convertToX(device.getCurrentPosition()) - halfDrawSize, scale.convertToY(device.getCurrentPosition()) - halfDrawSize, DrawStrategy.DRAW_SIZE_IN_PIXELS, DrawStrategy.DRAW_SIZE_IN_PIXELS);
         
         graphics.setColor(Color.BLACK);
-        graphics.drawString(String.valueOf(device.getId()), ScaleConverter.convertToX(device.getCurrentPosition()), ScaleConverter.convertToY(device.getCurrentPosition()));
+        graphics.drawString(String.valueOf(device.getId()), scale.convertToX(device.getCurrentPosition()), scale.convertToY(device.getCurrentPosition()));
     }
 }

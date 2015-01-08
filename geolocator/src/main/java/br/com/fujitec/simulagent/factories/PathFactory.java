@@ -12,6 +12,7 @@ import br.com.fujitec.simulagent.models.Device;
 import br.com.fujitec.simulagent.models.Path;
 import br.com.fujitec.simulagent.models.PositionPath;
 import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 import trilaceration.SensorPosition;
 
@@ -26,6 +27,7 @@ public class PathFactory {
     public static final int TICKS_DAY = (24 * 60 *60);
     public static final int MAX_TRIP_TIME = 3600;
     public static final int MIN_TRIP_TIME = 300;
+    private static ScaleConverter scale= SimulationController.getScaleInstance();
 
     public PathFactory() {
         super();
@@ -46,15 +48,15 @@ public class PathFactory {
         int numberOfSecondsPerDay = TICKS_DAY;
         int startTime = 0;
         double factor,distance,speed;
-        double startLat,startLong;
+        //double startLat,startLong;
         IGeoPosition  firstPosition=null,lastPosition= null;
         int tripTime;
         
         // define a largura media do tempo de parada
         final int timeWindow = numberOfSecondsPerDay / (numberOfPositions);
 
-        startLat = ScaleConverter.latIni;
-        startLong = ScaleConverter.longIni;
+        //startLat = scale.getLatIni();
+        //startLong = scale.getLongIni();
         factor    = 1.0;
         // Faz loop para gerar n pontos de parada preenchendo de forma aleatoria o tempo
         // de chagada, saida e tempo para se locomover para a proxima parada
@@ -64,8 +66,8 @@ public class PathFactory {
             
             final IGeoPosition geoPosition = createPosition(deviceClass, factor);
            
-            startLat  = geoPosition.getLatitude();
-            startLong = geoPosition.getLongitude();
+            //startLat  = geoPosition.getLatitude();
+            //startLong = geoPosition.getLongitude();
             if( i==0 ){
             	firstPosition  = lastPosition = geoPosition;
             	factor      = 1;
@@ -77,7 +79,7 @@ public class PathFactory {
 
             // caso seja o ultimo ponto ������ fixado o tempo de parada
             if (i != (numberOfPositions - 1)) {
-            	distance = DevicesController.calculateDistance(geoPosition, lastPosition);
+            	distance = DevicesController.calculateDistanceMeters(geoPosition, lastPosition);
                 // calcula o tempo em segundos para percorre a distancia
             	speed = (0.05 + 0.3*Math.random());
             	// tempo em segundos
@@ -91,7 +93,7 @@ public class PathFactory {
                 startTime = startTime + timePoint;
             } else {
             	// Ultimo ponto da rota
-            	distance = DevicesController.calculateDistance(firstPosition, lastPosition);
+            	distance = DevicesController.calculateDistanceMeters(firstPosition, lastPosition);
                 // calcula o tempo em segundos para percorre a distancia
             	speed = (0.05 + 0.3*Math.random());
             	// tempo em segundos
@@ -111,8 +113,8 @@ public class PathFactory {
     }
        
     private static IGeoPosition createPosition(Class<? extends Device> deviceClass,double factor) {
-        double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni)*factor;
-        double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni)*factor;
+        double latitude = scale.getLatIni() + Math.random() * (scale.getLatEnd() - scale.getLatIni())*factor;
+        double longitude = scale.getLongIni() + Math.random() * (scale.getLongEnd() - scale.getLongIni())*factor;
  
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
             return new SensorPosition(latitude, longitude, Sensor.RADIUS_IN_METERS);

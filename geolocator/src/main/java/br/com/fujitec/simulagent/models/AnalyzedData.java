@@ -2,6 +2,9 @@ package br.com.fujitec.simulagent.models;
 
 import java.util.List;
 
+import trilaceration.LocationArea;
+import trilaceration.ScaleConverter;
+import trilaceration.SensorPosition;
 import br.com.fujitec.location.facade.IGeoPosition;
 
 /**
@@ -73,5 +76,22 @@ public class AnalyzedData {
      */
     public boolean isPredictionUndefined() {
         return this.predictedMobility.equals(Mobility.UNDEFINED);
+    }
+    
+    public void showDetections(Integer agentId,ScaleConverter  scale){
+    	for( Sensor sensor:sensorsThatDetectedTheDevice){
+           final List<DetectedDevice> detectedDevices = sensor.getDetectedDevices().get(agentId);
+           final LocationArea locationArea = new LocationArea(scale);
+           locationArea.setDebugMode(true);
+           for (int currentIndex = 0; currentIndex < detectedDevices.size(); currentIndex++) {
+                final DetectedDevice currentDetectedDevice = detectedDevices.get(currentIndex);
+                final SensorPosition sensorPositionCurrent= new SensorPosition( currentDetectedDevice.getSensorPositionAtDetection().getLatitude(),currentDetectedDevice.getSensorPositionAtDetection().getLongitude(),Sensor.RADIUS_IN_METERS);
+                if(!locationArea.addSensorDetection(sensorPositionCurrent)){
+                	System.out.printf("Classificado como Movel");
+                }
+           }
+            
+		
+    	}
     }
 }

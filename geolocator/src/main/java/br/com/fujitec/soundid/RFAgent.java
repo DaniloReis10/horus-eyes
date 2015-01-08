@@ -15,12 +15,14 @@ import br.com.fujitec.location.geoengine.GeoPosition;
 import br.com.fujitec.simulagent.factories.PathFactory;
 import br.com.fujitec.simulagent.interfaces.IActionTick;
 import br.com.fujitec.simulagent.models.Mobility;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 public class RFAgent implements IMobileDevice, IActionTick {
     protected Mobility mobility;           // Tipo do agente Moével ou fixo
     protected GeoPosition currentPosition;      // Posicao corrente
     protected int currentTime;                  // Tempo corrente em relacao 0:00 em minutos no dia
+    protected ScaleConverter       scale = SimulationController.getScaleInstance();
 
     protected Integer id;
     
@@ -192,6 +194,6 @@ public class RFAgent implements IMobileDevice, IActionTick {
     @Override
     public void draw(Graphics graphics) {
         graphics.setColor(Color.RED); // COR ESPECÍFICA PARA REPRESENTAR AGENTE FIXO
-        graphics.fillRect(ScaleConverter.convertToX(currentPosition) - 5, ScaleConverter.convertToY(currentPosition) - 5, 10, 10);
+        graphics.fillRect(scale.convertToX(currentPosition) - 5, scale.convertToY(currentPosition) - 5, 10, 10);
     }
 }

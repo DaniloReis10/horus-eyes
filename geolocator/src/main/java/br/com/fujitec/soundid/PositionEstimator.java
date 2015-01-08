@@ -58,7 +58,7 @@ public class PositionEstimator {
                 // cria um sensor com a informacao
                 sensor = new SensorPosition(latitude, longitude, ratio);
                 // adiciona a informacao no calculo da posicao
-                area.addSensorDetection(sensor, ratio);
+                area.addSensorDetection(sensor);
             }
         }
         // calcula o centroide da posicao estimada

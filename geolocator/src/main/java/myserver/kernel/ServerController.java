@@ -10,12 +10,12 @@ import java.util.Vector;
  * @author Danilo Reis
  */
 public class ServerController {
-    private  SocketManager   socketManager;
-    private Vector                requests;
-    private Vector                 threads;    
-    private Vector                 sockets;    
-    private boolean                   stop;
-    static ServerController       instance;
+    private  SocketManager    socketManager;
+    private Vector<ProcessRequest> requests;
+    private Vector<Thread>          threads;    
+    private Vector<Socket>          sockets;    
+    private boolean                    stop;
+    static ServerController        instance;
     /**
      * Creates a new instance of ServerCotroller
      * @param None.
@@ -26,9 +26,9 @@ public class ServerController {
             // creates comunication manager object
             socketManager     = new SocketManager(port,bufferSize);
             // creates parser object
-            requests          = new Vector();
-            threads           = new Vector();
-            sockets           = new Vector();
+            requests          = new Vector<ProcessRequest>();
+            threads           = new Vector<Thread>();
+            sockets           = new Vector<Socket>();
             stop              = true;
             instance          = this;
         }
@@ -44,7 +44,7 @@ public class ServerController {
      */
     public void run(){
         SocketLink        link;
-        Socket          socket;
+//        Socket          socket;
         ProcessRequest request;
         Thread          thread;
         
@@ -104,28 +104,27 @@ public class ServerController {
      * @param stop New value of property stop.
      */
     public  synchronized  void setStop(boolean stop) {
-        int              i;
-        Iterator iterator1;
-        Iterator iterator2;
-        Iterator iterator3;
-        ProcessRequest  pr;
-        Thread          th;
-        Socket          sk;
+        Iterator<ProcessRequest> iterator1;
+        //Iterator<Thread>         iterator2;
+        Iterator<Socket>         iterator3;
+        ProcessRequest                  pr;
+        //Thread                          th;
+        Socket                          sk;
         
         try{
             this.stop = stop;
             iterator1 = requests.iterator();
-            iterator2 = threads.iterator();
+            //iterator2 = threads.iterator();
             iterator3 = sockets.iterator();
             do {
                 // pega elemento da lista
                 pr = (ProcessRequest)iterator1.next();
-                th = (Thread)iterator2.next();
+                //th = (Thread)iterator2.next();
                 sk = (Socket)iterator3.next();
                 //  compara com o numero serial
                 pr.setStop(true);
                 sk.close();
-  //              th.destroy();
+                //th.destroy();
             }
             while (iterator1.hasNext() == true);
         }

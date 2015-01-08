@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import br.com.fujitec.location.facade.IGeoPosition;
-import br.com.fujitec.simulagent.interfaces.DetectableDevice;
-import br.com.fujitec.simulagent.interfaces.Detector;
+import br.com.fujitec.simulagent.models.Agent;
 import br.com.fujitec.simulagent.models.Device;
+import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.interfaces.*;
+import br.com.fujitec.location.facade.IGeoPosition;
 import trilaceration.ScaleConverter;
 
 /**
- * Classe controladora do gerenciamento de posi��es
+ * Classe controladora do gerenciamento de posi������es
  * 
  * @author Danilo Reis
  * 
  */
 public class DevicesController {
     private List<DetectableDevice> detectableDevices;
-    private List<Detector> detectorDevices;
     private static int freeDeviceId;
+    private List<Detector> detectorDevices;
     private static DevicesController manager;
 
 
@@ -41,7 +42,7 @@ public class DevicesController {
         super();
         this.detectableDevices = new ArrayList<DetectableDevice>();
         this.detectorDevices = new ArrayList<Detector>();
-    }
+  }
 
     /**
      * Calcula a distancia em metros entre dois pontos dadas as coordenadas
@@ -53,7 +54,7 @@ public class DevicesController {
      *            Interface das coordenadas geograficas do ponto 2
      * @return distancia em metros
      */
-    public static synchronized double calculateDistance(IGeoPosition pos1, IGeoPosition pos2) {
+    public static synchronized double calculateDistanceMeters(IGeoPosition pos1, IGeoPosition pos2) {
         double dLat, dLon;
         double a, c, d;
         double lat1, lat2;
@@ -70,7 +71,7 @@ public class DevicesController {
         a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2)
                 * Math.cos(lat1) * Math.cos(lat2);
         c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        d = ScaleConverter.EARTH_RADIUS * c;
+        d = ScaleConverter.EARTHRATIO * c;
         
         return d;
     }
@@ -88,7 +89,7 @@ public class DevicesController {
         } else if (device instanceof Detector) {
             this.detectorDevices.add((Detector) device);
         }
-        
+              
         return true;
     }
 
@@ -104,7 +105,6 @@ public class DevicesController {
         } else if (device instanceof Detector) {
             this.detectorDevices.remove(device);
         }
-        
         return true;
     }
 
@@ -238,7 +238,7 @@ public class DevicesController {
         final List<DetectableDevice> devicesAround = new ArrayList<DetectableDevice>();
         
         for (DetectableDevice detectableDevice : this.detectableDevices) {
-            final double distance = DevicesController.calculateDistance(device.getCurrentPosition(), detectableDevice.getCurrentPosition());
+            final double distance = DevicesController.calculateDistanceMeters(device.getCurrentPosition(), detectableDevice.getCurrentPosition());
             final boolean isDistanceWithinRadius = distance <= radius;
             
             if(isDistanceWithinRadius) {
@@ -249,7 +249,8 @@ public class DevicesController {
         return devicesAround;
     }
 
-    /**
+  
+   /**
      * Retorna uma lista de dispositivos moveis registrados e pertencentes a um
      * grupo
      * 
@@ -300,11 +301,11 @@ public class DevicesController {
     }*/
 
     /**
-     * Fun�ao solicita do googlemaps uma imagem com o centro da imagem
+     * Fun���ao solicita do googlemaps uma imagem com o centro da imagem
      * localizado nas latitude e longitude especificados. A imagem gerada coloca
-     * uma icone no local das coordenadas o programador pode determinar o n�vel
-     * de zoom , a icone que ser� mostrada e um path. Estes dois ultimos
-     * parametros podem serem deixados em branco quando n�o se desejar mostrar a
+     * uma icone no local das coordenadas o programador pode determinar o n���vel
+     * de zoom , a icone que ser��� mostrada e um path. Estes dois ultimos
+     * parametros podem serem deixados em branco quando n���o se desejar mostrar a
      * path e que a icone do marcador seja a default do google maps.
      * 
      * @param latitude
@@ -312,11 +313,11 @@ public class DevicesController {
      * @param longitude
      *            - longitude do ponto a ser mostrado na imagem
      * @param imageName
-     *            - Nome do arquivo de imagem que ser� mostrado
+     *            - Nome do arquivo de imagem que ser��� mostrado
      * @param zoom
-     *            - N�vel de zoom entre 0 (o mais baixo, no qual todo o mundo
-     *            pode ser visto em um s� mapa) e 21+ (chega at� constru��es
-     *            individuais) s�o poss�veis na visualiza��o padr�o dos mapas.
+     *            - N���vel de zoom entre 0 (o mais baixo, no qual todo o mundo
+     *            pode ser visto em um s��� mapa) e 21+ (chega at��� constru������es
+     *            individuais) s���o poss���veis na visualiza������o padr���o dos mapas.
      * @param custonIconUrl
      *            -
      * @param path

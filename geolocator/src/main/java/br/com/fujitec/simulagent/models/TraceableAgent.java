@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.fujitec.location.facade.IGeoPosition;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 
 
@@ -17,6 +18,7 @@ public class TraceableAgent extends Device {
 
     private IGeoPosition previousPosition;
     private List<IGeoPosition> route;
+    private ScaleConverter scale= SimulationController.getScaleInstance();
     
     public TraceableAgent(final Integer agentID, final Mobility mobility) {
         super(agentID, mobility);
@@ -43,15 +45,15 @@ public class TraceableAgent extends Device {
             final IGeoPosition firstPosition = this.route.get(position);
             final IGeoPosition secondPosition = this.route.get(nextPosition);
             
-            final int x1 = ScaleConverter.convertToX(firstPosition);
-            final int y1 = ScaleConverter.convertToY(firstPosition);
-            final int x2 = ScaleConverter.convertToX(secondPosition);
-            final int y2 = ScaleConverter.convertToY(secondPosition);
+            final int x1 = scale.convertToX(firstPosition);
+            final int y1 = scale.convertToY(firstPosition);
+            final int x2 = scale.convertToX(secondPosition);
+            final int y2 = scale.convertToY(secondPosition);
             
             graphics.drawLine(x1, y1, x2, y2);
         }
         
-        graphics.fillRect(ScaleConverter.convertToX(currentPosition) - 3, ScaleConverter.convertToY(currentPosition) - 3, 6, 6);
+        graphics.fillRect(scale.convertToX(currentPosition) - 3, scale.convertToY(currentPosition) - 3, 6, 6);
     }
     
     public boolean hasMoved() {

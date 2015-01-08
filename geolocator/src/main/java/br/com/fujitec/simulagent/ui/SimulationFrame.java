@@ -55,8 +55,9 @@ public class SimulationFrame extends JFrame {
     private JLabel numberOfSimulationDaysLabel;
     private JTextField numberOfSimulationDaysTextField;
 
-    private int width;
-    private int height;
+    //private int width;
+    //private int height;
+    private ScaleConverter scale;
 
     private JProgressBar simulationProgressBar;
     private SimulationPanel drawingPanel;
@@ -98,8 +99,9 @@ public class SimulationFrame extends JFrame {
      * @param height
      */
     public SimulationFrame(int width, int height) {
-        this.width = width;
-        this.height = height;
+        //this.width = width;
+        //this.height = height;
+        this.scale = SimulationController.getScaleInstance();
 
         this.setSize(width, height);
 
@@ -138,7 +140,7 @@ public class SimulationFrame extends JFrame {
         this.numberOfSimulationDaysTextField = new JTextField();
         this.numberOfSimulationDaysTextField.setColumns(10);
         
-        this.drawingPanel = new SimulationPanel(ScaleConverter.width, ScaleConverter.height, this);
+        this.drawingPanel = new SimulationPanel(scale.getWidth(), scale.getHeight(), this);
         this.drawingPanel.setBackground(Color.WHITE);
         
         this.simulationProgressBar = new JProgressBar(0, PathFactory.TICKS_DAY);
@@ -476,14 +478,19 @@ public class SimulationFrame extends JFrame {
         final SimulationResults simulationResults = new SimulationResults();
         
         for (AnalyzedData data : analyzedData) {
-            if(data.isPredictionCorrect()) {
-                simulationResults.increaseNumberOfCorrectPredictions();
-            } else if(data.isPredictionUndefined()) {
-                simulationResults.increaseNumberOfUndetectedAgents();
-            } else {
-                simulationResults.increaseNumberOfWrongPredictions();
-                simulationResults.addWrongPredictionData(data);
-            }
+        	if(!data.isPredictionUndefined()){
+	            if(data.isPredictionCorrect()) {
+	                simulationResults.increaseNumberOfCorrectPredictions();
+	            } else if(data.isPredictionUndefined()) {
+	                simulationResults.increaseNumberOfUndetectedAgents();
+	            } else {
+	                simulationResults.increaseNumberOfWrongPredictions();
+	                simulationResults.addWrongPredictionData(data);
+	            }
+	        }
+        	else{
+        		simulationResults.increaseNumberOfUndetectedAgents();
+        	}
         }
         
         this.resultsTable.setValueAt(simulationResults.getNumberOfCorrectPredictions(), 0, 0);

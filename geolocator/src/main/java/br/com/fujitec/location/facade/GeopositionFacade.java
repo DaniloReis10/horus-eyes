@@ -3,10 +3,10 @@ package br.com.fujitec.location.facade;
 
 import java.util.List;
 
+import br.com.fujitec.simulagent.models.Device;
+import br.com.fujitec.simulagent.interfaces.*;
 import br.com.fujitec.location.geoengine.DevicePath;
 import br.com.fujitec.location.geoengine.DevicesController;
-import br.com.fujitec.simulagent.interfaces.DetectableDevice;
-import br.com.fujitec.simulagent.models.Device;
 
 public class GeopositionFacade implements IGeoPositionControl {
 
@@ -51,23 +51,11 @@ public class GeopositionFacade implements IGeoPositionControl {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
     public List<DetectableDevice> getDevicesAround(Device device, int radius) {
         return DevicesController.getInstance().getDevicesAround(device, radius);
     }
 
-    /**
-     * <p></p>
-     * 
-     * 
-     * @author tiagoportela <tiagoporteladesouza@gmail.com>
-     * @param
-     * @return
-     */
-    public void notifyDetectors() {
-        DevicesController.getInstance().notifyDetectors();
-    }
+
 
     /**
      * <p></p>
@@ -81,4 +69,9 @@ public class GeopositionFacade implements IGeoPositionControl {
         // TODO Auto-generated method stub
         return null;
     }
+
+	public void notifyDetectors() {
+		DevicesController.getInstance().notifyDetectors();
+		
+	}
 }

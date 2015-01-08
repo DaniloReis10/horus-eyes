@@ -22,7 +22,7 @@ import javax.swing.ListCellRenderer;
 /**
  *
  */
-class MyCellRenderer extends JLabel implements ListCellRenderer {
+class MyCellRenderer extends JLabel implements ListCellRenderer<Object> {
     /**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -40,7 +40,7 @@ class MyCellRenderer extends JLabel implements ListCellRenderer {
     // is selected
     // cell has focus?
     //class and return a reference
-    public Component getListCellRendererComponent(JList list,Object value,int index, boolean iss,boolean chf) {
+    public Component getListCellRendererComponent(JList<?> list,Object value,int index, boolean iss,boolean chf) {
         // Set the text and color
         //background for rendering
         setText(((ListItem)value).getValue());
@@ -57,8 +57,8 @@ class MyCellRenderer extends JLabel implements ListCellRenderer {
  *
  */
 public class IconList {
-    DefaultListModel model;
-    JList             list;
+    DefaultListModel<ListItem> model;
+    JList<ListItem>             list;
     JFrame           frame;
     int       width,heigth;
     int                x,y;
@@ -69,14 +69,14 @@ public class IconList {
     public IconList(){
         // Use a list model that
         //allows for updates
-        model = new DefaultListModel();
-        list  = new JList(model);
+        model = new DefaultListModel<ListItem>();
+        list  = new JList<ListItem>(model);
         list.setCellRenderer(new MyCellRenderer());
     }
     /**
      *
      */
-    public JList getJList(){
+    public JList<ListItem> getJList(){
         return list;
     }
     /**
@@ -126,7 +126,8 @@ public class IconList {
         heigth = frame.getHeight();
         frame.setVisible(true);
     }
-    public void show(){
+    @SuppressWarnings("deprecation")
+	public void show(){
         frame.setVisible(false);
         frame.show();
         frame.setVisible(true);

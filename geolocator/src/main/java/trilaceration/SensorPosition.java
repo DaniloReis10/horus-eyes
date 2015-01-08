@@ -6,7 +6,7 @@ import br.com.fujitec.location.geoengine.GeoPosition;
 
 public class SensorPosition  extends GeoPosition{
 
-	private double        radius;// Raio em metros da deteccao
+	private double        ratio;// Raio em metros da deteccao
 	private double       height;// altura do sensor
 	private int           floor;// Andar onde esta o sensor
 	private String         name;// Nome do sensor
@@ -24,7 +24,7 @@ public class SensorPosition  extends GeoPosition{
 	 */
 	public SensorPosition(double latitude, double longitude, double ratio,double height, int floor, String name, String description) {
 		super(new Date(),latitude,longitude);
-		this.radius       = ratio;
+		this.ratio       = ratio;
 		this.height      = height;
 		this.floor       = floor;
 		this.name        = name;
@@ -36,9 +36,9 @@ public class SensorPosition  extends GeoPosition{
 	 * @param longitude
 	 * @param ratio
 	 */
-	public SensorPosition(double latitude, double longitude, double radius) {
+	public SensorPosition(double latitude, double longitude, double ratio) {
 		super(new Date(),latitude,longitude);
-		this.radius = radius;
+		this.ratio = ratio;
 	}
 	// Metodos Set e gets dos atributos
 	public double getHeight() {
@@ -73,18 +73,15 @@ public class SensorPosition  extends GeoPosition{
 		this.description = description;
 	}
 
-	public double getRadius() {
-		return radius;
+	public double getRatio() {
+		return ratio;
 	}
 
-	public void setRadius(double ratio) {
-		this.radius = ratio;
+	public void setRatio(double ratio) {
+		this.ratio = ratio;
 	}
-		/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
+	public boolean validateMeasures() {
+		return true;
 	}
-
+	
 }

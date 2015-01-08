@@ -13,6 +13,7 @@ import br.com.fujitec.simulagent.models.Mobility;
 import br.com.fujitec.simulagent.models.ModelEnviroment;
 import br.com.fujitec.simulagent.models.Path;
 import br.com.fujitec.simulagent.models.Sensor;
+import br.com.fujitec.simulagent.ui.SimulationController;
 import trilaceration.ScaleConverter;
 import trilaceration.SensorPosition;
 
@@ -21,7 +22,8 @@ import trilaceration.SensorPosition;
  *
  */
 public class DeviceFactory {
-    
+    private static ScaleConverter scale= SimulationController.getScaleInstance();
+  
     public static <T extends Device> List<Device> createStaticDevices(Class<T> deviceClass, int numberOfDevices) {
         final List<Device> devices = new ArrayList<Device>();
         
@@ -39,8 +41,8 @@ public class DeviceFactory {
     }
     
     private static IGeoPosition createPosition(Device device) {
-        final double latitude = ScaleConverter.latIni + Math.random() * (ScaleConverter.latEnd - ScaleConverter.latIni);
-        final double longitude = ScaleConverter.longIni + Math.random() * (ScaleConverter.longEnd - ScaleConverter.longIni);
+        final double latitude  = scale.getLatIni()  + Math.random() * (scale.getLatEnd() - scale.getLatIni());
+        final double longitude = scale.getLongIni() + Math.random() * (scale.getLongEnd() - scale.getLongIni());
  
         if (device instanceof Sensor) {
             return new SensorPosition(latitude, longitude, Sensor.RADIUS_IN_METERS);
@@ -78,9 +80,9 @@ public class DeviceFactory {
         }
         
         if (deviceClass.getSimpleName().equalsIgnoreCase("Sensor")) {
-            return PathFactory.createSensorPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+            return PathFactory.createSensorPath(scale.getWidth(), scale.getHeight(), numberOfPositions);
         } else {
-            return PathFactory.createAgentPath(ScaleConverter.width, ScaleConverter.height, numberOfPositions);
+            return PathFactory.createAgentPath(scale.getWidth(), scale.getHeight(), numberOfPositions);
         }
     }
     

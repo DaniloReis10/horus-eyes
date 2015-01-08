@@ -13,13 +13,13 @@ public class CommandParser implements Parsernable{
     /**
      * Set of sub-String separates by commas in original ccommand line
      */
-    StringTokenizer   commandLine;
-    static int               code;    
-    static CommandParser instance;
-    static Vector  commandDecoder;
+    StringTokenizer                  commandLine;
+    static int                              code;    
+    static CommandParser                instance;
+    static Vector<CommandDecode>  commandDecoder;
     static
     {
-        commandDecoder = new Vector(); 
+        commandDecoder = new Vector<CommandDecode>(); 
         code           = 0;
     }
     /**
@@ -117,15 +117,12 @@ public class CommandParser implements Parsernable{
      * @return command code ( 1 - 10)
      */
     private int checkCommandSintax(String command0,String command1){
-        int                 i;
         StringBuffer    compl;
-        String         compls;
         CommandDecode  cmdDec;
         
         // monta o terminador do comando
         compl = new StringBuffer(command0);
         compl.insert(1,'/');
-        compls = compl.toString();
         // Busca na lista de comandos validos
         cmdDec = CommandParser.findCommandDecoder(command0);
         if(cmdDec != null){
